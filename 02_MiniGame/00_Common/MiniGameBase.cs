@@ -36,6 +36,11 @@ public abstract class MiniGameBase : MonoBehaviour
 
     }
 
+    protected virtual void Update()
+    {
+
+    }
+
     private void InitStateHandlers()
     {
         _stateHandlers.Clear();
