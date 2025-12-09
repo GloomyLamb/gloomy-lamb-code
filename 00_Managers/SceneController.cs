@@ -70,18 +70,4 @@ public class SceneController
             Logger.Log($"로딩 상태: {async.progress * 100}%...");
         }
     }
-
-    #region 테스트
-    public void TestLoadSceneAsync()
-    {
-        _curSceneType = SceneType.NHP_ThreeBiomes;
-
-        if (_coroutine != null)
-        {
-            CoroutineRunner.instance.StopCoroutine(_coroutine);
-            _coroutine = null;
-        }
-        _coroutine = CoroutineRunner.instance.StartCoroutine(LoadSceneAsync());
-    }
-    #endregion
 }

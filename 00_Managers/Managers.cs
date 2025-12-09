@@ -10,7 +10,7 @@ public class Managers : MonoBehaviour
     // 씬
     public void TestSceneController()
     {
-        Scene.TestLoadSceneAsync();
+        Scene.LoadSceneWithCoroutine(SceneType.NHP_ThreeBiomes);
     }
     #endregion
 }
