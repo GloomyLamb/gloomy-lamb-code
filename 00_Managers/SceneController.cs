@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum SceneType
@@ -34,7 +35,11 @@ public class SceneController
 
         // scene base에서 작성한 scene loaded 메서드로 사용
 
-        SceneManager.LoadScene(type.ToString());
+        AsyncOperation async = SceneManager.LoadSceneAsync(type.ToString());
+        while (!async.isDone)
+        {
+            Logger.Log($"로딩 상태: {async.progress}%...");
+        }
         _curSceneType = type;
     }
 
@@ -43,6 +48,10 @@ public class SceneController
     /// </summary>
     public void ReLoadScene()
     {
-        SceneManager.LoadScene(_curSceneType.ToString());
+        AsyncOperation async = SceneManager.LoadSceneAsync(_curSceneType.ToString());
+        while (!async.isDone)
+        {
+            Logger.Log($"로딩 상태: {async.progress}%...");
+        }
     }
 }
