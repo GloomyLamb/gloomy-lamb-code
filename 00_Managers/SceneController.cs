@@ -25,7 +25,7 @@ public class SceneController
     /// type과 동일한 이름의 씬을 로드합니다.
     /// </summary>
     /// <param name="type"></param>
-    public void LoadScene(SceneType type)
+    public void LoadSceneAsync(SceneType type)
     {
         if (type == _curSceneType)
         {
@@ -46,7 +46,7 @@ public class SceneController
     /// <summary>
     /// 현재 씬을 리로드 합니다.
     /// </summary>
-    public void ReLoadScene()
+    public void ReLoadSceneAsync()
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(_curSceneType.ToString());
         while (!async.isDone)
