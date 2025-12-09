@@ -2,15 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class InputManager : GlobalSingletonManager<InputManager>
 {
-    // todo : 리스트로 바꿔야 할 수도 있을 수 있으니 수정 고려해 두기
-    InputHandler nowInputHandler;
-
+    Dictionary<InputType, InputHandler> inputHandlers;
 
     protected override void Init()
     {
+        inputHandlers = new Dictionary<InputType, InputHandler>();
+
+        foreach (InputType type in Enum.GetValues(typeof(InputType)))
+        {
+            inputHandlers[type] = null;
+        }
+        
     }
 
     /// <summary>
@@ -20,35 +26,32 @@ public class InputManager : GlobalSingletonManager<InputManager>
     /// <param name="inputHandler"></param>
     public void UseInput(InputHandler inputHandler)
     {
-        nowInputHandler?.SetEnableInput(false);
-
         if (inputHandler == null) return;
 
-        nowInputHandler = inputHandler;
-        nowInputHandler.SetEnableInput(true);
+        inputHandlers[inputHandler.Type]?.SetEnableInput(false);
+        inputHandlers[inputHandler.Type] = inputHandler;
+        inputHandler.SetEnableInput(true);
         
-        if(nowInputHandler.UseCursor)
-            ShowCursor();
-        else
-            HideCursor();
+        Logger.Log("Enable Input");
+        
     }
 
     /// <summary>
-    /// 현재 Input 막기
+    /// Input 막기
     /// </summary>
     /// <param name="isLock"></param>
-    public void LockInput()
+    public void LockInput(InputType inputType)
     {
-        nowInputHandler?.SetEnableInput(false);
+        inputHandlers[inputType]?.SetEnableInput(false);
     }
 
     /// <summary>
-    /// 현재 Input 풀기
+    /// Input 풀기
     /// </summary>
     /// <param name="isLock"></param>
-    public void UnlockInput(bool isLock)
+    public void UnlockInput(InputType inputType)
     {
-        nowInputHandler?.SetEnableInput(true);
+        inputHandlers[inputType]?.SetEnableInput(true);
     }
     
     
@@ -62,4 +65,11 @@ public class InputManager : GlobalSingletonManager<InputManager>
         Cursor.lockState = CursorLockMode.None;
     }
 
+    protected override void OnSceneUnloaded(Scene scene)
+    {
+        foreach (InputType type in inputHandlers.Keys)
+        {
+            inputHandlers[type] = null;
+        }
+    }
 }
