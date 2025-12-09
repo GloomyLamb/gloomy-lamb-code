@@ -43,10 +43,10 @@ public class SceneController
 
         if (_coroutine != null)
         {
-            CoroutineRunner.instance.StopCoroutine(nameof(LoadSceneAsync));
+            CoroutineRunner.instance.StopCoroutine(_coroutine);
             _coroutine = null;
         }
-        _coroutine = CoroutineRunner.instance.StartCoroutine(nameof(LoadSceneAsync));
+        _coroutine = CoroutineRunner.instance.StartCoroutine(LoadSceneAsync());
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class SceneController
         while (!async.isDone)
         {
             yield return null;
-            Logger.Log($"로딩 상태: {async.progress}%...");
+            Logger.Log($"로딩 상태: {async.progress * 100}%...");
         }
     }
 
@@ -78,10 +78,10 @@ public class SceneController
 
         if (_coroutine != null)
         {
-            CoroutineRunner.instance.StopCoroutine(nameof(LoadSceneAsync));
+            CoroutineRunner.instance.StopCoroutine(_coroutine);
             _coroutine = null;
         }
-        _coroutine = CoroutineRunner.instance.StartCoroutine(nameof(LoadSceneAsync));
+        _coroutine = CoroutineRunner.instance.StartCoroutine(LoadSceneAsync());
     }
     #endregion
 }
