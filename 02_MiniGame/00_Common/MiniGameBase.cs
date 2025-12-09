@@ -19,6 +19,8 @@ public abstract class MiniGameBase : MonoBehaviour
     #region 필드
     // 게임 상태 관리
     private readonly Dictionary<GameState, Action> _stateHandlers = new();
+    private Dictionary<GameState, GameState[]> _allowedTransitions;
+
     private GameState _currentGameState = GameState.None;
     #endregion
 
@@ -26,6 +28,7 @@ public abstract class MiniGameBase : MonoBehaviour
     protected virtual void Awake()
     {
         InitStateHandlers();
+        _allowedTransitions = DefineTransitions();
     }
 
     protected virtual void Start()
@@ -44,42 +47,42 @@ public abstract class MiniGameBase : MonoBehaviour
         _stateHandlers[GameState.Clear] = HandleClear;
         _stateHandlers[GameState.Exit] = HandleExit;
     }
-    #endregion
 
-    #region [public] 미니 게임 상태 관리
     /// <summary>
-    /// [public] 게임 상태를 변경하는 메서드
+    /// FSM 상태 전이 정의 (필요 시 override 가능)
     /// </summary>
-    /// <param name="gameState"></param>
-    public void ChangeGameState(GameState gameState)
+    protected virtual Dictionary<GameState, GameState[]> DefineTransitions()
     {
-        if (!CanTransitionTo(gameState))
+        return new Dictionary<GameState, GameState[]>
         {
-            Logger.Log("상태 변경 실패");
-            return;
-        }
-
-        _currentGameState = gameState;
-        Logger.Log($"상태 변경: {_currentGameState}");
-        HandleStateChanged(gameState);
+            { GameState.None,  new[] { GameState.Start } },
+            { GameState.Start, new[] { GameState.Play } },
+            { GameState.Play,  new[] { GameState.Pause, GameState.Dead, GameState.Clear } },
+            { GameState.Pause, new[] { GameState.Resume, GameState.Start, GameState.Exit } },
+            { GameState.Resume, new[] { GameState.Play } },
+            { GameState.Dead, new[] { GameState.Start, GameState.Exit } },
+            { GameState.Clear, new[] { GameState.Start, GameState.Exit } },
+            { GameState.Exit, new[] { GameState.None } },
+        };
     }
     #endregion
 
-    #region 미니 게임 상태 변경 조건 관리
+    #region 게임 상태 변경
     /// <summary>
-    /// GameState FSM -> Figma FSM 참고
+    /// [public] 게임 상태를 변경하는 메서드
     /// </summary>
-    private readonly Dictionary<GameState, GameState[]> _allowedTransitions = new()
+    /// <param name="nextState"></param>
+    /// <returns></returns>
+    public bool TryChangeGameState(GameState nextState)
     {
-        { GameState.None,  new[] { GameState.Start } },
-        { GameState.Start, new[] { GameState.Play } },
-        { GameState.Play,  new[] { GameState.Pause, GameState.Clear, GameState.Dead } },
-        { GameState.Pause,  new[] { GameState.Start, GameState.Resume, GameState.Exit } },
-        { GameState.Resume, new[] { GameState.Play } },
-        { GameState.Dead,  new[] { GameState.Start, GameState.Exit } },
-        { GameState.Clear, new[] { GameState.Exit,  GameState.Start } },
-        { GameState.Exit,   new[] { GameState.None } },
-    };
+        if (!CanTransitionTo(nextState)) return false;
+
+        _currentGameState = nextState;
+        Logger.Log($"상태 변경: {_currentGameState}");
+
+        HandleStateChanged(nextState);
+        return true;
+    }
 
     /// <summary>
     /// 변경 가능한 상태인지 검증
@@ -127,12 +130,12 @@ public abstract class MiniGameBase : MonoBehaviour
     protected abstract void ResetGame();
 
     /// <summary>
-    /// 게임 시작 시, 초기화하고 플레이
+    /// 게임 시작 시, 초기화하고 플레이로 진입
     /// </summary>
     protected virtual void HandleStart()
     {
         ResetGame();
-        ChangeGameState(GameState.Play);
+        TryChangeGameState(GameState.Play);
     }
 
     /// <summary>
