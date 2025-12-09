@@ -46,28 +46,26 @@ public abstract class MiniGameBase : MonoBehaviour
     }
     #endregion
 
-    #region [public] 게임 상태 관리
+    #region [public] 미니 게임 상태 관리
     /// <summary>
     /// [public] 게임 상태를 변경하는 메서드
     /// </summary>
     /// <param name="gameState"></param>
     public void ChangeGameState(GameState gameState)
     {
-        if (!CanTransitionTo(gameState)) return;
+        if (!CanTransitionTo(gameState))
+        {
+            Logger.Log("상태 변경 실패");
+            return;
+        }
 
         _currentGameState = gameState;
         Logger.Log($"상태 변경: {_currentGameState}");
         HandleStateChanged(gameState);
-
-        if (gameState == GameState.Start)
-        {
-            ResetGame();
-            ChangeGameState(GameState.Play);
-        }
     }
     #endregion
 
-    #region 스테이지 상태 변경 조건 관리
+    #region 미니 게임 상태 변경 조건 관리
     /// <summary>
     /// GameState FSM -> Figma FSM 참고
     /// </summary>
@@ -122,22 +120,49 @@ public abstract class MiniGameBase : MonoBehaviour
     }
     #endregion
 
-    #region Abstract 함수
+    #region 미니 게임 내부 동작 로직
+    /// <summary>
+    /// 미니 게임에서 사용할 데이터를 초기화할 때 사용
+    /// </summary>
     protected abstract void ResetGame();
-    protected abstract void HandleStart();
-    protected abstract void HandlePause();
+
+    /// <summary>
+    /// 게임 시작 시, 초기화하고 플레이
+    /// </summary>
     protected virtual void HandleStart()
     {
         ResetGame();
         ChangeGameState(GameState.Play);
     }
-    protected virtual void HandlePause()
-    {
-        // 타이머 제로로 맞추기
-    }
+
+    /// <summary>
+    /// 플레이
+    /// </summary>
+    protected abstract void HandlePlay();
+
+    /// <summary>
+    /// 일시 정지 상태
+    /// </summary>
+    protected abstract void HandlePause();
+
+    /// <summary>
+    /// 재시작
+    /// </summary>
     protected abstract void HandleResume();
+
+    /// <summary>
+    /// 게임 오버
+    /// </summary>
     protected abstract void GameOver();
+
+    /// <summary>
+    /// 클리어
+    /// </summary>
     protected abstract void HandleClear();
+
+    /// <summary>
+    /// 게임 나가기
+    /// </summary>
     protected abstract void HandleExit();
     #endregion
 }
