@@ -102,7 +102,16 @@ public class CameraManager : MonoBehaviour
                 break;
         }
 
-
+        // Aim Setting
+        switch (info.aimType)
+        {
+            case VCAimType.Composer:
+                SetAimComposer(info.aimComposer);
+                break;
+            case VCAimType.HardLookAt:
+                SetAimHardLookAt();
+                break;
+        }
     }
 
     /// <summary>
@@ -112,20 +121,15 @@ public class CameraManager : MonoBehaviour
     private void SetBodyThirdPersonFollow(Body3PersonFollow info)
     {
         Cinemachine3rdPersonFollow body;
-        var component = _curVirtualCam.GetCinemachineComponent<CinemachineComponentBase>();
+        CinemachineComponentBase component = _curVirtualCam
+            .GetCinemachineComponent(CinemachineCore.Stage.Body);
 
-        if (!(component as Cinemachine3rdPersonFollow)) // 3인칭 카메라가 아닐 경우
-        {
-            _curVirtualCam.DestroyCinemachineComponent<CinemachineComponentBase>();
-            component = null;
-        }
-
-        if (component == null)                          // 컴포넌트가 null일 경우
+        // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
+        if (component == null || !(component as Cinemachine3rdPersonFollow))
         {
             _curVirtualCam.AddCinemachineComponent<Cinemachine3rdPersonFollow>();
-            body = _curVirtualCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            component = _curVirtualCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         }
-
         body = (Cinemachine3rdPersonFollow)component;
 
         // Rig Setting
@@ -146,20 +150,15 @@ public class CameraManager : MonoBehaviour
     private void SetBodyTransposer(BodyTransposer info)
     {
         CinemachineTransposer body;
-        var component = _curVirtualCam.GetCinemachineComponent<CinemachineComponentBase>();
+        CinemachineComponentBase component = _curVirtualCam
+            .GetCinemachineComponent(CinemachineCore.Stage.Body);
 
-        if (!(component as CinemachineTransposer))      // transposer 카메라가 아닐 경우
-        {
-            _curVirtualCam.DestroyCinemachineComponent<CinemachineComponentBase>();
-            component = null;
-        }
-
-        if (component == null)                          // 컴포넌트가 null일 경우
+        // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
+        if (component == null || !(component as CinemachineTransposer))
         {
             _curVirtualCam.AddCinemachineComponent<CinemachineTransposer>();
-            body = _curVirtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            component = _curVirtualCam.GetCinemachineComponent<CinemachineTransposer>();
         }
-
         body = (CinemachineTransposer)component;
 
         body.m_BindingMode = info.bindingMode;
@@ -168,6 +167,47 @@ public class CameraManager : MonoBehaviour
         body.m_YDamping = info.yDaming;
         body.m_ZDamping = info.zDaming;
         body.m_YawDamping = info.yawDaming;
+    }
+
+    private void SetAimComposer(AimComposer info)
+    {
+        CinemachineComposer aim;
+        CinemachineComponentBase component = _curVirtualCam
+            .GetCinemachineComponent(CinemachineCore.Stage.Aim);
+
+        // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
+        if (component == null || !(component as CinemachineComposer))
+        {
+            _curVirtualCam.AddCinemachineComponent<CinemachineComposer>();
+            component = _curVirtualCam.GetCinemachineComponent<CinemachineComposer>();
+        }
+        aim = (CinemachineComposer)component;
+
+        aim.m_TrackedObjectOffset = info.trackedObjectOffset;
+        aim.m_ScreenX = info.screenX;
+        aim.m_ScreenY = info.screenY;
+        aim.m_DeadZoneWidth = info.deadZoneWidth;
+        aim.m_DeadZoneHeight = info.deadZoneHeight;
+        aim.m_DeadZoneWidth = info.deadZoneWidth;
+        aim.m_SoftZoneHeight = info.softZoneHeight;
+        aim.m_BiasX = info.biasX;
+        aim.m_BiasY = info.biasY;
+        aim.m_CenterOnActivate = info.centerOnActivate;
+    }
+
+    private void SetAimHardLookAt()
+    {
+        CinemachineHardLookAt aim;
+        CinemachineComponentBase component = _curVirtualCam
+            .GetCinemachineComponent(CinemachineCore.Stage.Aim);
+
+        // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
+        if (component == null || !(component as CinemachineHardLookAt))
+        {
+            _curVirtualCam.AddCinemachineComponent<CinemachineHardLookAt>();
+            component = _curVirtualCam.GetCinemachineComponent<CinemachineHardLookAt>();
+        }
+        aim = (CinemachineHardLookAt)component;
     }
     #endregion
 }
