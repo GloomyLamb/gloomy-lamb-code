@@ -3,81 +3,130 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+// todo: enum은 따로 관리
+public enum VCType
+{
+    // 미니게임 - Fall
+    FallVC3D,
+    FallVC25D,
+    FallVC2D,
+}
+
 public class CameraManager : MonoBehaviour
 {
     // todo: 제네릭 매니저 들어오면 싱글톤 처리하기
 
     [Header("가상 카메라")]
-    [SerializeField] private CinemachineVirtualCamera _curCam;              // 현재 카메라
-    [SerializeField] private List<CinemachineVirtualCamera> _sceneCams;     // 씬에서 사용하는 카메라 리스트
+    [SerializeField] private CinemachineVirtualCamera _curVirtualCam;       // 현재 카메라
+    [SerializeField] private CinemachineFreeLook _curFreeLookCam;           // 현재 카메라
+    [SerializeField] private List<CinemachineInfo> _sceneCams;              // 씬에서 사용하는 카메라 리스트
 
-    private Dictionary<string, CinemachineVirtualCamera> _camDict = new();
+    private Dictionary<VCType, CinemachineInfo> _camDict = new();
 
     #region 초기화
+    private void Awake()
+    {
+        // todo: cur cam 있으면 가져오고, 없으면 만들기
+    }
+
     /// <summary>
     /// [public] 씬이 변경될 때마다 씬에 등록되어 있는 카메라 정보를 등록합니다.
     /// </summary>
     /// <param name="sceneCams"></param>
-    public void Register(List<CinemachineVirtualCamera> sceneCams)
+    public void Register(List<CinemachineInfo> sceneCams)
     {
         _sceneCams = sceneCams;
-        _curCam = _sceneCams[0];
+        _camDict = _sceneCams.ToDictionary(cam => cam.type, cam => cam);    // 딕셔너리 초기화
 
-        _camDict = _sceneCams.ToDictionary(cam => cam.name, cam => cam);
+        if (_sceneCams.Count > 0)
+        {
+            // todo: 카메라 설정 지정
+        }
     }
     #endregion
 
-    #region [public] 카메라 관리
+    #region 카메라 관리
     /// <summary>
-    /// [public] 카메라 이름을 받아서 해당 카메라를 가장 위에 띄웁니다.
-    /// name은 카메라 오브젝트 이름입니다.
+    /// [public] 카메라 타입을 받아서 해당 설정을 적용합니다.
     /// </summary>
-    /// <param name="name"></param>
-    public void SwitchTo(string camName)
+    /// <param name="camType">커스텀한 카메라의 타입</param>
+    public void SwitchTo(VCType camType)
     {
-        if (!_camDict.TryGetValue(camName, out var switchedCam))
+        if (!_camDict.TryGetValue(camType, out var switchedCam))
         {
-            Logger.LogWarning($"카메라 {camName} 없음");
+            Logger.LogWarning($"카메라 {camType} 없음");
             return;
         }
 
-        foreach (CinemachineVirtualCamera cam in _camDict.Values)
+        switch (switchedCam.cinemachineType)
         {
-            cam.Priority = Define.InactivePriority;     // 모든 카메라 우선순위 초기화
+            case CinemachineType.Virtual:
+                SetVirtualCamera(switchedCam);
+                break;
+            case CinemachineType.FreeLook:
+                break;
+            default:
+                break;
         }
-
-        switchedCam.Priority = Define.ActivePriority;   // 선택한 카메라 우선순위 지정
-        _curCam = switchedCam;                          // 현재 카메라 변경
     }
 
     /// <summary>
-    /// [public] 카메라의 Follow 타겟을 지정합니다.
+    /// 가상 카메라 값 세팅하기
     /// </summary>
-    /// <param name="camName"></param>
-    /// <param name="target"></param>
-    public void SetFollowTarget(string camName, Transform target)
+    /// <param name="info"></param>
+    private void SetVirtualCamera(CinemachineInfo info)
     {
-        if (!_camDict.TryGetValue(camName, out var cam))
+        if (info.follow != null)
         {
-            Logger.Log($"카메라 {camName} 없음");
-            return;
+            _curVirtualCam.Follow = info.follow;
         }
-        cam.Follow = target;
+        if (info.lookAt != null)
+        {
+            _curVirtualCam.LookAt = info.lookAt;
+        }
+
+        // Lens Setting
+        LensSettings lensSettings = _curVirtualCam.m_Lens;
+        lensSettings.FieldOfView = info.fieldOfView;
+        lensSettings.ModeOverride = info.lensMode;
+        _curVirtualCam.m_Lens = lensSettings;
+
+        // Body Setting
+        switch (info.bodyType)
+        {
+            case VCBodyType.ThirdPersonFollow:
+                SetThirdPersonFollow(info.bodyThridPersonFollow);
+                break;
+            case VCBodyType.Transposer:
+                SetTransposer(info.bodyTransposer);
+                break;
+        }
+
+
     }
 
     /// <summary>
-    /// [public] 카메라의 LookAt 타켓을 지정합니다.
+    /// 시네머신 바디 타입 3인칭 추적 카메라 세팅
     /// </summary>
-    /// <param name="camName"></param>
-    /// <param name="target"></param>
-    public void SetLookAtTarget(string camName, Transform target)
+    /// <param name="info"></param>
+    private void SetThirdPersonFollow(Body3PersonFollow info)
     {
-        if (!_camDict.TryGetValue(camName, out var cam))
-        {
-            Logger.Log($"카메라 {camName} 없음");
-            return;
-        }
-        cam.LookAt = target;
+        Cinemachine3rdPersonFollow body = new();
+
+        // Rig Setting
+        body.Damping = info.dampingValue;
+        body.ShoulderOffset = info.shoulderOffset;
+        body.CameraSide = info.cameraSide;
+        body.CameraDistance = info.cameraDistance;
+
+        // Obstacles Setting
+        body.CameraCollisionFilter = info.cameraCollisionFilter;
+        body.IgnoreTag = info.ignoreTag;
+    }
+
+    private void SetTransposer(BodyTransposer info)
+    {
+
     }
     #endregion
 }
