@@ -115,6 +115,28 @@ public class CameraManager : MonoBehaviour
                 break;
         }
     }
+
+    public void SwitchTo(CinemachineVirtualCamera virtualCam)
+    {
+        _curVirtualCam = virtualCam;
+    }
+
+    public void SwitchTo(CinemachineFreeLook freeLookCam)
+    {
+        _curFreeLookCam = freeLookCam;
+    }
+
+    public void SwitchFollow(Transform target)
+    {
+        _curFreeLookCam.Follow = target;
+        _curVirtualCam.Follow = target;
+    }
+
+    public void SwitchFollowLook(Transform target)
+    {
+        _curFreeLookCam.LookAt = target;
+        _curVirtualCam.LookAt = target;
+    }
     #endregion
 
     #region Virtual Camera 관리
