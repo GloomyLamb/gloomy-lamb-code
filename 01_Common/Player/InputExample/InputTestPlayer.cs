@@ -6,21 +6,28 @@ public class InputTestPlayer : Player
 {
     public override void Init()
     {
-        input.BindInputEvent(InputMapName.Default, InputActionName.Move, OnMove);
         input.BindInputEvent(InputMapName.Default, InputActionName.Jump, OnJump);
+        
     }
 
     private void Start()
     {
+        // 현재 사용할 Input을 InpputManager에게 전달해줘야 함!
+        // 이거 안하면 활성화 안되어요
+        // input 접근하면 할 수는 있지만 원활한 사용을 위해 Manager 통해서 사용바람! 
         InputManager.Instance.UseInput(input);
     }
 
-    void OnMove(InputAction.CallbackContext context)
+    // 또는 FixedUpdate에서
+    private void Update()
     {
-        if (context.phase == InputActionPhase.Started)
-        {
-            Logger.Log("Move Started");
-        }
+        Move();
+    }
+
+    void Move()
+    {
+        // Axis 뽑아오는 법!
+        Logger.Log(input.GetAxis(InputMapName.Default, InputActionName.Move).ToString());
     }
 
     void OnJump(InputAction.CallbackContext context)
