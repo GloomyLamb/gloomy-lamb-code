@@ -7,7 +7,7 @@ public enum SceneType
 {
     Title,
     Library,
-    NHP_ThreeBiomes,
+    NHP_ThreeBiomes,        // 테스트용
     // todo: 미니 게임들 추가
 }
 
@@ -63,6 +63,7 @@ public class SceneController
     /// <returns></returns>
     private IEnumerator LoadSceneAsync()
     {
+        // todo: 로딩 씬 필요
         AsyncOperation async = SceneManager.LoadSceneAsync(_curSceneType.ToString());
         while (!async.isDone)
         {
