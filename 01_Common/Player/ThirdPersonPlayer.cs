@@ -38,6 +38,11 @@ public class ThirdPersonPlayer : Player
         InputManager.Instance.UseInput(input);
     }
 
+    private void Update()
+    {
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime*10);
+    }
+
     private void FixedUpdate()
     {
         Move();
@@ -50,14 +55,14 @@ public class ThirdPersonPlayer : Player
         Vector3 camForwardFlat = Vector3.ProjectOnPlane(cam.forward, Vector3.up).normalized;
         Vector3 right = Vector3.Cross(Vector3.up, camForwardFlat).normalized;
         Vector3 moveDir = (camForwardFlat * inputDir.y + right * inputDir.x).normalized;
-        forward = moveDir;
         
         if (moveDir.magnitude > 0.1f)
         {
+            forward = moveDir;
             Vector3 newPosition = rb.position + forward * (moveSpeed * Time.deltaTime);
 
             rb.MovePosition(newPosition); 
-            rb.MoveRotation(Quaternion.LookRotation(forward, Vector3.up));
+            //rb.MoveRotation(Quaternion.LookRotation(forward, Vector3.up));
         }
     }
 
