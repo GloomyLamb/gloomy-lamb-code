@@ -37,13 +37,13 @@ public class CameraManager : MonoBehaviour
     {
         foreach (CinemachineVirtualCamera cam in _camDict.Values)
         {
-            cam.Priority = 0;           // 모든 카메라 우선순위 초기화
+            cam.Priority = Define.InactivePriority;         // 모든 카메라 우선순위 초기화
         }
 
         if (_camDict.TryGetValue(camName, out var SwitchedCam))
         {
-            SwitchedCam.Priority = 10;  // 선택한 카메라 우선순위 지정
-            _curCam = SwitchedCam;      // 현재 카메라 변경
+            SwitchedCam.Priority = Define.ActivePriority;   // 선택한 카메라 우선순위 지정
+            _curCam = SwitchedCam;                          // 현재 카메라 변경
         }
         else
         {
