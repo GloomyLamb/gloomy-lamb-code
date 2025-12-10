@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputHandler
@@ -41,12 +42,46 @@ public class InputHandler
         }
     }
 
-    public void BindInputEvent(InputMapName mapName, InputActionName actionName, Action<InputAction.CallbackContext> action)
+    public bool IsPressed(InputMapName mapName, InputActionName actionName)
     {
         string mapNameString = mapName.ToString();
         string actionNameString = actionName.ToString();
 
-        Logger.Log(mapName + ", " +  actionNameString);
+        if (actionMaps.TryGetValue(mapNameString, out InputActionMap map))
+        {
+            InputAction inputAction = map.actions.FirstOrDefault(a => a.name == actionNameString);
+            return inputAction.IsPressed();
+        }
+        return false;
+    }
+
+    public InputAction GetInputAction(InputMapName mapName, InputActionName actionName)
+    {
+        string mapNameString = mapName.ToString();
+        string actionNameString = actionName.ToString();
+
+        if (actionMaps.TryGetValue(mapNameString, out InputActionMap map))
+        {
+            InputAction inputAction = map.actions.FirstOrDefault(a => a.name == actionNameString);
+            return inputAction;
+        }
+        return null;
+    }
+
+    public Vector2 GetAxis(InputMapName mapName, InputActionName actionName)
+    {
+        InputAction inputAction = GetInputAction(mapName, actionName);
+        if (inputAction != null)
+        {
+            return inputAction.ReadValue<Vector2>();
+        }
+        return Vector2.zero;
+    }
+
+    public void BindInputEvent(InputMapName mapName, InputActionName actionName, Action<InputAction.CallbackContext> action)
+    {
+        string mapNameString = mapName.ToString();
+        string actionNameString = actionName.ToString();
 
         if (actionMaps.TryGetValue(mapNameString, out InputActionMap map))
         {
@@ -59,12 +94,10 @@ public class InputHandler
             inputAction.canceled += action;
 
             nowBindingActions.Add((inputAction, action));
-            
-            Logger.Log(mapName + ", " +  actionNameString);
         }
     }
 
-
+    
     public void DisposeInputEvent()
     {
         for (int i = nowBindingActions.Count - 1; i >= 0; i--)
@@ -76,5 +109,6 @@ public class InputHandler
         }
     }
 
+    
 
 }
