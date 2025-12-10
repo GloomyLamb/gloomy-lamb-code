@@ -47,6 +47,11 @@ public class CameraManager : MonoBehaviour
             _curFreeLookCam = FindObjectOfType<CinemachineFreeLook>();
         }
 
+        if (_player == null)
+        {
+            _player = FindObjectOfType<CapsuleCollider>().transform;
+        }
+
         if (_camera == null)
         {
             _camera = Camera.main.transform;
