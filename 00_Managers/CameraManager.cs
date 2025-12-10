@@ -10,6 +10,11 @@ public enum VCType
     FallVC3D,
     FallVC25D,
     FallVC2D,
+
+    // 테스트
+    TestVC1,
+    TestVC2,
+    TestVC3,
 }
 
 public class CameraManager : MonoBehaviour
@@ -218,6 +223,35 @@ public class CameraManager : MonoBehaviour
             component = _curVirtualCam.GetCinemachineComponent<CinemachineHardLookAt>();
         }
         aim = (CinemachineHardLookAt)component;
+    }
+    #endregion
+
+    #region 테스트 코드
+    public void Test_PushCamera()
+    {
+        List<CinemachineInfo> infos = new();
+        Register(infos);
+    }
+
+    public void Test_SwitchCamera1()
+    {
+        SwitchTo(VCType.TestVC1);
+    }
+
+    public void Test_SwitchCamera2()
+    {
+        SwitchTo(VCType.TestVC2);
+    }
+
+    public void Test_SwitchCamera3()
+    {
+        SwitchTo(VCType.TestVC3);
+    }
+
+    public void Test_ResetCamera()
+    {
+        _sceneCams.Clear();
+        _camDict.Clear();
     }
     #endregion
 }
