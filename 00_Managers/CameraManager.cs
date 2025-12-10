@@ -32,6 +32,15 @@ public class CameraManager : MonoBehaviour
     private void Awake()
     {
         // todo: cur cam 있으면 가져오고, 없으면 만들기
+        if (_curVirtualCam == null)
+        {
+            _curVirtualCam = FindObjectOfType<CinemachineVirtualCamera>();
+        }
+
+        if (_curFreeLookCam == null)
+        {
+            _curFreeLookCam = FindObjectOfType<CinemachineFreeLook>();
+        }
     }
 
     /// <summary>
