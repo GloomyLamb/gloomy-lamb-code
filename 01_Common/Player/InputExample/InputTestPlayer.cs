@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class InputTestPlayer : Player
 {
-    public override void Init()
+    protected override void Init()
     {
         input.BindInputEvent(InputMapName.Default, InputActionName.Jump, OnJump);
         

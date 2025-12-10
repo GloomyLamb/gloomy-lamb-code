@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,10 +6,12 @@ using UnityEngine.InputSystem;
 // controller 로 빼도 되지만, 우리 Player 들이 생각보다 가벼울 것임
 public abstract class Player : MonoBehaviour
 {
-    // PlayerController 
+    [Header("Input")]
     [SerializeField] protected InputActionAsset inputAction;
     protected InputHandler input;
-
+    
+    [Header("Pivot")]
+    [SerializeField] protected Transform pivot;
     
     public Vector3 Forward => forward;
     protected Vector3 forward;
@@ -20,8 +23,8 @@ public abstract class Player : MonoBehaviour
         Init();
     }
 
-    public abstract void Init();
-
+    protected abstract void Init();
+    
     private void OnDestroy()
     {
         input?.DisposeInputEvent();
