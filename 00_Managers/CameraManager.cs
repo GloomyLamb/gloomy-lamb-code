@@ -67,12 +67,15 @@ public class CameraManager : MonoBehaviour
                 SetVirtualCamera(switchedCam);
                 break;
             case CinemachineType.FreeLook:
+                // todo: free look 로직 짜기
                 break;
             default:
                 break;
         }
     }
+    #endregion
 
+    #region Virtual Camera 관리
     /// <summary>
     /// 가상 카메라 값 세팅하기
     /// </summary>
@@ -116,7 +119,9 @@ public class CameraManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
+    #region Body 관리
     /// <summary>
     /// 시네머신 바디 - 3 person follow 카메라 세팅
     /// </summary>
@@ -171,7 +176,9 @@ public class CameraManager : MonoBehaviour
         body.m_ZDamping = info.zDaming;
         body.m_YawDamping = info.yawDaming;
     }
+    #endregion
 
+    #region Aim 관리
     private void SetAimComposer(AimComposer info)
     {
         CinemachineComposer aim;
