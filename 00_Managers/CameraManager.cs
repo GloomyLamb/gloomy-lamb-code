@@ -35,20 +35,19 @@ public class CameraManager : MonoBehaviour
     /// <param name="name"></param>
     public void SwitchTo(string camName)
     {
+        if (!_camDict.TryGetValue(camName, out var switchedCam))
+        {
+            Logger.LogWarning($"카메라 {camName} 없음");
+            return;
+        }
+
         foreach (CinemachineVirtualCamera cam in _camDict.Values)
         {
             cam.Priority = Define.InactivePriority;         // 모든 카메라 우선순위 초기화
         }
 
-        if (_camDict.TryGetValue(camName, out var SwitchedCam))
-        {
-            SwitchedCam.Priority = Define.ActivePriority;   // 선택한 카메라 우선순위 지정
-            _curCam = SwitchedCam;                          // 현재 카메라 변경
-        }
-        else
-        {
-            Logger.Log($"카메라 {camName} 없음");
-        }
+        switchedCam.Priority = Define.ActivePriority;   // 선택한 카메라 우선순위 지정
+        _curCam = switchedCam;                          // 현재 카메라 변경
     }
 
     /// <summary>
@@ -58,14 +57,12 @@ public class CameraManager : MonoBehaviour
     /// <param name="target"></param>
     public void SetFollowTarget(string camName, Transform target)
     {
-        if (_camDict.TryGetValue(camName, out var cam))
-        {
-            cam.Follow = target;
-        }
-        else
+        if (!_camDict.TryGetValue(camName, out var cam))
         {
             Logger.Log($"카메라 {camName} 없음");
+            return;
         }
+        cam.Follow = target;
     }
 
     /// <summary>
@@ -75,14 +72,12 @@ public class CameraManager : MonoBehaviour
     /// <param name="target"></param>
     public void SetLookAtTarget(string camName, Transform target)
     {
-        if (_camDict.TryGetValue(camName, out var cam))
-        {
-            cam.LookAt = target;
-        }
-        else
+        if (!_camDict.TryGetValue(camName, out var cam))
         {
             Logger.Log($"카메라 {camName} 없음");
+            return;
         }
+        cam.LookAt = target;
     }
     #endregion
 }
