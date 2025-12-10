@@ -95,10 +95,10 @@ public class CameraManager : MonoBehaviour
         switch (info.bodyType)
         {
             case VCBodyType.ThirdPersonFollow:
-                SetThirdPersonFollow(info.bodyThridPersonFollow);
+                SetBodyThirdPersonFollow(info.bodyThridPersonFollow);
                 break;
             case VCBodyType.Transposer:
-                SetTransposer(info.bodyTransposer);
+                SetBodyTransposer(info.bodyTransposer);
                 break;
         }
 
@@ -109,7 +109,7 @@ public class CameraManager : MonoBehaviour
     /// 시네머신 바디 - 3 person follow 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private void SetThirdPersonFollow(Body3PersonFollow info)
+    private void SetBodyThirdPersonFollow(Body3PersonFollow info)
     {
         Cinemachine3rdPersonFollow body;
         var component = _curVirtualCam.GetCinemachineComponent<CinemachineComponentBase>();
@@ -143,7 +143,7 @@ public class CameraManager : MonoBehaviour
     /// 시네머신 바디 - Transposer 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private void SetTransposer(BodyTransposer info)
+    private void SetBodyTransposer(BodyTransposer info)
     {
         CinemachineTransposer body;
         var component = _curVirtualCam.GetCinemachineComponent<CinemachineComponentBase>();
