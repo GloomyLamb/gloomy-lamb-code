@@ -39,12 +39,16 @@ public class CameraManager : MonoBehaviour
         // todo: cur cam 있으면 가져오고, 없으면 만들기
         if (_curVirtualCam == null)
         {
-            _curVirtualCam = FindObjectOfType<CinemachineVirtualCamera>();
+            var go = new GameObject("Virtual Camera");
+            go.AddComponent<CinemachineVirtualCamera>();
+            _curVirtualCam = go.GetComponent<CinemachineVirtualCamera>();
         }
 
         if (_curFreeLookCam == null)
         {
-            _curFreeLookCam = FindObjectOfType<CinemachineFreeLook>();
+            var go = new GameObject("FreeLook Camera");
+            go.AddComponent<CinemachineFreeLook>();
+            _curFreeLookCam = go.GetComponent<CinemachineFreeLook>();
         }
 
         if (_player == null)
@@ -111,9 +115,11 @@ public class CameraManager : MonoBehaviour
         switch (switchedCamInfo.cinemachineType)
         {
             case CinemachineType.Virtual:
+                SetPriority(CinemachineType.Virtual);
                 SetVirtualCamera(switchedCamInfo._virtualCam);
                 break;
             case CinemachineType.FreeLook:
+                SetPriority(CinemachineType.FreeLook);
                 // todo: free look 로직 짜기
                 break;
             default:
@@ -129,6 +135,20 @@ public class CameraManager : MonoBehaviour
     public void SwitchTo(CinemachineFreeLook freeLookCam)
     {
         _curFreeLookCam = freeLookCam;
+    }
+
+    private void SetPriority(CinemachineType type)
+    {
+        if (type == CinemachineType.Virtual)
+        {
+            _curVirtualCam.Priority = Define.ActivePriority;
+            _curFreeLookCam.Priority = Define.InactivePriority;
+        }
+        else if (type == CinemachineType.FreeLook)
+        {
+            _curVirtualCam.Priority = Define.InactivePriority;
+            _curFreeLookCam.Priority = Define.ActivePriority;
+        }
     }
 
     public void SwitchFollow(Transform target)
