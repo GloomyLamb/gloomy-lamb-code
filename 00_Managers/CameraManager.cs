@@ -22,11 +22,11 @@ public class CameraManager : MonoBehaviour
     // todo: 제네릭 매니저 들어오면 싱글톤 처리하기
 
     [Header("가상 카메라")]
-    [SerializeField] private CinemachineVirtualCamera _curVirtualCam;       // 현재 카메라
-    [SerializeField] private CinemachineFreeLook _curFreeLookCam;           // 현재 카메라
-    [SerializeField] private List<CinemachineInfo> _sceneCams;              // 씬에서 사용하는 카메라 리스트
+    [SerializeField] private CinemachineVirtualCamera _curVirtualCam;
+    [SerializeField] private CinemachineFreeLook _curFreeLookCam;
+    [SerializeField] private List<CinemachineInfo> _sceneCams;      // 씬에서 사용하는 카메라 리스트
 
-    private Dictionary<VCType, CinemachineInfo> _camDict = new();
+    private Dictionary<VCType, CinemachineInfo> _camDict = new();   // 씬에서 사용하는 카메라 딕셔너리
 
     #region 초기화
     private void Awake()
