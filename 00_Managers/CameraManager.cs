@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 // todo: enum은 따로 관리
@@ -28,6 +29,10 @@ public class CameraManager : MonoBehaviour
 
     private Dictionary<VCType, CinemachineInfo> _camDict = new();   // 씬에서 사용하는 카메라 딕셔너리
 
+    // todo: 플레이어 캐싱해두기 (현재는 테스트용)
+    [SerializeField] private Transform _player;
+    [SerializeField] private Transform _camera;
+
     #region 초기화
     private void Awake()
     {
@@ -40,6 +45,11 @@ public class CameraManager : MonoBehaviour
         if (_curFreeLookCam == null)
         {
             _curFreeLookCam = FindObjectOfType<CinemachineFreeLook>();
+        }
+
+        if (_camera == null)
+        {
+            _camera = Camera.main.transform;
         }
     }
 
@@ -100,9 +110,18 @@ public class CameraManager : MonoBehaviour
         {
             _curVirtualCam.Follow = info.follow;
         }
+        else
+        {
+            _curVirtualCam.Follow = _player;
+        }
+
         if (info.lookAt != null)
         {
             _curVirtualCam.LookAt = info.lookAt;
+        }
+        else
+        {
+            _curVirtualCam.LookAt = _player;
         }
 
         // Lens Setting
