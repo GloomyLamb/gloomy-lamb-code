@@ -38,10 +38,13 @@ public class CameraManager : MonoBehaviour
         _sceneCams = sceneCams;
         _camDict = _sceneCams.ToDictionary(cam => cam.type, cam => cam);    // 딕셔너리 초기화
 
-        if (_sceneCams.Count > 0)
+        if (_sceneCams.Count == 0)
         {
-            // todo: 카메라 설정 지정
+            Logger.LogWarning("씬 카메라 리스트 없음");
+            return;
         }
+
+        SwitchTo(_sceneCams[0].type);
     }
     #endregion
 
