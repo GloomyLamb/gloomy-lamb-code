@@ -257,7 +257,12 @@ public class CameraManager : MonoBehaviour
     #region 테스트 코드
     public void Test_PushCamera()
     {
-        List<CinemachineInfo> infos = new();
+        List<CinemachineInfo> infos = new()
+        {
+            FindTestSO("TestVC1"),
+            FindTestSO("TestVC2"),
+            FindTestSO("TestVC3")
+        };
         Register(infos);
     }
 
@@ -280,6 +285,16 @@ public class CameraManager : MonoBehaviour
     {
         _sceneCams.Clear();
         _camDict.Clear();
+    }
+
+    private CinemachineInfo FindTestSO(string name)
+    {
+        Logger.Log($"so 데이터 찾기: {name}");
+        string[] guids = AssetDatabase.FindAssets($"{name} t:CinemachineInfo");
+
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        var def = AssetDatabase.LoadAssetAtPath<CinemachineInfo>(path);
+        return def;
     }
     #endregion
 }
