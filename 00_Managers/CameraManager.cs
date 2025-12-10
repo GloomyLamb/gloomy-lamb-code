@@ -191,9 +191,12 @@ public class CameraManager : MonoBehaviour
         if (component == null || !(component as Cinemachine3rdPersonFollow))
         {
             _curVirtualCam.AddCinemachineComponent<Cinemachine3rdPersonFollow>();
-            component = _curVirtualCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            body = _curVirtualCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         }
-        body = (Cinemachine3rdPersonFollow)component;
+        else
+        {
+            body = (Cinemachine3rdPersonFollow)component;
+        }
 
         // Rig Setting
         body.Damping = info.dampingValue;
@@ -220,9 +223,12 @@ public class CameraManager : MonoBehaviour
         if (component == null || !(component as CinemachineTransposer))
         {
             _curVirtualCam.AddCinemachineComponent<CinemachineTransposer>();
-            component = _curVirtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            body = _curVirtualCam.GetCinemachineComponent<CinemachineTransposer>();
         }
-        body = (CinemachineTransposer)component;
+        else
+        {
+            body = (CinemachineTransposer)component;
+        }
 
         body.m_BindingMode = info.bindingMode;
         body.m_FollowOffset = info.followOffset;
@@ -244,9 +250,12 @@ public class CameraManager : MonoBehaviour
         if (component == null || !(component as CinemachineComposer))
         {
             _curVirtualCam.AddCinemachineComponent<CinemachineComposer>();
-            component = _curVirtualCam.GetCinemachineComponent<CinemachineComposer>();
+            aim = _curVirtualCam.GetCinemachineComponent<CinemachineComposer>();
         }
-        aim = (CinemachineComposer)component;
+        else
+        {
+            aim = (CinemachineComposer)component;
+        }
 
         aim.m_TrackedObjectOffset = info.trackedObjectOffset;
         aim.m_ScreenX = info.screenX;
@@ -270,9 +279,12 @@ public class CameraManager : MonoBehaviour
         if (component == null || !(component as CinemachineHardLookAt))
         {
             _curVirtualCam.AddCinemachineComponent<CinemachineHardLookAt>();
-            component = _curVirtualCam.GetCinemachineComponent<CinemachineHardLookAt>();
+            aim = _curVirtualCam.GetCinemachineComponent<CinemachineHardLookAt>();
         }
-        aim = (CinemachineHardLookAt)component;
+        else
+        {
+            aim = (CinemachineHardLookAt)component;
+        }
     }
     #endregion
 
