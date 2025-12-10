@@ -9,7 +9,7 @@ public class CameraManager : MonoBehaviour
 
     [Header("가상 카메라")]
     [SerializeField] private CinemachineVirtualCamera _curCam;              // 현재 카메라
-    [SerializeField] private List<CinemachineVirtualCamera> _sceneCams;    // 씬에서 사용하는 카메라 리스트
+    [SerializeField] private List<CinemachineVirtualCamera> _sceneCams;     // 씬에서 사용하는 카메라 리스트
 
     private Dictionary<string, CinemachineVirtualCamera> _camDict = new();
 
@@ -43,7 +43,7 @@ public class CameraManager : MonoBehaviour
 
         foreach (CinemachineVirtualCamera cam in _camDict.Values)
         {
-            cam.Priority = Define.InactivePriority;         // 모든 카메라 우선순위 초기화
+            cam.Priority = Define.InactivePriority;     // 모든 카메라 우선순위 초기화
         }
 
         switchedCam.Priority = Define.ActivePriority;   // 선택한 카메라 우선순위 지정
