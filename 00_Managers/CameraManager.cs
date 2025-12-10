@@ -79,16 +79,34 @@ public class CameraManager : MonoBehaviour
     /// <param name="camType">커스텀한 카메라의 타입</param>
     public void SwitchTo(VCType camType)
     {
-        if (!_camDict.TryGetValue(camType, out var switchedCam))
+        if (!_camDict.TryGetValue(camType, out var switchedCamInfo))
         {
             Logger.LogWarning($"카메라 {camType} 없음");
             return;
         }
 
-        switch (switchedCam.cinemachineType)
+        if (switchedCamInfo.follow != null)
+        {
+            _curVirtualCam.Follow = switchedCamInfo.follow;
+        }
+        else
+        {
+            _curVirtualCam.Follow = _player;
+        }
+
+        if (switchedCamInfo.lookAt != null)
+        {
+            _curVirtualCam.LookAt = switchedCamInfo.lookAt;
+        }
+        else
+        {
+            _curVirtualCam.LookAt = _player;
+        }
+
+        switch (switchedCamInfo.cinemachineType)
         {
             case CinemachineType.Virtual:
-                SetVirtualCamera(switchedCam);
+                SetVirtualCamera(switchedCamInfo._virtualCam);
                 break;
             case CinemachineType.FreeLook:
                 // todo: free look 로직 짜기
@@ -104,26 +122,8 @@ public class CameraManager : MonoBehaviour
     /// 가상 카메라 값 세팅하기
     /// </summary>
     /// <param name="info"></param>
-    private void SetVirtualCamera(CinemachineInfo info)
+    private void SetVirtualCamera(CinemachineVirtualInfo info)
     {
-        if (info.follow != null)
-        {
-            _curVirtualCam.Follow = info.follow;
-        }
-        else
-        {
-            _curVirtualCam.Follow = _player;
-        }
-
-        if (info.lookAt != null)
-        {
-            _curVirtualCam.LookAt = info.lookAt;
-        }
-        else
-        {
-            _curVirtualCam.LookAt = _player;
-        }
-
         // Lens Setting
         LensSettings lensSettings = _curVirtualCam.m_Lens;
         lensSettings.FieldOfView = info.fieldOfView;
