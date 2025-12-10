@@ -106,12 +106,27 @@ public class CameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 시네머신 바디 타입 3인칭 추적 카메라 세팅
+    /// 시네머신 바디 - 3 person follow 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
     private void SetThirdPersonFollow(Body3PersonFollow info)
     {
-        Cinemachine3rdPersonFollow body = new();
+        Cinemachine3rdPersonFollow body;
+        var component = _curVirtualCam.GetCinemachineComponent<CinemachineComponentBase>();
+
+        if (!(component as Cinemachine3rdPersonFollow)) // 3인칭 카메라가 아닐 경우
+        {
+            _curVirtualCam.DestroyCinemachineComponent<CinemachineComponentBase>();
+            component = null;
+        }
+
+        if (component == null)                          // 컴포넌트가 null일 경우
+        {
+            _curVirtualCam.AddCinemachineComponent<Cinemachine3rdPersonFollow>();
+            body = _curVirtualCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        }
+
+        body = (Cinemachine3rdPersonFollow)component;
 
         // Rig Setting
         body.Damping = info.dampingValue;
@@ -124,9 +139,35 @@ public class CameraManager : MonoBehaviour
         body.IgnoreTag = info.ignoreTag;
     }
 
+    /// <summary>
+    /// 시네머신 바디 - Transposer 카메라 세팅
+    /// </summary>
+    /// <param name="info"></param>
     private void SetTransposer(BodyTransposer info)
     {
+        CinemachineTransposer body;
+        var component = _curVirtualCam.GetCinemachineComponent<CinemachineComponentBase>();
 
+        if (!(component as CinemachineTransposer))      // transposer 카메라가 아닐 경우
+        {
+            _curVirtualCam.DestroyCinemachineComponent<CinemachineComponentBase>();
+            component = null;
+        }
+
+        if (component == null)                          // 컴포넌트가 null일 경우
+        {
+            _curVirtualCam.AddCinemachineComponent<CinemachineTransposer>();
+            body = _curVirtualCam.GetCinemachineComponent<CinemachineTransposer>();
+        }
+
+        body = (CinemachineTransposer)component;
+
+        body.m_BindingMode = info.bindingMode;
+        body.m_FollowOffset = info.followOffset;
+        body.m_XDamping = info.xDaming;
+        body.m_YDamping = info.yDaming;
+        body.m_ZDamping = info.zDaming;
+        body.m_YawDamping = info.yawDaming;
     }
     #endregion
 }
