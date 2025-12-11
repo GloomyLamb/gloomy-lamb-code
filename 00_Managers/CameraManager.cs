@@ -37,6 +37,9 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         base.Awake();
     }
 
+    /// <summary>
+    /// 파라미터 초기화
+    /// </summary>
     protected override void Init()
     {
         base.Init();
@@ -99,23 +102,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
             return;
         }
 
-        if (switchedCamInfo.follow != null)
-        {
-            _curVirtualCam.Follow = switchedCamInfo.follow;
-        }
-        else
-        {
-            _curVirtualCam.Follow = _player;
-        }
-
-        if (switchedCamInfo.lookAt != null)
-        {
-            _curVirtualCam.LookAt = switchedCamInfo.lookAt;
-        }
-        else
-        {
-            _curVirtualCam.LookAt = _player;
-        }
+        CheckNullOfFollowNLookAt(switchedCamInfo);
 
         switch (switchedCamInfo.cinemachineType)
         {
@@ -132,16 +119,69 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         }
     }
 
+    /// <summary>
+    /// [public] 파라미터를 현재 보는 카메라로 설정합니다.
+    /// </summary>
+    /// <param name="virtualCam"></param>
     public void SwitchTo(CinemachineVirtualCamera virtualCam)
     {
         _curVirtualCam = virtualCam;
     }
 
+    /// <summary>
+    /// [public] 파라미터를 현재 보는 카메라로 설정합니다.
+    /// </summary>
+    /// <param name="freeLookCam"></param>
     public void SwitchTo(CinemachineFreeLook freeLookCam)
     {
         _curFreeLookCam = freeLookCam;
+        SetPriority(CinemachineType.FreeLook);
     }
 
+    /// <summary>
+    /// [public] Follow 타겟을 변경합니다.
+    /// </summary>
+    /// <param name="target"></param>
+    public void SwitchFollow(Transform target)
+    {
+        _curFreeLookCam.Follow = target;
+        _curVirtualCam1.Follow = target;
+        _curVirtualCam2.Follow = target;
+    }
+
+    /// <summary>
+    /// [public] LookAt 타겟을 변경합니다.
+    /// </summary>
+    /// <param name="target"></param>
+    public void SwitchFollowLook(Transform target)
+    {
+        _curFreeLookCam.LookAt = target;
+        _curVirtualCam1.LookAt = target;
+        _curVirtualCam2.LookAt = target;
+    }
+
+    /// <summary>
+    /// info의 follow, lookAt에 값이 없으면 기본값을 넣어줍니다.
+    /// </summary>
+    /// <param name="info"></param>
+    private void CheckNullOfFollowNLookAt(CinemachineInfo info)
+    {
+        if (_firstVirtualCam)
+        {
+            _curVirtualCam2.Follow = info.follow != null ? info.follow : _player;
+            _curVirtualCam2.LookAt = info.lookAt != null ? info.lookAt : _player;
+        }
+        else
+        {
+            _curVirtualCam1.Follow = info.follow != null ? info.follow : _player;
+            _curVirtualCam1.LookAt = info.lookAt != null ? info.lookAt : _player;
+        }
+    }
+
+    /// <summary>
+    /// 카메라 타입에 맞게 우선순위를 설정해줍니다.
+    /// </summary>
+    /// <param name="type"></param>
     private void SetPriority(CinemachineType type)
     {
         if (type == CinemachineType.Virtual)
@@ -154,18 +194,6 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
             _curVirtualCam.Priority = Define.InactivePriority;
             _curFreeLookCam.Priority = Define.ActivePriority;
         }
-    }
-
-    public void SwitchFollow(Transform target)
-    {
-        _curFreeLookCam.Follow = target;
-        _curVirtualCam.Follow = target;
-    }
-
-    public void SwitchFollowLook(Transform target)
-    {
-        _curFreeLookCam.LookAt = target;
-        _curVirtualCam.LookAt = target;
     }
     #endregion
 
