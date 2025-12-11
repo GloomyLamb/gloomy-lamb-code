@@ -28,10 +28,10 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     [SerializeField] private CinemachineVirtualCamera _curVirtualCam2;
     [SerializeField] private bool _firstVirtualCam = false;     // 사용 중인 카메라 확인하기
 
-    private VCType _curType;
+    private VCType _curType = VCType.None;
 
     // 외부 카메라를 사용할 경우 캐싱
-    private CinemachineVirtualCamera _externalVirtualCam;
+    [SerializeField] private CinemachineVirtualCamera _externalVirtualCam;
     private bool _useExternal = false;
 
     [Header("Free Look Camera")]
@@ -158,11 +158,17 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     {
         // todo: 외부에서 들어오는 카메라라면 기존 카메라랑 연결이 끊길 것으로 예상
         // 노는 카메라 캐싱하는 방법 필요
+        if (_useExternal != useExternal && !useExternal)
+        {
+            _externalVirtualCam = null;
+        }
         _useExternal = useExternal;
+
         if (useExternal)
         {
             _externalVirtualCam = virtualCam;
             SetPriority(CinemachineType.Virtual);
+            _curType = VCType.None;
             return;
         }
 
