@@ -24,7 +24,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     // 시네머신의 부드러운 카메라 이동을 이용하기 위해 2개의 카메라 사용
     [SerializeField] private CinemachineVirtualCamera _curVirtualCam1;
     [SerializeField] private CinemachineVirtualCamera _curVirtualCam2;
-    private bool _firstVirtualCam = true;     // 사용 중인 카메라 확인하기
+    [SerializeField] private bool _firstVirtualCam = false;     // 사용 중인 카메라 확인하기
 
     [SerializeField] private CinemachineFreeLook _curFreeLookCam;
 
@@ -118,9 +118,11 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         switch (switchedCamInfo.cinemachineType)
         {
             case CinemachineType.Virtual:
+                Logger.Log("Virtual Camera 변경");
                 SwitchTo(SetVirtualCamera(switchedCamInfo._virtualCam));
                 break;
             case CinemachineType.FreeLook:
+                Logger.Log("FreeLook Camera 변경");
                 SetPriority(CinemachineType.FreeLook);
                 // todo: free look 로직 짜기
                 break;
@@ -137,11 +139,13 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     {
         if (_firstVirtualCam)
         {
+            Logger.Log("Virtual Camera 2번으로 변경");
             _curVirtualCam2 = virtualCam;
             _firstVirtualCam = false;
         }
         else
         {
+            Logger.Log("Virtual Camera 1번으로 변경");
             _curVirtualCam1 = virtualCam;
             _firstVirtualCam = true;
         }
@@ -154,6 +158,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// <param name="freeLookCam"></param>
     public void SwitchTo(CinemachineFreeLook freeLookCam)
     {
+        Logger.Log("FreeLook Camera로 변경");
         _curFreeLookCam = freeLookCam;
         SetPriority(CinemachineType.FreeLook);
     }
@@ -210,11 +215,13 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         {
             if (_firstVirtualCam)
             {
+                Logger.Log("Virtual Camera 2번으로 우선순위 변경");
                 _curVirtualCam1.Priority = Define.InactivePriority;
                 _curVirtualCam2.Priority = Define.ActivePriority;
             }
             else
             {
+                Logger.Log("Virtual Camera 1번으로 우선순위 변경");
                 _curVirtualCam1.Priority = Define.ActivePriority;
                 _curVirtualCam2.Priority = Define.InactivePriority;
             }
@@ -278,7 +285,9 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// 시네머신 바디 - 3 person follow 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private CinemachineVirtualCamera SetBodyThirdPersonFollow(CinemachineVirtualCamera cam, Body3PersonFollow info)
+    private CinemachineVirtualCamera SetBodyThirdPersonFollow(
+        CinemachineVirtualCamera cam,
+        Body3PersonFollow info)
     {
         Cinemachine3rdPersonFollow body;
         CinemachineComponentBase component = cam
@@ -305,6 +314,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         body.CameraCollisionFilter = info.cameraCollisionFilter;
         body.IgnoreTag = info.ignoreTag;
 
+        Logger.Log($"{(_firstVirtualCam ? "2번째" : "1번째")} 카메라 Body 변경 완료");
         return cam;
     }
 
@@ -312,7 +322,9 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// 시네머신 바디 - Transposer 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private void SetBodyTransposer(CinemachineVirtualCamera cam, BodyTransposer info)
+    private CinemachineVirtualCamera SetBodyTransposer(
+        CinemachineVirtualCamera cam,
+        BodyTransposer info)
     {
         CinemachineTransposer body;
         CinemachineComponentBase component = cam
@@ -335,11 +347,15 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         body.m_YDamping = info.yDaming;
         body.m_ZDamping = info.zDaming;
         body.m_YawDamping = info.yawDaming;
+
+        return cam;
     }
     #endregion
 
     #region Aim 관리
-    private CinemachineVirtualCamera SetAimComposer(CinemachineVirtualCamera cam, AimComposer info)
+    private CinemachineVirtualCamera SetAimComposer(
+        CinemachineVirtualCamera cam,
+        AimComposer info)
     {
         CinemachineComposer aim;
         CinemachineComponentBase component = cam
