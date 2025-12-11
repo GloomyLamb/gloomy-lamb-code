@@ -26,6 +26,8 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     [SerializeField] private CinemachineVirtualCamera _curVirtualCam2;
     [SerializeField] private bool _firstVirtualCam = false;     // 사용 중인 카메라 확인하기
 
+    private VCType _curType;
+
     // 외부 카메라를 사용할 경우 캐싱
     private CinemachineVirtualCamera _externalVirtualCam;
     private bool _useExternal = false;
@@ -118,8 +120,15 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
             return;
         }
 
+        if (_curType == camType)    // 동일한 타입의 카메라 사용
+        {
+            Logger.Log("이미 사용 중인 카메라 입니다.");
+            return;
+        }
+
         CheckNullOfFollowNLookAt(switchedCamInfo);
 
+        // Virtual Camera vs FreeLook
         switch (switchedCamInfo.cinemachineType)
         {
             case CinemachineType.Virtual:
@@ -134,6 +143,8 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
             default:
                 break;
         }
+
+        _curType = camType;         // 타입 캐싱
     }
 
     /// <summary>
