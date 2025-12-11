@@ -18,10 +18,8 @@ public enum VCType
     TestVC3,
 }
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : GlobalSingletonManager<CameraManager>
 {
-    // todo: 제네릭 매니저 들어오면 싱글톤 처리하기
-
     [Header("가상 카메라")]
     [SerializeField] private CinemachineVirtualCamera _curVirtualCam;
     [SerializeField] private CinemachineFreeLook _curFreeLookCam;
@@ -34,8 +32,15 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Transform _camera;
 
     #region 초기화
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+    }
+
+    protected override void Init()
+    {
+        base.Init();
+
         // todo: cur cam 있으면 가져오고, 없으면 만들기
         if (_curVirtualCam == null)
         {
