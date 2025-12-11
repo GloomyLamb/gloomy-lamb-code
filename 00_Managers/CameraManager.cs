@@ -137,6 +137,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// <param name="virtualCam"></param>
     public void SwitchTo(CinemachineVirtualCamera virtualCam)
     {
+        SetPriority(CinemachineType.Virtual);
         if (_firstVirtualCam)
         {
             Logger.Log("Virtual Camera 2번으로 변경");
@@ -149,7 +150,6 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
             _curVirtualCam1 = virtualCam;
             _firstVirtualCam = true;
         }
-        SetPriority(CinemachineType.Virtual);
     }
 
     /// <summary>
@@ -158,9 +158,9 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// <param name="freeLookCam"></param>
     public void SwitchTo(CinemachineFreeLook freeLookCam)
     {
+        SetPriority(CinemachineType.FreeLook);
         Logger.Log("FreeLook Camera로 변경");
         _curFreeLookCam = freeLookCam;
-        SetPriority(CinemachineType.FreeLook);
     }
 
     /// <summary>
