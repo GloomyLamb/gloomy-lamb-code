@@ -27,6 +27,8 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     [SerializeField] private bool _firstVirtualCam = false;     // 사용 중인 카메라 확인하기
 
     // 외부 카메라를 사용할 경우 캐싱
+    private CinemachineVirtualCamera _externalVirtualCam;
+    private bool _useExternal = false;
 
     [Header("Free Look Camera")]
     [SerializeField] private CinemachineFreeLook _curFreeLookCam;
@@ -122,7 +124,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         {
             case CinemachineType.Virtual:
                 Logger.Log("Virtual Camera 변경");
-                SwitchTo(SetVirtualCamera(switchedCamInfo._virtualCam));
+                SwitchTo(SetVirtualCamera(switchedCamInfo._virtualCam), false);
                 break;
             case CinemachineType.FreeLook:
                 Logger.Log("FreeLook Camera 변경");
@@ -138,10 +140,18 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// [public] 파라미터를 현재 보는 카메라로 설정합니다.
     /// </summary>
     /// <param name="virtualCam"></param>
-    public void SwitchTo(CinemachineVirtualCamera virtualCam)
+    /// <param name="useExternal">카메라 매니저와 연결되어 있는 가상 카메라를 사용하지 않고 외부에서 사용하는 경우</param>
+    public void SwitchTo(CinemachineVirtualCamera virtualCam, bool useExternal = true)
     {
         // todo: 외부에서 들어오는 카메라라면 기존 카메라랑 연결이 끊길 것으로 예상
         // 노는 카메라 캐싱하는 방법 필요
+        _useExternal = useExternal;
+        if (useExternal)
+        {
+            _externalVirtualCam = virtualCam;
+            SetPriority(CinemachineType.Virtual);
+            return;
+        }
 
         SetPriority(CinemachineType.Virtual);
         if (_firstVirtualCam)
@@ -215,6 +225,15 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// <param name="type"></param>
     private void SetPriority(CinemachineType type)
     {
+        if (_useExternal) // 외부 카메라 사용 중
+        {
+            _externalVirtualCam.Priority = Define.ActivePriority;
+            _curVirtualCam1.Priority = Define.InactivePriority;
+            _curVirtualCam2.Priority = Define.InactivePriority;
+            _curFreeLookCam.Priority = Define.InactivePriority;
+            return;
+        }
+
         // 현재 카메라가 1번째일 경우 2번째 카메라 수정
         // 현재 카메라가 2번째일 경우 1번째 카메라 수정
         if (type == CinemachineType.Virtual)
