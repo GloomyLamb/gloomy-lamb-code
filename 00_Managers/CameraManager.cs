@@ -444,6 +444,9 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     #endregion
 
     #region 테스트 코드
+    [Header("테스트")]
+    [SerializeField] CinemachineVirtualCamera _testVirtualCam;
+
     public void Test_PushCamera()
     {
         List<CinemachineInfo> infos = new()
@@ -470,12 +473,26 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         SwitchTo(VCType.TestVC3);
     }
 
+    /// <summary>
+    /// 외부 카메라 테스트
+    /// </summary>
+    public void Test_ExternalCamera()
+    {
+        SwitchTo(_testVirtualCam);
+    }
+
     public void Test_ResetCamera()
     {
         _sceneCams.Clear();
         _camDict.Clear();
+        _externalVirtualCam = null;
     }
 
+    /// <summary>
+    /// 카메라 SO 데이터를 찾아옵니다.
+    /// </summary>
+    /// <param name="name">SO 파일 이름</param>
+    /// <returns></returns>
     private CinemachineInfo FindTestSO(string name)
     {
         Logger.Log($"so 데이터 찾기: {name}");
