@@ -20,12 +20,15 @@ public enum VCType
 
 public class CameraManager : GlobalSingletonManager<CameraManager>
 {
-    [Header("가상 카메라")]
+    [Header("Virtual Camera")]
     // 시네머신의 부드러운 카메라 이동을 이용하기 위해 2개의 카메라 사용
     [SerializeField] private CinemachineVirtualCamera _curVirtualCam1;
     [SerializeField] private CinemachineVirtualCamera _curVirtualCam2;
     [SerializeField] private bool _firstVirtualCam = false;     // 사용 중인 카메라 확인하기
 
+    // 외부 카메라를 사용할 경우 캐싱
+
+    [Header("Free Look Camera")]
     [SerializeField] private CinemachineFreeLook _curFreeLookCam;
 
     [SerializeField] private List<CinemachineInfo> _sceneCams;      // 씬에서 사용하는 카메라 리스트
@@ -137,6 +140,9 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// <param name="virtualCam"></param>
     public void SwitchTo(CinemachineVirtualCamera virtualCam)
     {
+        // todo: 외부에서 들어오는 카메라라면 기존 카메라랑 연결이 끊길 것으로 예상
+        // 노는 카메라 캐싱하는 방법 필요
+
         SetPriority(CinemachineType.Virtual);
         if (_firstVirtualCam)
         {
