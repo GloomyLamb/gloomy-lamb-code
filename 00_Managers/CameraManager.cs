@@ -7,6 +7,8 @@ using UnityEngine;
 // todo: enum은 따로 관리
 public enum VCType
 {
+    None,
+
     // 미니게임 - Fall
     FallVC3D,
     FallVC25D,
