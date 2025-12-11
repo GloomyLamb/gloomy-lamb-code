@@ -118,8 +118,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         switch (switchedCamInfo.cinemachineType)
         {
             case CinemachineType.Virtual:
-                SetPriority(CinemachineType.Virtual);
-                SetVirtualCamera(switchedCamInfo._virtualCam);
+                SwitchTo(SetVirtualCamera(switchedCamInfo._virtualCam));
                 break;
             case CinemachineType.FreeLook:
                 SetPriority(CinemachineType.FreeLook);
@@ -235,7 +234,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// 가상 카메라 값 세팅하기
     /// </summary>
     /// <param name="info"></param>
-    private void SetVirtualCamera(CinemachineVirtualInfo info)
+    private CinemachineVirtualCamera SetVirtualCamera(CinemachineVirtualInfo info)
     {
         CinemachineVirtualCamera cam;
         // 현재 카메라가 1번째일 경우 2번째 카메라 수정
@@ -263,12 +262,14 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         switch (info.aimType)
         {
             case VCAimType.Composer:
-                SetAimComposer(info.aimComposer);
+                SetAimComposer(cam, info.aimComposer);
                 break;
             case VCAimType.HardLookAt:
-                SetAimHardLookAt();
+                SetAimHardLookAt(cam);
                 break;
         }
+
+        return cam;
     }
     #endregion
 
@@ -277,7 +278,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// 시네머신 바디 - 3 person follow 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private void SetBodyThirdPersonFollow(Body3PersonFollow info)
+    private CinemachineVirtualCamera SetBodyThirdPersonFollow(CinemachineVirtualCamera cam, Body3PersonFollow info)
     {
         Cinemachine3rdPersonFollow body;
         CinemachineComponentBase component = cam
@@ -303,23 +304,25 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         // Obstacles Setting
         body.CameraCollisionFilter = info.cameraCollisionFilter;
         body.IgnoreTag = info.ignoreTag;
+
+        return cam;
     }
 
     /// <summary>
     /// 시네머신 바디 - Transposer 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private void SetBodyTransposer(BodyTransposer info)
+    private void SetBodyTransposer(CinemachineVirtualCamera cam, BodyTransposer info)
     {
         CinemachineTransposer body;
-        CinemachineComponentBase component = _curVirtualCam
+        CinemachineComponentBase component = cam
             .GetCinemachineComponent(CinemachineCore.Stage.Body);
 
         // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
         if (component == null || !(component as CinemachineTransposer))
         {
-            _curVirtualCam.AddCinemachineComponent<CinemachineTransposer>();
-            body = _curVirtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            cam.AddCinemachineComponent<CinemachineTransposer>();
+            body = cam.GetCinemachineComponent<CinemachineTransposer>();
         }
         else
         {
@@ -336,17 +339,17 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     #endregion
 
     #region Aim 관리
-    private void SetAimComposer(AimComposer info)
+    private CinemachineVirtualCamera SetAimComposer(CinemachineVirtualCamera cam, AimComposer info)
     {
         CinemachineComposer aim;
-        CinemachineComponentBase component = _curVirtualCam1
+        CinemachineComponentBase component = cam
             .GetCinemachineComponent(CinemachineCore.Stage.Aim);
 
         // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
         if (component == null || !(component as CinemachineComposer))
         {
-            _curVirtualCam1.AddCinemachineComponent<CinemachineComposer>();
-            aim = _curVirtualCam1.GetCinemachineComponent<CinemachineComposer>();
+            cam.AddCinemachineComponent<CinemachineComposer>();
+            aim = cam.GetCinemachineComponent<CinemachineComposer>();
         }
         else
         {
@@ -363,24 +366,28 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         aim.m_BiasX = info.biasX;
         aim.m_BiasY = info.biasY;
         aim.m_CenterOnActivate = info.centerOnActivate;
+
+        return cam;
     }
 
-    private void SetAimHardLookAt()
+    private CinemachineVirtualCamera SetAimHardLookAt(CinemachineVirtualCamera cam)
     {
         CinemachineHardLookAt aim;
-        CinemachineComponentBase component = _curVirtualCam1
+        CinemachineComponentBase component = cam
             .GetCinemachineComponent(CinemachineCore.Stage.Aim);
 
         // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
         if (component == null || !(component as CinemachineHardLookAt))
         {
-            _curVirtualCam1.AddCinemachineComponent<CinemachineHardLookAt>();
-            aim = _curVirtualCam1.GetCinemachineComponent<CinemachineHardLookAt>();
+            cam.AddCinemachineComponent<CinemachineHardLookAt>();
+            aim = cam.GetCinemachineComponent<CinemachineHardLookAt>();
         }
         else
         {
             aim = (CinemachineHardLookAt)component;
         }
+
+        return cam;
     }
     #endregion
 
