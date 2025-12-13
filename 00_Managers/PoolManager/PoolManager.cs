@@ -2,32 +2,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PoolManager : SceneSingletonManager<PoolManager>
 {
-    [SerializeField] List<BasePool> pools;
-    Dictionary<PoolType, BasePool> poolDic;
+    [SerializeField] List<BasePool> poolsOrigin;
+    Dictionary<PoolType, BasePool> poolOriginDic;
+    
+    Dictionary<PoolType, BasePool> nowPoolDic;
 
     protected override void Init()
     {
-        poolDic = ((PoolType[])Enum.GetValues(typeof(PoolType))).ToDictionary(part => part,
+        poolOriginDic = ((PoolType[])Enum.GetValues(typeof(PoolType))).ToDictionary(part => part,
             part => (BasePool)null);
 
-        foreach (var pool in pools)
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+
+    public void UsePool(PoolType poolType)
+    {
+        foreach (var pool in poolsOrigin)
         {
-            if (Enum.TryParse(pool.gameObject.name, ignoreCase: true, out PoolType poolType))
-            {
-                pool.Init();
-                poolDic[poolType] = pool;
-            }
+            // if (Enum.TryParse(pool.gameObject.name, ignoreCase: true, out PoolType poolType))
+            // {
+            //     pool.Init();
+            //     poolDic[poolType] = pool;
+            // }
         }
     }
 
     public GameObject Spawn(PoolType poolType, Vector3 position, Quaternion rotation, Transform parent = null)
     {
-        if (poolDic.ContainsKey(poolType))
+        if (poolOriginDic.ContainsKey(poolType))
         {
-            GameObject newGameObject = poolDic[poolType].GetGameObject();
+            GameObject newGameObject = poolOriginDic[poolType].GetGameObject();
             
             newGameObject.transform.position = position;
             newGameObject.transform.rotation = rotation;
@@ -46,9 +56,9 @@ public class PoolManager : SceneSingletonManager<PoolManager>
 
     public GameObject Spawn(PoolType poolType)
     {
-        if (poolDic.ContainsKey(poolType))
+        if (poolOriginDic.ContainsKey(poolType))
         {
-            GameObject newGameObject = poolDic[poolType].GetGameObject();
+            GameObject newGameObject = poolOriginDic[poolType].GetGameObject();
             return newGameObject;
         }
         return null;
@@ -56,9 +66,14 @@ public class PoolManager : SceneSingletonManager<PoolManager>
 
     public void DeactivateAllPoolObjects(PoolType poolType)
     {
-        if (poolDic.ContainsKey(poolType))
+        if (poolOriginDic.ContainsKey(poolType))
         {
-            poolDic[poolType].DeactivateAllPoolObjects();
+            poolOriginDic[poolType].DeactivateAllPoolObjects();
         }
+    }
+
+    void OnSceneUnloaded(Scene scene)
+    {
+        nowPoolDic.Clear();
     }
 }
