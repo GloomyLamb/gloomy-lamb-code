@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PoolObject:MonoBehaviour
+public class PoolObject : MonoBehaviour
 {
     public event Action<PoolObject> OnEnableAction;
     public event Action<PoolObject> OnDisableAction;

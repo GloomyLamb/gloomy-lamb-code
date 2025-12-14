@@ -5,49 +5,63 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class PoolManager : SceneSingletonManager<PoolManager>
+public class PoolManager : GlobalSingletonManager<PoolManager>
 {
-    [SerializeField] List<BasePool> poolsOrigin;
-    Dictionary<PoolType, BasePool> poolOriginDic;
+    [SerializeField] List<BasePool> poolsOrigin;    // Pool Prefabs. poolOriginDic에 초기화 할 때에만 사용!
     
-    Dictionary<PoolType, BasePool> nowPoolDic;
+    Dictionary<PoolType, BasePool> poolOriginDic;   // Key 로 담아둔 Origin Pool 들. Instantiate 해서 사용해야함
+    Dictionary<PoolType, BasePool> nowPoolDic;      // Scene 에서 사용할 Pool 들을 Instantiate 하고 넣어둘 Dictionary.
 
     protected override void Init()
     {
         poolOriginDic = ((PoolType[])Enum.GetValues(typeof(PoolType))).ToDictionary(part => part,
             part => (BasePool)null);
 
+        for (int i = 0; i < poolsOrigin.Count; i++)
+        {
+            if (Enum.TryParse(poolsOrigin[i].name, true, out PoolType poolType))
+            {
+                poolOriginDic[poolType] = poolsOrigin[i];
+            }
+        }
+        
+        nowPoolDic =  new Dictionary<PoolType, BasePool>();
+        
         SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
 
+    /// <summary>
+    /// Scene에서 사용할 Pool 들 사용하겠다고 알려줘야해요
+    /// </summary>
+    /// <param name="poolType"></param>
     public void UsePool(PoolType poolType)
     {
-        foreach (var pool in poolsOrigin)
+        if (poolOriginDic.ContainsKey(poolType))
         {
-            // if (Enum.TryParse(pool.gameObject.name, ignoreCase: true, out PoolType poolType))
-            // {
-            //     pool.Init();
-            //     poolDic[poolType] = pool;
-            // }
+            BasePool newPool = Instantiate(poolOriginDic[poolType]);
+            newPool.Init();
+            nowPoolDic[poolType] = newPool;
         }
     }
 
     public GameObject Spawn(PoolType poolType, Vector3 position, Quaternion rotation, Transform parent = null)
     {
-        if (poolOriginDic.ContainsKey(poolType))
+        if (nowPoolDic.ContainsKey(poolType))
         {
-            GameObject newGameObject = poolOriginDic[poolType].GetGameObject();
-            
+            if (nowPoolDic[poolType] == null) return null;
+
+            GameObject newGameObject = nowPoolDic[poolType].GetGameObject();
+
             newGameObject.transform.position = position;
             newGameObject.transform.rotation = rotation;
-            
-            
+
+
             if (parent != null)
             {
                 newGameObject.transform.SetParent(parent);
             }
-            
+
             return newGameObject;
         }
 
@@ -56,22 +70,27 @@ public class PoolManager : SceneSingletonManager<PoolManager>
 
     public GameObject Spawn(PoolType poolType)
     {
-        if (poolOriginDic.ContainsKey(poolType))
+        if (nowPoolDic.ContainsKey(poolType))
         {
-            GameObject newGameObject = poolOriginDic[poolType].GetGameObject();
+            GameObject newGameObject = nowPoolDic[poolType].GetGameObject();
             return newGameObject;
         }
+
         return null;
     }
 
     public void DeactivateAllPoolObjects(PoolType poolType)
     {
-        if (poolOriginDic.ContainsKey(poolType))
+        if (nowPoolDic.ContainsKey(poolType))
         {
-            poolOriginDic[poolType].DeactivateAllPoolObjects();
+            nowPoolDic[poolType].DeactivateAllPoolObjects();
         }
     }
 
+    /// <summary>
+    /// Scene 벗어날 때 nowPoolDic 버리고 떠나기
+    /// </summary>
+    /// <param name="scene"></param>
     void OnSceneUnloaded(Scene scene)
     {
         nowPoolDic.Clear();

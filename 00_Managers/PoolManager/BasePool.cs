@@ -31,12 +31,17 @@ public class BasePool : MonoBehaviour
         nowPoolSize++;
         
         deactivatedObjectsPool.Add(newGameObject);
-
-        newGameObject.OnDisableAction += OnDisableAction;
         
+        // PoolObject 가 Disable 될 때 
+        newGameObject.OnDisableAction += OnDisableAction;
+
         return newGameObject;
     }
 
+    /// <summary>
+    /// PoolManager 에서 Spawn 할 때 접근해서 쓰고 있음
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetGameObject()
     {
         foreach (PoolObject poolObject in deactivatedObjectsPool)
@@ -69,8 +74,7 @@ public class BasePool : MonoBehaviour
     }
 
     void ActivateGameObject(PoolObject poolObject)
-    {       
-        
+    {
         poolObject.gameObject.SetActive(true);
         if (deactivatedObjectsPool.Contains(poolObject)==true)
         {
@@ -90,5 +94,6 @@ public class BasePool : MonoBehaviour
             activatedObjectsPool[i].gameObject.SetActive(false);
         }
     }
+
     
 }
