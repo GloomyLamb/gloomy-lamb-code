@@ -18,9 +18,8 @@ public abstract class Player : MonoBehaviour
     [SerializeField] protected LayerMask interactableLayer;
 
     // 가중치
-    [SerializeField] protected bool angleWeight = false;
-    [SerializeField] protected bool distanceWieght = true;
-    private float cosThreshold;
+    [SerializeField] protected bool useAngleWeight = false;
+    [SerializeField] protected bool useDistanceWieght = true;
 
     public Vector3 Forward => forward;
     protected Vector3 forward;
@@ -37,7 +36,7 @@ public abstract class Player : MonoBehaviour
 
     protected virtual void Update()
     {
-        OnDetectInteractablesEnter();
+        UpdateInteractionTarget();
     }
 
     private void OnDestroy()
@@ -46,9 +45,9 @@ public abstract class Player : MonoBehaviour
     }
 
     #region 상호작용
-    protected void OnDetectInteractablesEnter()
+    protected void UpdateInteractionTarget()
     {
-        Collider[] cols = DetectInteractable();                     // 1. 반경 내 오브젝트 탐색
+        Collider[] cols = GetInteractables();                       // 1. 반경 내 오브젝트 탐색
         IInteractable interactable = FindBestInteractable(cols);    // 2. 우선순위 계산 (각도 + 거리)
         interactable?.PopUpKey();                                   // 3. 타겟 확정 -> 팝업 표시
     }
@@ -56,7 +55,7 @@ public abstract class Player : MonoBehaviour
     /// <summary>
     /// 반경 내 오브젝트 탐색
     /// </summary>
-    protected virtual Collider[] DetectInteractable()
+    protected virtual Collider[] GetInteractables()
     {
         return Physics.OverlapSphere(
            transform.position,
@@ -90,8 +89,8 @@ public abstract class Player : MonoBehaviour
 
             // 각도 + 거리 가중치 합산 (점수가 낮을수록 우선순위 높음)
             float score =
-                (1f - dot) * (angleWeight ? 1 : 0)
-                + sqrDistance * (distanceWieght ? 1 : 0);
+                (1f - dot) * (useAngleWeight ? 1 : 0)
+                + sqrDistance * (useDistanceWieght ? 0.5f : 0);
 
             if (score < bestScore)
             {
