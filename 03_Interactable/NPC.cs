@@ -143,13 +143,34 @@ public abstract class NPC : MonoBehaviour, IInteractable
     }
     #endregion
 
+    #region 테스트
+    public void Test_ToggleSpeechBubble()
+    {
+        ToggleSpeechBubble();
+    }
+
+    public void Test_SpawnSpeechBubbleDefault()
+    {
+        Destroy(speechBubble.gameObject);
+        ApplySpeechBubble("SpeechBubble_Default");
+        SpawnSpeechBubble();
+    }
+
+    public void Test_SpawnSpeechBubbleUI()
+    {
+        Destroy(speechBubble.gameObject);
+        ApplySpeechBubble("SpeechBubble_UI");
+        SpawnSpeechBubble();
+    }
+    #endregion
+
     #region 에디터 전용
 #if UNITY_EDITOR
     private void Reset()
     {
         ApplyLayer();
         ApplyCollider();
-        ApplySpeechBubble();
+        ApplySpeechBubble("SpeechBubble_Default");
     }
 
 #endif
@@ -168,11 +189,11 @@ public abstract class NPC : MonoBehaviour, IInteractable
         col.center = Vector3.zero;
     }
 
-    private void ApplySpeechBubble()
+    private void ApplySpeechBubble(string name)
     {
         if (speechBubblePrefab != null) return;
 
-        string[] guids = AssetDatabase.FindAssets("t:Prefab SpeechBubble_Default");
+        string[] guids = AssetDatabase.FindAssets($"t:Prefab {name}");
 
         if (guids.Length == 0)
         {
