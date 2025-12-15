@@ -97,5 +97,25 @@ public abstract class Player : MonoBehaviour
 
         return best;
     }
+
+    /// <summary>
+    /// 탐색 범위 표시
+    /// </summary>
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, interactRange);
+
+        Vector3 origin = transform.position;
+        Vector3 fwd = forward;
+
+        // 직선
+        Vector3 left = Quaternion.AngleAxis(-interactAngle * 0.5f, Vector3.up) * fwd;
+        Vector3 right = Quaternion.AngleAxis(interactAngle * 0.5f, Vector3.up) * fwd;
+
+        Gizmos.DrawLine(origin, origin + left * interactRange);
+        Gizmos.DrawLine(origin, origin + right * interactRange);
+    }
+
     #endregion
 }
