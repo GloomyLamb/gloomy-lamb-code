@@ -10,6 +10,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
 
     // 말풍선
     [SerializeField] protected GameObject speechBubblePrefab;
+    protected GameObject speechBubble;
 
     // 상호작용 가능 관리
 
@@ -19,6 +20,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
     private void Awake()
     {
         this.forward = transform.forward;
+        SpawnSpeechBubble();
     }
 
     protected virtual void Update()
@@ -110,6 +112,17 @@ public abstract class NPC : MonoBehaviour, IInteractable
     #endregion
 
     #region 말풍선
+    private void SpawnSpeechBubble()
+    {
+        if (speechBubblePrefab == null)
+        {
+            Logger.LogWarning("말풍선 프리팹 없음");
+            return;
+        }
+        speechBubble = Instantiate(speechBubblePrefab, transform);
+        speechBubble.transform.localPosition = new Vector3(0f, 1.7f, 0f);
+        speechBubble.SetActive(false);
+    }
     #endregion
 
     #region 에디터 전용
