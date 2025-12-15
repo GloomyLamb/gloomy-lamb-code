@@ -2,6 +2,6 @@ public class InteractableTestObject : InteractableObject
 {
     public override void Interact()
     {
-        throw new System.NotImplementedException();
+        Logger.Log("오브젝트 상호작용");
     }
 }

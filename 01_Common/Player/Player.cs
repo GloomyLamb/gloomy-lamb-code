@@ -30,6 +30,7 @@ public abstract class Player : MonoBehaviour
     private void Awake()
     {
         input = new InputHandler(inputAction, InputType.Player);
+        input.BindInputEvent(InputMapName.Default, InputActionName.Interaction, OnInteract);
         forward = transform.forward;
         Init();
     }
@@ -47,6 +48,14 @@ public abstract class Player : MonoBehaviour
     }
 
     #region 상호작용
+    private void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            _curInteractable?.Interact();
+        }
+    }
+
     /// <summary>
     /// interactable 오브젝트 탐색
     /// </summary>

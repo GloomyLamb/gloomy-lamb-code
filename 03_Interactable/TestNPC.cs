@@ -2,6 +2,6 @@ public class TestNPC : NPC
 {
     public override void Interact()
     {
-        throw new System.NotImplementedException();
+        Logger.Log("NPC와 상호작용");
     }
 }
