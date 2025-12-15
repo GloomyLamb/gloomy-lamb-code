@@ -1,14 +1,19 @@
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
 public abstract class NPC : MonoBehaviour, IInteractable
 {
-    // NPC 기본 방향
-    protected Vector3 forward;
-    [SerializeField] protected float rotateSpeed = 270f;
+    [Header("테스트")]
+    [SerializeField] protected bool isTest = false;
+
+    [Header("NPC 기본 설정")]
+    [SerializeField][Range(90f, 360f)] protected float rotateSpeed = 270f;
+    protected Vector3 forward;      // NPC 기본 방향
 
     // 말풍선
-    // todo: 프리팹 연결해서 자동 생성 및 관리
+    [SerializeField] protected GameObject speechBubblePrefab;
+    protected GameObject speechBubble;
 
     // 상호작용 가능 관리
 
@@ -18,6 +23,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
     private void Awake()
     {
         this.forward = transform.forward;
+        SpawnSpeechBubble();
     }
 
     protected virtual void Update()
@@ -108,12 +114,27 @@ public abstract class NPC : MonoBehaviour, IInteractable
     }
     #endregion
 
+    #region 말풍선
+    private void SpawnSpeechBubble()
+    {
+        if (speechBubblePrefab == null)
+        {
+            Logger.LogWarning("말풍선 프리팹 없음");
+            return;
+        }
+        speechBubble = Instantiate(speechBubblePrefab, transform);
+        speechBubble.transform.localPosition = new Vector3(0f, 1.7f, 0f);
+        speechBubble.SetActive(isTest);
+    }
+    #endregion
+
     #region 에디터 전용
 #if UNITY_EDITOR
     private void Reset()
     {
         ApplyLayer();
         ApplyCollider();
+        ApplySpeechBubble();
     }
 
 #endif
@@ -130,6 +151,22 @@ public abstract class NPC : MonoBehaviour, IInteractable
         col.isTrigger = true;
         col.radius = 3f;
         col.center = Vector3.zero;
+    }
+
+    private void ApplySpeechBubble()
+    {
+        if (speechBubblePrefab != null) return;
+
+        string[] guids = AssetDatabase.FindAssets("t:Prefab SpeechBubble_Default");
+
+        if (guids.Length == 0)
+        {
+            Logger.Log("SpeechBubble 프리팹 못 찾음");
+            return;
+        }
+
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        speechBubblePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
     }
     #endregion
 }
