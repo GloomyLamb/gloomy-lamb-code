@@ -58,19 +58,19 @@ public abstract class Player : MonoBehaviour
         IInteractable interactable = FindBestInteractable(cols);    // 2. 우선순위 계산 (각도 + 거리)
 
         // 범위에 상호작용 가능한 오브젝트가 없으면 상태 초기화
-        if (curInteractable != null && interactable == null)
+        if (_curInteractable != null && interactable == null)
         {
-            curInteractable.HideKey();
-            curInteractable = null;
+            _curInteractable.HideInteractUI();
+            _curInteractable = null;
             return;
         }
 
         // 변경 없으면 패스
-        if (curInteractable == interactable) return;
+        if (_curInteractable == interactable) return;
 
-        interactable?.HideKey();
+        interactable?.HideInteractUI();
         _curInteractable = interactable;
-        interactable?.PopUpKey();                                   // 3. 타겟 확정 -> 팝업 표시
+        interactable?.ShowInteractUI();                                   // 3. 타겟 확정 -> 팝업 표시
     }
 
     /// <summary>
