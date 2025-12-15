@@ -1,5 +1,8 @@
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// NPC 기본 클래스
@@ -41,6 +44,8 @@ public abstract class NPC : MonoBehaviour, IInteractable
 
     protected virtual void LateUpdate()
     {
+        if (speechBubble == null) return;
+
         Vector3 target = -_camera.forward;
         speechBubble.transform.forward = new Vector3(target.x, 0, target.z);
     }
