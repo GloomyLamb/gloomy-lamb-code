@@ -21,6 +21,9 @@ public abstract class Player : MonoBehaviour
     [SerializeField] protected bool useAngleWeight = false;
     [SerializeField] protected bool useDistanceWieght = true;
 
+    // 캐싱
+    private IInteractable _curInteractable;
+
     public Vector3 Forward => forward;
     protected Vector3 forward;
 
@@ -28,7 +31,6 @@ public abstract class Player : MonoBehaviour
     {
         input = new InputHandler(inputAction, InputType.Player);
         forward = transform.forward;
-        cosThreshold = Mathf.Cos(Mathf.Deg2Rad * (interactAngle / 2));
         Init();
     }
 
@@ -45,10 +47,18 @@ public abstract class Player : MonoBehaviour
     }
 
     #region 상호작용
+    /// <summary>
+    /// interactable 오브젝트 탐색
+    /// </summary>
     protected void UpdateInteractionTarget()
     {
         Collider[] cols = GetInteractables();                       // 1. 반경 내 오브젝트 탐색
         IInteractable interactable = FindBestInteractable(cols);    // 2. 우선순위 계산 (각도 + 거리)
+
+        if (_curInteractable == interactable) return;               // 변경 없으면 패스
+
+        interactable?.HideKey();
+        _curInteractable = interactable;
         interactable?.PopUpKey();                                   // 3. 타겟 확정 -> 팝업 표시
     }
 
@@ -72,6 +82,7 @@ public abstract class Player : MonoBehaviour
     {
         IInteractable best = null;
         float bestScore = float.MaxValue;
+        float cosThreshold = Mathf.Cos(Mathf.Deg2Rad * (interactAngle / 2));
 
         // 현재 기준: 거리
         foreach (var col in cols)
@@ -120,6 +131,5 @@ public abstract class Player : MonoBehaviour
         Gizmos.DrawLine(origin, origin + left * interactRange);
         Gizmos.DrawLine(origin, origin + right * interactRange);
     }
-
     #endregion
 }

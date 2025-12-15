@@ -16,4 +16,12 @@ public interface IInteractable
         // todo: 일반 키 넣고 필요 시 오버라이드
         Logger.Log("상호작용 키 팝업");
     }
+
+    /// <summary>
+    /// 상호작용 키 숨기기
+    /// </summary>
+    public virtual void HideKey()
+    {
+        Logger.Log("상호작용 키 숨기기");
+    }
 }
