@@ -46,7 +46,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
     {
         if (speechBubble == null) return;
 
-        Vector3 target = -_camera.forward;
+        Vector3 target = _camera.forward;
         speechBubble.transform.forward = new Vector3(target.x, 0, target.z);
     }
 
