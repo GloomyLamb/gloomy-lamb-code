@@ -1,15 +1,22 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(NPC))]
-public class NPC_Inspector : Editor
+public abstract class NPC_Inspector<T> : Editor where T : NPC
 {
+    protected T npc;
+    protected virtual void OnEnable()
+    {
+        npc = (T)target;
+    }
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+        DrawTestButtons();
+    }
 
-        var npc = (NPC)target;
-
+    protected virtual void DrawTestButtons()
+    {
         if (GUILayout.Button("[Test] 말풍선 ON/OFF"))
         {
             if (npc)
