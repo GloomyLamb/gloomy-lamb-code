@@ -126,6 +126,12 @@ public abstract class NPC : MonoBehaviour, IInteractable
         speechBubble.transform.localPosition = new Vector3(0f, 1.7f, 0f);
         speechBubble.SetActive(isTest);
     }
+
+    protected void ToggleSpeechBubble()
+    {
+        if (speechBubble == null) return;
+        speechBubble.SetActive(!speechBubble.activeSelf);
+    }
     #endregion
 
     #region 에디터 전용
