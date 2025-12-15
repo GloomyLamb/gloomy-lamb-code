@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
@@ -8,7 +9,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
     [SerializeField] protected float rotateSpeed = 270f;
 
     // 말풍선
-    // todo: 프리팹 연결해서 자동 생성 및 관리
+    [SerializeField] protected GameObject speechBubblePrefab;
 
     // 상호작용 가능 관리
 
@@ -108,12 +109,16 @@ public abstract class NPC : MonoBehaviour, IInteractable
     }
     #endregion
 
+    #region 말풍선
+    #endregion
+
     #region 에디터 전용
 #if UNITY_EDITOR
     private void Reset()
     {
         ApplyLayer();
         ApplyCollider();
+        ApplySpeechBubble();
     }
 
 #endif
@@ -130,6 +135,22 @@ public abstract class NPC : MonoBehaviour, IInteractable
         col.isTrigger = true;
         col.radius = 3f;
         col.center = Vector3.zero;
+    }
+
+    private void ApplySpeechBubble()
+    {
+        if (speechBubblePrefab != null) return;
+
+        string[] guids = AssetDatabase.FindAssets("t:Prefab SpeechBubble");
+
+        if (guids.Length == 0)
+        {
+            Logger.Log("SpeechBubble 프리팹 못 찾음");
+            return;
+        }
+
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        speechBubblePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
     }
     #endregion
 }
