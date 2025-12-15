@@ -60,6 +60,11 @@ public abstract class Player : MonoBehaviour
         // 범위에 상호작용 가능한 오브젝트가 없으면 상태 초기화
         if (_curInteractable != null && interactable == null)
         {
+            if (_curInteractable as NPC)    // NPC일 경우 NPC의 플레이어 캐싱 정보 삭제
+            {
+                NPC npc = _curInteractable as NPC;
+                npc.ResetPlayer();
+            }
             _curInteractable.HideInteractUI();
             _curInteractable = null;
             return;
@@ -68,9 +73,16 @@ public abstract class Player : MonoBehaviour
         // 변경 없으면 패스
         if (_curInteractable == interactable) return;
 
+        // NPC일 경우
+        if (interactable as NPC)            // NPC 플레이어 캐싱
+        {
+            NPC npc = interactable as NPC;
+            npc.SetPlayer(this.transform);
+        }
+
         interactable?.HideInteractUI();
         _curInteractable = interactable;
-        interactable?.ShowInteractUI();                                   // 3. 타겟 확정 -> 팝업 표시
+        interactable?.ShowInteractUI();
     }
 
     /// <summary>
