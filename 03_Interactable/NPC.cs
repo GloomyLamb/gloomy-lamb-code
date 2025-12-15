@@ -7,9 +7,9 @@ public abstract class NPC : MonoBehaviour, IInteractable
     [Header("테스트")]
     [SerializeField] protected bool isTest = false;
 
-    [Header("공통 NPC 설정")]
+    [Header("NPC 기본 설정")]
+    [SerializeField][Range(90f, 360f)] protected float rotateSpeed = 270f;
     protected Vector3 forward;      // NPC 기본 방향
-    [SerializeField] protected float rotateSpeed = 270f;
 
     // 말풍선
     [SerializeField] protected GameObject speechBubblePrefab;
