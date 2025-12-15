@@ -7,6 +7,8 @@ using UnityEngine;
 // todo: enum은 따로 관리
 public enum VCType
 {
+    None,
+
     // 미니게임 - Fall
     FallVC3D,
     FallVC25D,
@@ -20,11 +22,22 @@ public enum VCType
 
 public class CameraManager : GlobalSingletonManager<CameraManager>
 {
-    [Header("가상 카메라")]
-    [SerializeField] private CinemachineVirtualCamera _curVirtualCam;
-    [SerializeField] private CinemachineFreeLook _curFreeLookCam;
-    [SerializeField] private List<CinemachineInfo> _sceneCams;      // 씬에서 사용하는 카메라 리스트
+    [Header("Virtual Camera")]
+    // 시네머신의 부드러운 카메라 이동을 이용하기 위해 2개의 카메라 사용
+    [SerializeField] private CinemachineVirtualCamera _curVirtualCam1;
+    [SerializeField] private CinemachineVirtualCamera _curVirtualCam2;
+    [SerializeField] private bool _firstVirtualCam = false;     // 사용 중인 카메라 확인하기
 
+    private VCType _curType = VCType.None;
+
+    // 외부 카메라를 사용할 경우 캐싱
+    [SerializeField] private CinemachineVirtualCamera _externalVirtualCam;
+    private bool _useExternal = false;
+
+    [Header("Free Look Camera")]
+    [SerializeField] private CinemachineFreeLook _curFreeLookCam;
+
+    [SerializeField] private List<CinemachineInfo> _sceneCams;      // 씬에서 사용하는 카메라 리스트
     private Dictionary<VCType, CinemachineInfo> _camDict = new();   // 씬에서 사용하는 카메라 딕셔너리
 
     // todo: 플레이어 캐싱해두기 (현재는 테스트용)
@@ -37,16 +50,26 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         base.Awake();
     }
 
+    /// <summary>
+    /// 파라미터 초기화
+    /// </summary>
     protected override void Init()
     {
         base.Init();
 
         // todo: cur cam 있으면 가져오고, 없으면 만들기
-        if (_curVirtualCam == null)
+        if (_curVirtualCam1 == null)
         {
-            var go = new GameObject("Virtual Camera");
+            var go = new GameObject("Virtual Camera 1");
             go.AddComponent<CinemachineVirtualCamera>();
-            _curVirtualCam = go.GetComponent<CinemachineVirtualCamera>();
+            _curVirtualCam1 = go.GetComponent<CinemachineVirtualCamera>();
+        }
+
+        if (_curVirtualCam2 == null)
+        {
+            var go = new GameObject("Virtual Camera 2");
+            go.AddComponent<CinemachineVirtualCamera>();
+            _curVirtualCam2 = go.GetComponent<CinemachineVirtualCamera>();
         }
 
         if (_curFreeLookCam == null)
@@ -99,73 +122,161 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
             return;
         }
 
-        if (switchedCamInfo.follow != null)
+        if (_curType == camType)    // 동일한 타입의 카메라 사용
         {
-            _curVirtualCam.Follow = switchedCamInfo.follow;
-        }
-        else
-        {
-            _curVirtualCam.Follow = _player;
+            Logger.Log("이미 사용 중인 카메라 입니다.");
+            return;
         }
 
-        if (switchedCamInfo.lookAt != null)
-        {
-            _curVirtualCam.LookAt = switchedCamInfo.lookAt;
-        }
-        else
-        {
-            _curVirtualCam.LookAt = _player;
-        }
+        CheckNullOfFollowNLookAt(switchedCamInfo);
 
+        // Virtual Camera vs FreeLook
         switch (switchedCamInfo.cinemachineType)
         {
             case CinemachineType.Virtual:
-                SetPriority(CinemachineType.Virtual);
-                SetVirtualCamera(switchedCamInfo._virtualCam);
+                Logger.Log("Virtual Camera 변경");
+                SwitchTo(SetVirtualCamera(switchedCamInfo._virtualCam), false);
                 break;
             case CinemachineType.FreeLook:
+                Logger.Log("FreeLook Camera 변경");
                 SetPriority(CinemachineType.FreeLook);
                 // todo: free look 로직 짜기
                 break;
             default:
                 break;
         }
+
+        _curType = camType;         // 타입 캐싱
     }
 
-    public void SwitchTo(CinemachineVirtualCamera virtualCam)
+    /// <summary>
+    /// [public] 파라미터를 현재 보는 카메라로 설정합니다.
+    /// </summary>
+    /// <param name="virtualCam"></param>
+    /// <param name="useExternal">카메라 매니저와 연결되어 있는 가상 카메라를 사용하지 않고 외부에서 사용하는 경우</param>
+    public void SwitchTo(CinemachineVirtualCamera virtualCam, bool useExternal = true)
     {
-        _curVirtualCam = virtualCam;
+        // todo: 외부에서 들어오는 카메라라면 기존 카메라랑 연결이 끊길 것으로 예상
+        // 노는 카메라 캐싱하는 방법 필요
+        if (_useExternal != useExternal && !useExternal)
+        {
+            _externalVirtualCam = null;
+        }
+        _useExternal = useExternal;
+
+        if (useExternal)
+        {
+            _externalVirtualCam = virtualCam;
+            SetPriority(CinemachineType.Virtual);
+            _curType = VCType.None;
+            return;
+        }
+
+        SetPriority(CinemachineType.Virtual);
+        if (_firstVirtualCam)
+        {
+            Logger.Log("Virtual Camera 2번으로 변경");
+            _curVirtualCam2 = virtualCam;
+            _firstVirtualCam = false;
+        }
+        else
+        {
+            Logger.Log("Virtual Camera 1번으로 변경");
+            _curVirtualCam1 = virtualCam;
+            _firstVirtualCam = true;
+        }
     }
 
+    /// <summary>
+    /// [public] 파라미터를 현재 보는 카메라로 설정합니다.
+    /// </summary>
+    /// <param name="freeLookCam"></param>
     public void SwitchTo(CinemachineFreeLook freeLookCam)
     {
+        SetPriority(CinemachineType.FreeLook);
+        Logger.Log("FreeLook Camera로 변경");
         _curFreeLookCam = freeLookCam;
     }
 
+    /// <summary>
+    /// [public] Follow 타겟을 변경합니다.
+    /// </summary>
+    /// <param name="target"></param>
+    public void SwitchFollow(Transform target)
+    {
+        _curFreeLookCam.Follow = target;
+        _curVirtualCam1.Follow = target;
+        _curVirtualCam2.Follow = target;
+    }
+
+    /// <summary>
+    /// [public] LookAt 타겟을 변경합니다.
+    /// </summary>
+    /// <param name="target"></param>
+    public void SwitchFollowLook(Transform target)
+    {
+        _curFreeLookCam.LookAt = target;
+        _curVirtualCam1.LookAt = target;
+        _curVirtualCam2.LookAt = target;
+    }
+
+    /// <summary>
+    /// info의 follow, lookAt에 값이 없으면 기본값을 넣어줍니다.
+    /// </summary>
+    /// <param name="info"></param>
+    private void CheckNullOfFollowNLookAt(CinemachineInfo info)
+    {
+        if (_firstVirtualCam)
+        {
+            _curVirtualCam2.Follow = info.follow != null ? info.follow : _player;
+            _curVirtualCam2.LookAt = info.lookAt != null ? info.lookAt : _player;
+        }
+        else
+        {
+            _curVirtualCam1.Follow = info.follow != null ? info.follow : _player;
+            _curVirtualCam1.LookAt = info.lookAt != null ? info.lookAt : _player;
+        }
+    }
+
+    /// <summary>
+    /// 카메라 타입에 맞게 우선순위를 설정해줍니다.
+    /// </summary>
+    /// <param name="type"></param>
     private void SetPriority(CinemachineType type)
     {
+        if (_useExternal) // 외부 카메라 사용 중
+        {
+            _externalVirtualCam.Priority = Define.ActivePriority;
+            _curVirtualCam1.Priority = Define.InactivePriority;
+            _curVirtualCam2.Priority = Define.InactivePriority;
+            _curFreeLookCam.Priority = Define.InactivePriority;
+            return;
+        }
+
+        // 현재 카메라가 1번째일 경우 2번째 카메라 수정
+        // 현재 카메라가 2번째일 경우 1번째 카메라 수정
         if (type == CinemachineType.Virtual)
         {
-            _curVirtualCam.Priority = Define.ActivePriority;
+            if (_firstVirtualCam)
+            {
+                Logger.Log("Virtual Camera 2번으로 우선순위 변경");
+                _curVirtualCam1.Priority = Define.InactivePriority;
+                _curVirtualCam2.Priority = Define.ActivePriority;
+            }
+            else
+            {
+                Logger.Log("Virtual Camera 1번으로 우선순위 변경");
+                _curVirtualCam1.Priority = Define.ActivePriority;
+                _curVirtualCam2.Priority = Define.InactivePriority;
+            }
             _curFreeLookCam.Priority = Define.InactivePriority;
         }
         else if (type == CinemachineType.FreeLook)
         {
-            _curVirtualCam.Priority = Define.InactivePriority;
+            _curVirtualCam1.Priority = Define.InactivePriority;
+            _curVirtualCam2.Priority = Define.InactivePriority;
             _curFreeLookCam.Priority = Define.ActivePriority;
         }
-    }
-
-    public void SwitchFollow(Transform target)
-    {
-        _curFreeLookCam.Follow = target;
-        _curVirtualCam.Follow = target;
-    }
-
-    public void SwitchFollowLook(Transform target)
-    {
-        _curFreeLookCam.LookAt = target;
-        _curVirtualCam.LookAt = target;
     }
     #endregion
 
@@ -174,22 +285,27 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// 가상 카메라 값 세팅하기
     /// </summary>
     /// <param name="info"></param>
-    private void SetVirtualCamera(CinemachineVirtualInfo info)
+    private CinemachineVirtualCamera SetVirtualCamera(CinemachineVirtualInfo info)
     {
+        CinemachineVirtualCamera cam;
+        // 현재 카메라가 1번째일 경우 2번째 카메라 수정
+        // 현재 카메라가 2번째일 경우 1번째 카메라 수정
+        cam = _firstVirtualCam ? _curVirtualCam2 : _curVirtualCam1;
+
         // Lens Setting
-        LensSettings lensSettings = _curVirtualCam.m_Lens;
+        LensSettings lensSettings = cam.m_Lens;
         lensSettings.FieldOfView = info.fieldOfView;
         lensSettings.ModeOverride = info.lensMode;
-        _curVirtualCam.m_Lens = lensSettings;
+        cam.m_Lens = lensSettings;
 
         // Body Setting
         switch (info.bodyType)
         {
             case VCBodyType.ThirdPersonFollow:
-                SetBodyThirdPersonFollow(info.bodyThridPersonFollow);
+                SetBodyThirdPersonFollow(cam, info.bodyThridPersonFollow);
                 break;
             case VCBodyType.Transposer:
-                SetBodyTransposer(info.bodyTransposer);
+                SetBodyTransposer(cam, info.bodyTransposer);
                 break;
         }
 
@@ -197,12 +313,14 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         switch (info.aimType)
         {
             case VCAimType.Composer:
-                SetAimComposer(info.aimComposer);
+                SetAimComposer(cam, info.aimComposer);
                 break;
             case VCAimType.HardLookAt:
-                SetAimHardLookAt();
+                SetAimHardLookAt(cam);
                 break;
         }
+
+        return cam;
     }
     #endregion
 
@@ -211,17 +329,19 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
     /// 시네머신 바디 - 3 person follow 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private void SetBodyThirdPersonFollow(Body3PersonFollow info)
+    private CinemachineVirtualCamera SetBodyThirdPersonFollow(
+        CinemachineVirtualCamera cam,
+        Body3PersonFollow info)
     {
         Cinemachine3rdPersonFollow body;
-        CinemachineComponentBase component = _curVirtualCam
+        CinemachineComponentBase component = cam
             .GetCinemachineComponent(CinemachineCore.Stage.Body);
 
         // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
         if (component == null || !(component as Cinemachine3rdPersonFollow))
         {
-            _curVirtualCam.AddCinemachineComponent<Cinemachine3rdPersonFollow>();
-            body = _curVirtualCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            cam.AddCinemachineComponent<Cinemachine3rdPersonFollow>();
+            body = cam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         }
         else
         {
@@ -237,23 +357,28 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         // Obstacles Setting
         body.CameraCollisionFilter = info.cameraCollisionFilter;
         body.IgnoreTag = info.ignoreTag;
+
+        Logger.Log($"{(_firstVirtualCam ? "2번째" : "1번째")} 카메라 Body 변경 완료");
+        return cam;
     }
 
     /// <summary>
     /// 시네머신 바디 - Transposer 카메라 세팅
     /// </summary>
     /// <param name="info"></param>
-    private void SetBodyTransposer(BodyTransposer info)
+    private CinemachineVirtualCamera SetBodyTransposer(
+        CinemachineVirtualCamera cam,
+        BodyTransposer info)
     {
         CinemachineTransposer body;
-        CinemachineComponentBase component = _curVirtualCam
+        CinemachineComponentBase component = cam
             .GetCinemachineComponent(CinemachineCore.Stage.Body);
 
         // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
         if (component == null || !(component as CinemachineTransposer))
         {
-            _curVirtualCam.AddCinemachineComponent<CinemachineTransposer>();
-            body = _curVirtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            cam.AddCinemachineComponent<CinemachineTransposer>();
+            body = cam.GetCinemachineComponent<CinemachineTransposer>();
         }
         else
         {
@@ -266,21 +391,25 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         body.m_YDamping = info.yDaming;
         body.m_ZDamping = info.zDaming;
         body.m_YawDamping = info.yawDaming;
+
+        return cam;
     }
     #endregion
 
     #region Aim 관리
-    private void SetAimComposer(AimComposer info)
+    private CinemachineVirtualCamera SetAimComposer(
+        CinemachineVirtualCamera cam,
+        AimComposer info)
     {
         CinemachineComposer aim;
-        CinemachineComponentBase component = _curVirtualCam
+        CinemachineComponentBase component = cam
             .GetCinemachineComponent(CinemachineCore.Stage.Aim);
 
         // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
         if (component == null || !(component as CinemachineComposer))
         {
-            _curVirtualCam.AddCinemachineComponent<CinemachineComposer>();
-            aim = _curVirtualCam.GetCinemachineComponent<CinemachineComposer>();
+            cam.AddCinemachineComponent<CinemachineComposer>();
+            aim = cam.GetCinemachineComponent<CinemachineComposer>();
         }
         else
         {
@@ -297,28 +426,35 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         aim.m_BiasX = info.biasX;
         aim.m_BiasY = info.biasY;
         aim.m_CenterOnActivate = info.centerOnActivate;
+
+        return cam;
     }
 
-    private void SetAimHardLookAt()
+    private CinemachineVirtualCamera SetAimHardLookAt(CinemachineVirtualCamera cam)
     {
         CinemachineHardLookAt aim;
-        CinemachineComponentBase component = _curVirtualCam
+        CinemachineComponentBase component = cam
             .GetCinemachineComponent(CinemachineCore.Stage.Aim);
 
         // 컴포넌트가 null이거나 해당 클래스가 아닐 경우
         if (component == null || !(component as CinemachineHardLookAt))
         {
-            _curVirtualCam.AddCinemachineComponent<CinemachineHardLookAt>();
-            aim = _curVirtualCam.GetCinemachineComponent<CinemachineHardLookAt>();
+            cam.AddCinemachineComponent<CinemachineHardLookAt>();
+            aim = cam.GetCinemachineComponent<CinemachineHardLookAt>();
         }
         else
         {
             aim = (CinemachineHardLookAt)component;
         }
+
+        return cam;
     }
     #endregion
 
     #region 테스트 코드
+    [Header("테스트")]
+    [SerializeField] CinemachineVirtualCamera _testVirtualCam;
+
     public void Test_PushCamera()
     {
         List<CinemachineInfo> infos = new()
@@ -345,12 +481,26 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         SwitchTo(VCType.TestVC3);
     }
 
+    /// <summary>
+    /// 외부 카메라 테스트
+    /// </summary>
+    public void Test_ExternalCamera()
+    {
+        SwitchTo(_testVirtualCam);
+    }
+
     public void Test_ResetCamera()
     {
         _sceneCams.Clear();
         _camDict.Clear();
+        _externalVirtualCam = null;
     }
 
+    /// <summary>
+    /// 카메라 SO 데이터를 찾아옵니다.
+    /// </summary>
+    /// <param name="name">SO 파일 이름</param>
+    /// <returns></returns>
     private CinemachineInfo FindTestSO(string name)
     {
         Logger.Log($"so 데이터 찾기: {name}");

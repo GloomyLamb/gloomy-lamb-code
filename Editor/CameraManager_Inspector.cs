@@ -48,5 +48,13 @@ public class CameraManager_Inspector : Editor
                 cameraManager.Test_SwitchCamera3();
             }
         }
+
+        if (GUILayout.Button("[Test] 외부 카메라 전환"))
+        {
+            if (cameraManager)
+            {
+                cameraManager.Test_ExternalCamera();
+            }
+        }
     }
 }
