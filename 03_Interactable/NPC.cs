@@ -39,9 +39,9 @@ public abstract class NPC : MonoBehaviour, IInteractable
     /// 플레이어 캐싱
     /// </summary>
     /// <param name="player"></param>
-    public void SetPlayer(Transform player)
+    public void SetPlayer(Player player)
     {
-        this.player = player;
+        this.player = player.transform;
     }
 
     /// <summary>
@@ -65,6 +65,25 @@ public abstract class NPC : MonoBehaviour, IInteractable
             transform.rotation,
             targetRot,
             rotateSpeed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<Player>(out var player))
+        {
+            SetPlayer(player);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<Player>(out var player))
+        {
+            if (this.player == player.transform)
+            {
+                ResetPlayer();
+            }
+        }
     }
     #endregion
 
