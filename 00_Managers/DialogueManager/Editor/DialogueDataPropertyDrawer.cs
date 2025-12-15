@@ -33,8 +33,7 @@ public class DialogueDataPropertyDrawer : PropertyDrawer
         // 위에 이름이랑 스프라이트 같이 놓기
         EditorGUI.PropertyField(new Rect(top.x, y, nameWidth, line), name, GUIContent.none);
         EditorGUI.PropertyField(new Rect(top.x + nameWidth + 5, y, sprWidth, line), sprName, GUIContent.none);
-        EditorGUI.PropertyField(new Rect(top.x + nameWidth + sprWidth + 10, y, emotionWidth, line), emotion,
-            GUIContent.none);
+        EditorGUI.PropertyField(new Rect(top.x + nameWidth + sprWidth + 10, y, emotionWidth, line), emotion, GUIContent.none);
 
         y += (line + spacing);
 
@@ -64,29 +63,28 @@ public class DialogueDataPropertyDrawer : PropertyDrawer
                 float positionX = rowRect.x + labelWidth + 5f;
                 float buttonWidth = rowRect.width - labelWidth - 5f;
                 
-                // if (buttonElement.managedReferenceValue is NextDialogueButtonData)
-                // {
-                //     float half = (buttonWidth - 5f) * 0.5f;
-                //
-                //     Rect descRect = new Rect(positionX, rowRect.y, half, rowHeight);
-                //     Rect assetRect = new Rect(positionX + half + 5f, rowRect.y, half, rowHeight);
-                //
-                //     EditorGUI.PropertyField(descRect, buttonDesc, GUIContent.none);
-                //
-                //     SerializedProperty nextAsset = buttonElement.FindPropertyRelative("nextDialogueAssets");
-                //
-                //     EditorGUI.PropertyField(assetRect, nextAsset, GUIContent.none);
-                // }
-                // else
-                // {
-                //     Rect descRect = new Rect(positionX, rowRect.y, buttonWidth , rowHeight);
-                //     EditorGUI.PropertyField(descRect, buttonDesc, GUIContent.none);
-                // }
-                //
+                SerializedProperty type = buttonElement.FindPropertyRelative("type");
+                if ((DialogueButtonType)type.enumValueIndex == DialogueButtonType.NextDialogue)
+                {
+                    float half = (buttonWidth - 5f) * 0.5f;
+                
+                    Rect descRect = new Rect(positionX, rowRect.y, half, rowHeight);
+                    Rect assetRect = new Rect(positionX + half + 5f, rowRect.y, half, rowHeight);
+                
+                    EditorGUI.PropertyField(descRect, buttonDesc, GUIContent.none);
+                
+                    SerializedProperty nextAsset = buttonElement.FindPropertyRelative("nextDialogueAssets");
+                
+                    EditorGUI.PropertyField(assetRect, nextAsset, GUIContent.none);
+                }
+                else
+                {
+                    Rect descRect = new Rect(positionX, rowRect.y, buttonWidth , rowHeight);
+                    EditorGUI.PropertyField(descRect, buttonDesc, GUIContent.none);
+                }
+                
 
                 //EditorGUI.PropertyField(left, buttonDesc, GUIContent.none);
-        
-      
                 //
                 
                 y += rowHeight + spacing;
