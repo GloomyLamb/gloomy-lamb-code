@@ -19,8 +19,9 @@ public class InputTestPlayer : Player
     }
 
     // 또는 FixedUpdate에서
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         Move();
     }
 
