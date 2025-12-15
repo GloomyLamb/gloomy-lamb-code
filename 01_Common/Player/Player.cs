@@ -14,7 +14,7 @@ public abstract class Player : MonoBehaviour
 
     [Header("Interaction Setting")]
     [SerializeField] protected float interactRange = 3f;
-    [SerializeField] protected float interactAngle = 60f;
+    [SerializeField][Range(60f, 180f)] protected float interactAngle = 120f;
     [SerializeField] protected LayerMask interactableLayer;
 
     // 가중치
