@@ -35,6 +35,11 @@ public abstract class Player : MonoBehaviour
 
     protected abstract void Init();
 
+    protected virtual void Update()
+    {
+        OnDetectInteractablesEnter();
+    }
+
     private void OnDestroy()
     {
         input?.DisposeInputEvent();

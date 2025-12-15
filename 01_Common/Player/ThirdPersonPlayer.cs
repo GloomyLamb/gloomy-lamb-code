@@ -38,9 +38,10 @@ public class ThirdPersonPlayer : Player
         InputManager.Instance.UseInput(input);
     }
 
-    private void Update()
+    protected override void Update()
     {
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime*10);
+        base.Update();
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * 10);
     }
 
     private void FixedUpdate()
