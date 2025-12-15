@@ -1,6 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// NPC 기본 클래스
+/// </summary>
 [RequireComponent(typeof(SphereCollider))]
 public abstract class NPC : MonoBehaviour, IInteractable
 {
@@ -115,6 +118,9 @@ public abstract class NPC : MonoBehaviour, IInteractable
     #endregion
 
     #region 말풍선
+    /// <summary>
+    /// 게임 시작 시 NPC 말풍선 생성하기
+    /// </summary>
     private void SpawnSpeechBubble()
     {
         if (speechBubblePrefab == null)
@@ -127,6 +133,9 @@ public abstract class NPC : MonoBehaviour, IInteractable
         speechBubble.SetActive(isTest);
     }
 
+    /// <summary>
+    /// 말풍선 ON/OFF 토글
+    /// </summary>
     protected void ToggleSpeechBubble()
     {
         if (speechBubble == null) return;
