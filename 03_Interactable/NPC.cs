@@ -157,7 +157,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
     {
         if (speechBubblePrefab != null) return;
 
-        string[] guids = AssetDatabase.FindAssets("t:Prefab SpeechBubble");
+        string[] guids = AssetDatabase.FindAssets("t:Prefab SpeechBubble_Default");
 
         if (guids.Length == 0)
         {
