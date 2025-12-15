@@ -53,9 +53,20 @@ public abstract class Player : MonoBehaviour
     protected void UpdateInteractionTarget()
     {
         Collider[] cols = GetInteractables();                       // 1. 반경 내 오브젝트 탐색
+        if (cols.Length == 0) return;
+
         IInteractable interactable = FindBestInteractable(cols);    // 2. 우선순위 계산 (각도 + 거리)
 
-        if (_curInteractable == interactable) return;               // 변경 없으면 패스
+        // 범위에 상호작용 가능한 오브젝트가 없으면 상태 초기화
+        if (curInteractable != null && interactable == null)
+        {
+            curInteractable.HideKey();
+            curInteractable = null;
+            return;
+        }
+
+        // 변경 없으면 패스
+        if (curInteractable == interactable) return;
 
         interactable?.HideKey();
         _curInteractable = interactable;
