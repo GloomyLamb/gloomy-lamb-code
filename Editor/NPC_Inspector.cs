@@ -17,28 +17,27 @@ public abstract class NPC_Inspector<T> : Editor where T : NPC
 
     protected virtual void DrawTestButtons()
     {
-        if (GUILayout.Button("[Test] 말풍선 ON/OFF"))
+        EditorGUILayout.LabelField("테스트 버튼", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("말풍선 ON / OFF"))
         {
-            if (npc)
-            {
-                npc.Test_ToggleSpeechBubble();
-            }
+            Undo.RecordObject(npc.gameObject, "Toggle Speech Bubble");
+            npc.Test_ToggleSpeechBubble();
+            EditorUtility.SetDirty(npc);
         }
 
-        if (GUILayout.Button("[Test] 말풍선 교체 - 3D"))
+        if (GUILayout.Button("말풍선 교체 - 3D"))
         {
-            if (npc)
-            {
-                npc.Test_SpawnSpeechBubbleDefault();
-            }
+            Undo.RecordObject(npc.gameObject, "Spawn Speech Bubble 3D");
+            npc.Test_SpawnSpeechBubbleDefault();
+            EditorUtility.SetDirty(npc);
         }
 
-        if (GUILayout.Button("[Test] 말풍선 교체 - 2D"))
+        if (GUILayout.Button("말풍선 교체 - 2D"))
         {
-            if (npc)
-            {
-                npc.Test_SpawnSpeechBubbleUI();
-            }
+            Undo.RecordObject(npc.gameObject, "Spawn Speech Bubble UI");
+            npc.Test_SpawnSpeechBubbleUI();
+            EditorUtility.SetDirty(npc);
         }
     }
 }

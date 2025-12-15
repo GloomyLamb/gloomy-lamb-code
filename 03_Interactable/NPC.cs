@@ -16,7 +16,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
 
     // 말풍선
     [SerializeField] protected GameObject speechBubblePrefab;
-    protected GameObject speechBubble;
+    [SerializeField] protected GameObject speechBubble;
 
     // 상호작용 가능 관리
 
@@ -37,7 +37,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    #region 플레이어 상호작용
+    #region 플레이어 탐지
     /// <summary>
     /// 플레이어 캐싱
     /// </summary>
@@ -55,25 +55,6 @@ public abstract class NPC : MonoBehaviour, IInteractable
         this.player = null;
     }
 
-    /// <summary>
-    /// 플레이어 방향대로 회전
-    /// </summary>
-    private void RotateToPlayer()
-    {
-        Vector3 dir = player.position - transform.position; // 플레이어 방향
-        dir.y = 0f;                                         // 수평 방향만 고려
-
-        if (dir.sqrMagnitude < 0.0001f) return;             // 너무 가까우면 회전 안 함
-
-        Quaternion targetRot = Quaternion.LookRotation(dir);
-        transform.rotation = Quaternion.RotateTowards(
-            transform.rotation,
-            targetRot,
-            rotateSpeed * Time.deltaTime);
-    }
-    #endregion
-
-    #region 트리거 감지
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<Player>(out var player))
@@ -93,6 +74,25 @@ public abstract class NPC : MonoBehaviour, IInteractable
                 ResetPlayer();
             }
         }
+    }
+    #endregion
+
+    #region 회전
+    /// <summary>
+    /// 플레이어 방향대로 회전
+    /// </summary>
+    private void RotateToPlayer()
+    {
+        Vector3 dir = player.position - transform.position; // 플레이어 방향
+        dir.y = 0f;                                         // 수평 방향만 고려
+
+        if (dir.sqrMagnitude < 0.0001f) return;             // 너무 가까우면 회전 안 함
+
+        Quaternion targetRot = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            targetRot,
+            rotateSpeed * Time.deltaTime);
     }
     #endregion
 
@@ -123,11 +123,18 @@ public abstract class NPC : MonoBehaviour, IInteractable
     /// </summary>
     private void SpawnSpeechBubble()
     {
+        if (speechBubble != null)
+        {
+            Logger.Log("이미 말풍선 생성됨");
+            return;
+        }
+
         if (speechBubblePrefab == null)
         {
             Logger.LogWarning("말풍선 프리팹 없음");
             return;
         }
+
         speechBubble = Instantiate(speechBubblePrefab, transform);
         speechBubble.transform.localPosition = new Vector3(0f, 1.7f, 0f);
         speechBubble.SetActive(isTest);
@@ -151,16 +158,36 @@ public abstract class NPC : MonoBehaviour, IInteractable
 
     public void Test_SpawnSpeechBubbleDefault()
     {
-        Destroy(speechBubble.gameObject);
+#if UNITY_EDITOR
+        ClearSpeechBubble();
         ApplySpeechBubble("SpeechBubble_Default");
         SpawnSpeechBubble();
+#endif
     }
 
     public void Test_SpawnSpeechBubbleUI()
     {
-        Destroy(speechBubble.gameObject);
+#if UNITY_EDITOR
+        ClearSpeechBubble();
         ApplySpeechBubble("SpeechBubble_UI");
         SpawnSpeechBubble();
+#endif
+    }
+
+    private void ClearSpeechBubble()
+    {
+        speechBubblePrefab = null;
+        if (speechBubble == null) return;
+
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+            DestroyImmediate(speechBubble);
+        else
+            Destroy(speechBubble);
+#else
+        Destroy(speechBubble);
+#endif
+        speechBubble = null;
     }
     #endregion
 
@@ -173,7 +200,6 @@ public abstract class NPC : MonoBehaviour, IInteractable
         ApplySpeechBubble("SpeechBubble_Default");
     }
 
-#endif
     private void ApplyLayer()
     {
         int layer = LayerMask.NameToLayer("Interactable");
@@ -204,5 +230,6 @@ public abstract class NPC : MonoBehaviour, IInteractable
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
         speechBubblePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
     }
+#endif
     #endregion
 }
