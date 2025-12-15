@@ -1,4 +1,4 @@
-public class InteractableTestObject : InteractableObject
+public class InteractableTestObject : InteractableObjectBase
 {
     public override void Interact()
     {
