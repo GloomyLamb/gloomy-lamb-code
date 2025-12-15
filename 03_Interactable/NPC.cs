@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public abstract class NPC : MonoBehaviour, IInteractable
 {
     // NPC 기본 방향
@@ -13,13 +14,6 @@ public abstract class NPC : MonoBehaviour, IInteractable
 
     // 플레이어 정보
     protected Transform player;
-
-    private void Reset()
-    {
-        int layer = LayerMask.NameToLayer("Interactable");
-        if (layer != -1)
-            gameObject.layer = layer;
-    }
 
     private void Awake()
     {
@@ -105,6 +99,31 @@ public abstract class NPC : MonoBehaviour, IInteractable
     public virtual void HideInteractUI()
     {
         Logger.Log("상호작용 키 숨기기");
+    }
+    #endregion
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    private void Reset()
+    {
+        ApplyLayer();
+        ApplyCollider();
+    }
+
+#endif
+    private void ApplyLayer()
+    {
+        int layer = LayerMask.NameToLayer("Interactable");
+        if (layer != -1)
+            gameObject.layer = layer;
+    }
+
+    private void ApplyCollider()
+    {
+        var col = GetComponent<SphereCollider>();
+        col.isTrigger = true;
+        col.radius = 3f;
+        col.center = Vector3.zero;
     }
     #endregion
 }
