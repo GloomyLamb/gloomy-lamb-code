@@ -4,8 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public abstract class NPC : MonoBehaviour, IInteractable
 {
-    // NPC 기본 방향
-    protected Vector3 forward;
+    [Header("테스트")]
+    [SerializeField] protected bool isTest = false;
+
+    [Header("공통 NPC 설정")]
+    protected Vector3 forward;      // NPC 기본 방향
     [SerializeField] protected float rotateSpeed = 270f;
 
     // 말풍선
@@ -121,7 +124,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
         }
         speechBubble = Instantiate(speechBubblePrefab, transform);
         speechBubble.transform.localPosition = new Vector3(0f, 1.7f, 0f);
-        speechBubble.SetActive(false);
+        speechBubble.SetActive(isTest);
     }
     #endregion
 
