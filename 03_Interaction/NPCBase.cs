@@ -8,7 +8,7 @@ using UnityEditor;
 /// NPC 기본 클래스
 /// </summary>
 [RequireComponent(typeof(SphereCollider))]
-public abstract class NPC : MonoBehaviour, IInteractable
+public abstract class NPCBase : MonoBehaviour, IInteractable
 {
     [Header("테스트")]
     [SerializeField] protected bool isTest = false;
