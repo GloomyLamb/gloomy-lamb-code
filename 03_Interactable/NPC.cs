@@ -20,12 +20,14 @@ public abstract class NPC : MonoBehaviour, IInteractable
 
     // 상호작용 가능 관리
 
-    // 플레이어 정보
+    // 캐싱
     protected Transform player;
+    private Transform _camera;
 
     private void Awake()
     {
         this.forward = transform.forward;
+        _camera = Camera.main.transform;
         SpawnSpeechBubble();
     }
 
@@ -35,6 +37,12 @@ public abstract class NPC : MonoBehaviour, IInteractable
         {
             RotateToPlayer();
         }
+    }
+
+    protected virtual void LateUpdate()
+    {
+        Vector3 target = -_camera.forward;
+        speechBubble.transform.forward = new Vector3(target.x, 0, target.z);
     }
 
     #region 플레이어 탐지
