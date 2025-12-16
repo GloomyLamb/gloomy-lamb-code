@@ -8,8 +8,11 @@ public enum SceneType
     None,
     Title,
     Library,
-    NHP_ThreeBiomes,        // 테스트용
-    // todo: 미니 게임들 추가
+    Video,
+
+    // 테스트용
+    NHP_ThreeBiomes,
+    VideoTest,
 }
 
 /// <summary>
