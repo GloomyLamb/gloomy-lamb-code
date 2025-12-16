@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-[CreateAssetMenu(fileName = "new VideoDatabase", menuName = "SO/VideoDatabase")]
+[CreateAssetMenu(fileName = "new VideoDatabase", menuName = "SO/Video Database")]
 public class VideoDatabase : ScriptableObject
 {
     public List<VideoClipEntry> clips;

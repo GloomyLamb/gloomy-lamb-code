@@ -22,6 +22,7 @@ public class VideoController : MonoBehaviour
 
     public void Init(VideoID videoId)
     {
+        Logger.Log("비디오 정보 초기화");
         _currentVideoID = videoId;
 
         _videoPlayer.loopPointReached -= HandleVideoFinished;

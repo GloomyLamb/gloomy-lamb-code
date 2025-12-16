@@ -7,6 +7,7 @@ public class VideoFlowContext
     {
         VideoID = videoId;
         ReturnScene = returnScene;
+        Logger.Log($"{VideoID} 영상 시청 후 {ReturnScene}으로 이동 설정");
     }
 
     public void Clear()

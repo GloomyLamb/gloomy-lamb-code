@@ -18,8 +18,10 @@ public class VideoScene : SceneBase
     {
         base.OnSceneLoaded(scene, mode);
 
+        Logger.Log("비디오 컨트롤러 탐색");
         _videoController = FindObjectOfType<VideoController>();
 
+        Logger.Log("비디오 컨트롤러 설정 - 종료 이벤트, 초기화");
         _videoController.OnVideoFinished += HandleVideoFinished;
         VideoFlowContext videoFlowContext = GameManager.Instance.VideoFlow;
         _videoController.Init(videoFlowContext.VideoID);
