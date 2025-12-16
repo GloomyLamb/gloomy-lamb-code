@@ -7,7 +7,7 @@ using UnityEditor;
 /// <summary>
 /// NPC 기본 클래스
 /// </summary>
-[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(CapsuleCollider))]
 public abstract class NPCBase : MonoBehaviour, IInteractable
 {
     [Header("테스트")]
@@ -36,6 +36,11 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         SpawnSpeechBubble();
     }
 
+    protected virtual void Start()
+    {
+        SetPlayer(FindObjectOfType<Player>());
+    }
+
     protected virtual void Update()
     {
         if (player != null)
@@ -59,6 +64,7 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     /// <param name="player"></param>
     public void SetPlayer(Player player)
     {
+        Logger.Log("플레이어 캐싱");
         this.player = player.transform;
     }
 
@@ -67,6 +73,7 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     /// </summary>
     public void ResetPlayer()
     {
+        Logger.Log("플레이어 캐싱 제거");
         this.player = null;
     }
 
@@ -226,9 +233,9 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
 
     private void ApplyCollider()
     {
-        var col = GetComponent<SphereCollider>();
-        col.isTrigger = true;
-        col.radius = 3f;
+        var col = GetComponent<CapsuleCollider>();
+        col.isTrigger = false;
+        col.radius = 1.5f;
         col.center = Vector3.zero;
     }
 
