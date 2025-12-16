@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 /// <summary>
 /// NPC 클릭 레이캐스터
 /// </summary>
@@ -17,8 +22,8 @@ public class ClickRaycaster : MonoBehaviour
 
     private void Awake()
     {
-        Init();
         _camera = Camera.main;
+        Init();
     }
 
     private void Init()
@@ -27,15 +32,26 @@ public class ClickRaycaster : MonoBehaviour
         _input.BindInputEvent(InputMapName.Default, InputActionName.Interaction, OnClick);
     }
 
+    private void Start()
+    {
+        Logger.Log("인풋 연결");
+        InputManager.Instance.UseInput(_input);
+    }
+
     private void Update()
     {
         //Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         //Debug.DrawRay(ray.origin, ray.direction * _maxDistance, Color.red, 1f);
     }
 
+    private void OnDestroy()
+    {
+        _input?.DisposeInputEvent();
+    }
+
     private void OnClick(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Started)
         {
             Logger.Log("마우스 클릭");
             if (_camera == null) return;
@@ -53,4 +69,31 @@ public class ClickRaycaster : MonoBehaviour
             }
         }
     }
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    private void Reset()
+    {
+        if (_inputActions == null)
+            _inputActions = FindInputActionAsset("InputAction_Camera");
+
+        _layerMask = LayerMask.GetMask("Interactable");
+    }
+
+    private InputActionAsset FindInputActionAsset(string name)
+    {
+        Logger.Log($"InputActionAsset 찾기: {name}");
+
+        string[] guids = AssetDatabase.FindAssets($"t:InputActionAsset {name}");
+        if (guids.Length == 0)
+        {
+            Logger.LogWarning($"InputActionAsset 못 찾음: {name}");
+            return null;
+        }
+
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        return AssetDatabase.LoadAssetAtPath<InputActionAsset>(path);
+    }
+#endif
+    #endregion
 }
