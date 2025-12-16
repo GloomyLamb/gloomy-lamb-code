@@ -3,6 +3,7 @@ public enum InputType
     Player,
     Camera,
     UI,
+    DialogueBox,
 }
 
 public enum InputMapName
