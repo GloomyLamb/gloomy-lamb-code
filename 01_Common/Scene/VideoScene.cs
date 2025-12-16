@@ -1,5 +1,3 @@
-using UnityEngine.SceneManagement;
-
 /// <summary>
 /// 비디오 씬 클래스
 /// </summary>
@@ -14,9 +12,9 @@ public class VideoScene : SceneBase
     /// </summary>
     /// <param name="scene"></param>
     /// <param name="mode"></param>
-    public override void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public override void Init()
     {
-        base.OnSceneLoaded(scene, mode);
+        base.Init();
 
         Logger.Log("비디오 컨트롤러 탐색");
         _videoController = FindObjectOfType<VideoController>();
