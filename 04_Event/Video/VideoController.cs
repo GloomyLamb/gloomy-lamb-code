@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 /// <summary>
@@ -12,6 +13,18 @@ public class VideoController : MonoBehaviour
 
     [Header("비디오 재생 관리")]
     [SerializeField] private VideoPlayer _videoPlayer;
+
+    // 캐싱
+    private VideoID _currentVideoID;
+    private string _nextSceneName;      // todo: enum 변경 고려
+
+    public void Init(VideoID videoId, string nextSceneName)
+    {
+        _currentVideoID = videoId;
+        _nextSceneName = nextSceneName;
+
+        _videoPlayer.loopPointReached += OnVideoFinished;
+    }
 
     /// <summary>
     /// id에 해당하는 비디오를 재생합니다.
@@ -27,6 +40,32 @@ public class VideoController : MonoBehaviour
 
         _videoPlayer.clip = clip;
         _videoPlayer.Play();
+    }
+
+    /// <summary>
+    /// 현재 재생 중인 비디오를 중지합니다.
+    /// </summary>
+    public void StopVideo()
+    {
+        _videoPlayer.Stop();
+    }
+
+    /// <summary>
+    /// 비디오 재생이 끝났을 때 호출됩니다.
+    /// </summary>
+    /// <param name="videoPlayer"></param>
+    private void OnVideoFinished(VideoPlayer videoPlayer)
+    {
+        _videoPlayer.loopPointReached -= OnVideoFinished;
+
+        if (_nextSceneName == SceneManager.GetActiveScene().name)
+        {
+            // todo: 동일 씬일 경우 변환 처리
+        }
+        else
+        {
+            GameManager.Instance.Scene.LoadSceneWithCoroutine(_nextSceneName);
+        }
     }
 
     #region 에디터 전용
