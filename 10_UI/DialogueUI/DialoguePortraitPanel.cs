@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueCharacterPanel : MonoBehaviour
+public class DialoguePortraitPanel : MonoBehaviour
 {
     [SerializeField] private Image characterImg;
     [SerializeField] private Image characterEmotionImg;

@@ -1,37 +1,35 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
-public class DialogueUI : BaseUI
+public class DialogueBaseUI : BaseUI
 {
     [Header("Input")]
-    [SerializeField] private InputActionAsset inputActionAsset;
+    [SerializeField] protected InputActionAsset inputActionAsset;
+    protected InputHandler input;
     
-    [Header("UI Elements")]
-    [SerializeField] private TextMeshProUGUI dialogueText;
+    [Header("Dialogue Text")]
+    [SerializeField] protected TextMeshProUGUI dialogueText;
 
-    [Space]
-    [SerializeField] private GameObject characterNamePanel;
-    [SerializeField] private TextMeshProUGUI characterNameText;
-    
-    
-    
 
-    const float DialogueSpeedRate = 10f;
-    private float dialogueSpeed = 1.0f;
 
-    InputHandler input;
+    protected const float DialogueSpeedRate = 10f;
+    protected float dialogueSpeed = 1.0f;
 
     Coroutine dialogueCoroutine;
+
+
     public override void Init()
     {
         input = new InputHandler(inputActionAsset, InputType.DialogueBox);
-        
+        //
+        // portraitPanels =  new List<DialoguePortraitPanel>();
+        // for (int i = 0; i < portraitPanelOrigins; ++i)
+        // {
+        //     
+        // }
     }
 
     private void Start()
@@ -39,29 +37,29 @@ public class DialogueUI : BaseUI
         InputManager.Instance.UseInput(input);
     }
 
-    public void ShowDialogue(DialogueData dialogueData)
+    public virtual void ShowDialogue(DialogueData dialogueData)
     {
         this.gameObject.SetActive(true);
         //dialogueData.Name
     }
-    
-    public void PrintDialogue(string dialogueString)
+
+    public virtual void PrintDialogue(string dialogueString)
     {
         if (dialogueCoroutine != null)
         {
             StopCoroutine(dialogueCoroutine);
         }
-        
+
         dialogueSpeed = dialogueSpeed <= 0 ? 1.0f : dialogueSpeed;
-        
+
         dialogueCoroutine = StartCoroutine(PrintDialogueRoutine(dialogueString));
     }
 
-    IEnumerator PrintDialogueRoutine(string dialogueString)
+    protected IEnumerator PrintDialogueRoutine(string dialogueString)
     {
         dialogueText.text = "";
         //int nowPrintCount = 0;
-        
+
         for (int i = 0; i < dialogueString.Length; i++)
         {
             yield return new WaitForSecondsRealtime(DialogueSpeedRate / dialogueSpeed);
