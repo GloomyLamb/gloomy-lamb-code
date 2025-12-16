@@ -21,6 +21,11 @@ public class DialogueData
     [SerializeField] List<DialogueButtonData> buttons;
 
 
+    public DialogueData(string _dialogue)
+    {
+        dialogue = _dialogue;
+    }
+    
     public DialogueData(string _name, string _dialogue, string _sprName, DialogueEmotionType _emotion, List<DialogueButtonData> _buttons)
     {
         // type = _type;
