@@ -6,22 +6,23 @@ using UnityEngine.SceneManagement;
 public enum SceneType
 {
     None,
-    Title,
-    Library,
-    Video,
+    VideoScene,
 
     // 테스트용
     NHP_ThreeBiomes,
-    VideoTest,
+    VideoTestScene,
 }
 
 /// <summary>
 /// 씬 전환 관리
 /// </summary>
+[System.Serializable]
 public class SceneController
 {
     #region Fields
     internal SceneController() { }
+
+    [SerializeField] private SceneDatabase _sceneDatabase;
 
     // todo: 씬 관리 하기 고민
     // - dict으로 한 번에 정의해서 묶을 지, 씬에 저장해두고, 씬에서 넘어가면 거기서 불러올지
@@ -31,6 +32,7 @@ public class SceneController
     private Coroutine _coroutine;
     #endregion
 
+    #region 씬 로드
     /// <summary>
     /// type과 동일한 이름의 씬을 비동기로 로드합니다.
     /// </summary>
@@ -103,4 +105,16 @@ public class SceneController
             Logger.Log($"로딩 상태: {async.progress * 100}%...");
         }
     }
+    #endregion
+
+    #region 비디오 씬 이동
+    public void OnVideoSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SceneManager.sceneLoaded -= OnVideoSceneLoaded;
+
+        _sceneDatabase.TryGetScene(SceneType.VideoScene, out GameObject prefab);
+        var videoScene = GameObject.Instantiate(prefab).GetComponent<VideoScene>();
+        SceneManager.sceneLoaded += videoScene.OnSceneLoaded;
+    }
+    #endregion
 }
