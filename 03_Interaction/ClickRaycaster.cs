@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -34,14 +33,7 @@ public class ClickRaycaster : MonoBehaviour
 
     private void Start()
     {
-        Logger.Log("인풋 연결");
         InputManager.Instance.UseInput(_input);
-    }
-
-    private void Update()
-    {
-        //Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        //Debug.DrawRay(ray.origin, ray.direction * _maxDistance, Color.red, 1f);
     }
 
     private void OnDestroy()
