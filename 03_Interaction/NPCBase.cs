@@ -1,7 +1,6 @@
 using UnityEngine;
 
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 /// <summary>
@@ -183,14 +182,14 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     public void Test_SpawnSpeechBubbleDefault()
     {
         ClearSpeechBubble();
-        FindAndLoadAsset("SpeechBubble_Default");
+        AssetLoader.FindAndLoadByName("SpeechBubble_Default");
         SpawnSpeechBubble();
     }
 
     public void Test_SpawnSpeechBubbleUI()
     {
         ClearSpeechBubble();
-        FindAndLoadAsset("SpeechBubble_UI");
+        AssetLoader.FindAndLoadByName("SpeechBubble_UI");
         SpawnSpeechBubble();
     }
 
@@ -216,11 +215,11 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         ApplyCollider();
         if (speechBubblePrefab == null)
         {
-            speechBubblePrefab = FindAndLoadAsset("SpeechBubble_Default");
+            speechBubblePrefab = AssetLoader.FindAndLoadByName("SpeechBubble_Default");
         }
         if (dialogueUIPrefab == null)
         {
-            dialogueUIPrefab = FindAndLoadAsset("DialogueUI");
+            dialogueUIPrefab = AssetLoader.FindAndLoadByName("DialogueUI");
         }
     }
 
@@ -237,20 +236,6 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         col.isTrigger = false;
         col.radius = 1.5f;
         col.center = Vector3.zero;
-    }
-
-    private GameObject FindAndLoadAsset(string name)
-    {
-        string[] guids = AssetDatabase.FindAssets($"t:Prefab {name}");
-
-        if (guids.Length == 0)
-        {
-            Logger.Log($"{name} 프리팹 못 찾음");
-            return null;
-        }
-
-        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-        return AssetDatabase.LoadAssetAtPath<GameObject>(path);
     }
 #endif
     #endregion
