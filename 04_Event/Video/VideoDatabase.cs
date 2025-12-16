@@ -11,6 +11,6 @@ public class VideoDatabase : ScriptableObject
 [System.Serializable]
 public class VideoClipEntry
 {
-    public string videoName;
+    public VideoID id;
     public VideoClip videoClip;
 }

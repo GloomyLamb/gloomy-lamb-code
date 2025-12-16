@@ -13,12 +13,12 @@ public class VideoController : MonoBehaviour
     [SerializeField] private VideoPlayer _videoPlayer;
 
     /// <summary>
-    /// videoName에 해당하는 비디오를 재생합니다.
+    /// id에 해당하는 비디오를 재생합니다.
     /// </summary>
-    /// <param name="videoName"></param>
-    public void PlayVideoByName(string videoName)
+    /// <param name="id"></param>
+    public void PlayVideoByName(VideoID id)
     {
-        VideoClipEntry clipEntry = _videoDatabase.clips.Find(clip => clip.videoName == videoName);
+        VideoClipEntry clipEntry = _videoDatabase.clips.Find(clip => clip.id == id);
         if (clipEntry != null)
         {
             _videoPlayer.clip = clipEntry.videoClip;
@@ -26,7 +26,7 @@ public class VideoController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"{videoName} 비디오 데이터베이스에 없음");
+            Debug.LogWarning($"{id} 비디오 데이터베이스에 없음");
         }
     }
 
