@@ -30,11 +30,16 @@ public class VideoController : MonoBehaviour
         }
     }
 
+    #region 에디터 전용
 #if UNITY_EDITOR
     private void Reset()
     {
         if (_videoDatabase != null) return;
         _videoDatabase = AssetLoader.FindAndLoadByName<VideoDatabase>("VideoDatabase");
+
+        if (_videoPlayer != null) return;
+        _videoPlayer = FindObjectOfType<VideoPlayer>();
     }
 #endif
+    #endregion
 }
