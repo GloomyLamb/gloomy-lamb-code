@@ -18,4 +18,5 @@ public enum InputActionName
     Jump,
     Interaction,
     Dash,
+    Next,
 }
