@@ -94,7 +94,7 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
 
     #region 회전
     /// <summary>
-    /// 플레이어 방향대로 회전
+    /// 플레이어를 바라보게 회전
     /// </summary>
     private void RotateToPlayer()
     {
@@ -209,11 +209,11 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         ApplyCollider();
         if (speechBubblePrefab == null)
         {
-            FindAndLoadAsset("SpeechBubble_Default");
+            speechBubblePrefab = FindAndLoadAsset("SpeechBubble_Default");
         }
         if (dialogueUIPrefab == null)
         {
-            FindAndLoadAsset("DialogueUI");
+            dialogueUIPrefab = FindAndLoadAsset("DialogueUI");
         }
     }
 
