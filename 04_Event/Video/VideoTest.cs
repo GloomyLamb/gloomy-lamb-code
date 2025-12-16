@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class VideoTest : MonoBehaviour
 {
-    void Start()
+    public void TestShowVideo()
     {
         GameManager.Instance.ShowVideo(VideoID.Test, SceneType.VideoTestScene);
     }
