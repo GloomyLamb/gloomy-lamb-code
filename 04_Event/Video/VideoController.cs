@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEngine.Video;
 
-#if UNITY_EDITOR
-#endif
-
+/// <summary>
+/// 비디오 재생 & 제어 클래스
+/// todo: manager로 변경 고려
+/// </summary>
 public class VideoController : MonoBehaviour
 {
     [Header("데이터베이스")]
     [SerializeField] private VideoDatabase _videoDatabase;
 
-    [Header("비디오")]
+    [Header("비디오 재생 관리")]
     [SerializeField] private VideoPlayer _videoPlayer;
 
     /// <summary>
