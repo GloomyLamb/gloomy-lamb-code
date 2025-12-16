@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class InputHandler
 {
     protected InputActionAsset inputAsset;
+    public bool Enabled => inputAsset == null ? false : inputAsset.enabled;
 
     protected List<(InputAction, Action<InputAction.CallbackContext>)> nowBindingActions;
     protected Dictionary<string, InputActionMap> actionMaps;
@@ -19,13 +20,13 @@ public class InputHandler
     {
         inputAsset = _inputAsset;
         nowBindingActions = new List<(InputAction, Action<InputAction.CallbackContext>)>();
-        
+
         actionMaps = new Dictionary<string, InputActionMap>();
         foreach (InputActionMap map in inputAsset.actionMaps)
         {
             actionMaps.Add(map.name, map);
         }
-        
+
         type = _type;
     }
 
@@ -52,6 +53,7 @@ public class InputHandler
             InputAction inputAction = map.actions.FirstOrDefault(a => a.name == actionNameString);
             return inputAction.IsPressed();
         }
+
         return false;
     }
 
@@ -65,6 +67,7 @@ public class InputHandler
             InputAction inputAction = map.actions.FirstOrDefault(a => a.name == actionNameString);
             return inputAction;
         }
+
         return null;
     }
 
@@ -75,10 +78,12 @@ public class InputHandler
         {
             return inputAction.ReadValue<Vector2>();
         }
+
         return Vector2.zero;
     }
 
-    public void BindInputEvent(InputMapName mapName, InputActionName actionName, Action<InputAction.CallbackContext> action)
+    public void BindInputEvent(InputMapName mapName, InputActionName actionName,
+        Action<InputAction.CallbackContext> action)
     {
         string mapNameString = mapName.ToString();
         string actionNameString = actionName.ToString();
@@ -97,7 +102,7 @@ public class InputHandler
         }
     }
 
-    
+
     public void DisposeInputEvent()
     {
         for (int i = nowBindingActions.Count - 1; i >= 0; i--)
@@ -108,7 +113,4 @@ public class InputHandler
             nowBindingActions.Remove(nowBindingActions[i]);
         }
     }
-
-    
-
 }

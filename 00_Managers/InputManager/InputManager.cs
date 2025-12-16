@@ -31,7 +31,6 @@ public class InputManager : GlobalSingletonManager<InputManager>
         inputHandlers[inputHandler.Type]?.SetEnableInput(false);
         inputHandlers[inputHandler.Type] = inputHandler;
         inputHandler.SetEnableInput(true);
-        
         Logger.Log("Enable Input");
         
     }
@@ -52,6 +51,47 @@ public class InputManager : GlobalSingletonManager<InputManager>
     public void UnlockInput(InputType inputType)
     {
         inputHandlers[inputType]?.SetEnableInput(true);
+    }
+    
+    /// <summary>
+    /// 해당 Input 빼고 모두 꺼줌.
+    /// 기존 인풋 상태를 반환하니 저장했다가 필요할 때 Restore 해주기
+    /// </summary>
+    /// <param name="inputType"></param>
+    /// <returns></returns>
+    public Dictionary<InputType, bool> SoloInput(InputType inputType)
+    {
+        Dictionary<InputType, bool> originState =  new Dictionary<InputType, bool>();
+        
+        foreach (InputHandler inputHandler in inputHandlers.Values)
+        {
+            if(inputHandler == null) continue;
+            
+            originState.Add(inputHandler.Type, inputHandler.Enabled);
+            
+            if (inputHandler.Type == inputType)
+                UnlockInput(inputHandler.Type);
+            else
+                LockInput(inputHandler.Type);
+        }
+        return originState;
+    }
+
+    /// <summary>
+    /// Input 상태 복구용
+    /// </summary>
+    /// <param name="states"></param>
+    public void RestoreInput(Dictionary<InputType, bool> states)
+    {
+        if(states == null) return;
+
+        foreach (InputType inputType in states.Keys)
+        {
+            if(states[inputType])
+                UnlockInput(inputType);
+            else
+                LockInput(inputType);
+        }
     }
     
     
