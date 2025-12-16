@@ -53,6 +53,7 @@ public class VideoController : MonoBehaviour
     {
         _videoPlayer.Stop();
         HandleVideoFinished(_videoPlayer);
+        _videoPlayer.clip = null;
     }
 
     /// <summary>
