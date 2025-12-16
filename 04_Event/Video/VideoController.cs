@@ -38,6 +38,11 @@ public class VideoController : MonoBehaviour
 
         if (_videoPlayer != null) return;
         _videoPlayer = FindObjectOfType<VideoPlayer>();
+        if (_videoPlayer == null)
+        {
+            GameObject obj = Instantiate(AssetLoader.FindAndLoadByName("VideoPlayer"));
+            _videoPlayer = obj.GetComponent<VideoPlayer>();
+        }
     }
 #endif
     #endregion
