@@ -22,9 +22,7 @@ public class VideoScene : SceneBase
 
         _videoController.OnVideoFinished += HandleVideoFinished;
         VideoFlowContext videoFlowContext = GameManager.Instance.VideoFlow;
-        _videoController.Init(
-            videoFlowContext.VideoID,
-            videoFlowContext.ReturnScene.ToString());
+        _videoController.Init(videoFlowContext.VideoID);
     }
 
     /// <summary>

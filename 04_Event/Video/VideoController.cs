@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 /// <summary>
@@ -14,16 +14,20 @@ public class VideoController : MonoBehaviour
     [Header("비디오 재생 관리")]
     [SerializeField] private VideoPlayer _videoPlayer;
 
+    // 이벤트
+    public event Action OnVideoFinished;
+
     // 캐싱
     private VideoID _currentVideoID;
-    private string _nextSceneName;      // todo: enum 변경 고려
 
-    public void Init(VideoID videoId, string nextSceneName)
+    public void Init(VideoID videoId)
     {
         _currentVideoID = videoId;
-        _nextSceneName = nextSceneName;
 
-        _videoPlayer.loopPointReached += OnVideoFinished;
+        _videoPlayer.loopPointReached -= HandleVideoFinished;
+        _videoPlayer.loopPointReached += HandleVideoFinished;
+
+        PlayVideo(_currentVideoID);
     }
 
     /// <summary>
@@ -48,24 +52,17 @@ public class VideoController : MonoBehaviour
     public void StopVideo()
     {
         _videoPlayer.Stop();
+        HandleVideoFinished(_videoPlayer);
     }
 
     /// <summary>
     /// 비디오 재생이 끝났을 때 호출됩니다.
     /// </summary>
     /// <param name="videoPlayer"></param>
-    private void OnVideoFinished(VideoPlayer videoPlayer)
+    private void HandleVideoFinished(VideoPlayer videoPlayer)
     {
-        _videoPlayer.loopPointReached -= OnVideoFinished;
-
-        if (_nextSceneName == SceneManager.GetActiveScene().name)
-        {
-            // todo: 동일 씬일 경우 변환 처리
-        }
-        else
-        {
-            GameManager.Instance.Scene.LoadSceneWithCoroutine(_nextSceneName);
-        }
+        _videoPlayer.loopPointReached -= HandleVideoFinished;
+        OnVideoFinished?.Invoke();
     }
 
     #region 에디터 전용
