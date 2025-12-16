@@ -16,18 +16,16 @@ public class VideoController : MonoBehaviour
     /// id에 해당하는 비디오를 재생합니다.
     /// </summary>
     /// <param name="id"></param>
-    public void PlayVideoByName(VideoID id)
+    public void PlayVideo(VideoID id)
     {
-        VideoClipEntry clipEntry = _videoDatabase.clips.Find(clip => clip.id == id);
-        if (clipEntry != null)
-        {
-            _videoPlayer.clip = clipEntry.videoClip;
-            _videoPlayer.Play();
-        }
-        else
+        if (!_videoDatabase.TryGetClip(id, out VideoClip clip))
         {
             Debug.LogWarning($"{id} 비디오 데이터베이스에 없음");
+            return;
         }
+
+        _videoPlayer.clip = clip;
+        _videoPlayer.Play();
     }
 
     #region 에디터 전용
