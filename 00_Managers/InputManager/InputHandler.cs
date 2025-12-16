@@ -34,7 +34,6 @@ public class InputHandler
     {
         if (enable == true)
         {
-            Logger.Log("Enable Input");
             inputAsset.Enable();
         }
         else if (enable == false)
