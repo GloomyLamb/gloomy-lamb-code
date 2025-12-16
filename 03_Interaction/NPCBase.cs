@@ -21,7 +21,9 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     [SerializeField] protected GameObject speechBubblePrefab;
     [SerializeField] protected GameObject speechBubble;
 
-    // 상호작용 가능 관리
+    // 대화창
+    [SerializeField] protected GameObject dialogueUIPrefab;
+    [SerializeField] protected GameObject dialogueUI;
 
     // 캐싱
     protected Transform player;
@@ -139,6 +141,7 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         if (speechBubble != null)
         {
             Logger.Log("이미 말풍선 생성됨");
+            speechBubble.SetActive(isTest);
             return;
         }
 
@@ -164,6 +167,7 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     #endregion
 
     #region 테스트
+#if UNITY_EDITOR
     public void Test_ToggleSpeechBubble()
     {
         ToggleSpeechBubble();
@@ -171,20 +175,16 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
 
     public void Test_SpawnSpeechBubbleDefault()
     {
-#if UNITY_EDITOR
         ClearSpeechBubble();
-        ApplySpeechBubble("SpeechBubble_Default");
+        FindAndLoadAsset("SpeechBubble_Default");
         SpawnSpeechBubble();
-#endif
     }
 
     public void Test_SpawnSpeechBubbleUI()
     {
-#if UNITY_EDITOR
         ClearSpeechBubble();
-        ApplySpeechBubble("SpeechBubble_UI");
+        FindAndLoadAsset("SpeechBubble_UI");
         SpawnSpeechBubble();
-#endif
     }
 
     private void ClearSpeechBubble()
@@ -192,16 +192,13 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         speechBubblePrefab = null;
         if (speechBubble == null) return;
 
-#if UNITY_EDITOR
         if (!Application.isPlaying)
             DestroyImmediate(speechBubble);
         else
             Destroy(speechBubble);
-#else
-        Destroy(speechBubble);
-#endif
         speechBubble = null;
     }
+#endif
     #endregion
 
     #region 에디터 전용
@@ -210,7 +207,14 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     {
         ApplyLayer();
         ApplyCollider();
-        ApplySpeechBubble("SpeechBubble_Default");
+        if (speechBubblePrefab == null)
+        {
+            FindAndLoadAsset("SpeechBubble_Default");
+        }
+        if (dialogueUIPrefab == null)
+        {
+            FindAndLoadAsset("DialogueUI");
+        }
     }
 
     private void ApplyLayer()
@@ -228,20 +232,18 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         col.center = Vector3.zero;
     }
 
-    private void ApplySpeechBubble(string name)
+    private GameObject FindAndLoadAsset(string name)
     {
-        if (speechBubblePrefab != null) return;
-
         string[] guids = AssetDatabase.FindAssets($"t:Prefab {name}");
 
         if (guids.Length == 0)
         {
-            Logger.Log("SpeechBubble 프리팹 못 찾음");
-            return;
+            Logger.Log($"{name} 프리팹 못 찾음");
+            return null;
         }
 
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-        speechBubblePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+        return AssetDatabase.LoadAssetAtPath<GameObject>(path);
     }
 #endif
     #endregion
