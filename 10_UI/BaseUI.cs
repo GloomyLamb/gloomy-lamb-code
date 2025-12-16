@@ -14,10 +14,6 @@ public abstract class BaseUI : MonoBehaviour
         
     }
 
-    private void Start()
-    {
-        
-    }
 
     void RegisterUI()
     {
