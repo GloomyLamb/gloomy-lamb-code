@@ -12,13 +12,8 @@ public abstract class Player : MonoBehaviour
     [Header("Pivot")]
     [SerializeField] protected Transform pivot;
 
-    // todo: 테스트 후 SO로 분리 고려
-    [Header("Interaction Setting")]
-    [SerializeField] protected float interactRange = 3f;
-    [SerializeField][Range(60f, 180f)] protected float interactAngle = 120f;
-    [SerializeField] protected LayerMask interactableLayer;
-    [SerializeField] protected bool useAngleWeight = false;
-    [SerializeField] protected bool useDistanceWieght = true;
+    [Header("SO Data")]
+    [SerializeField] protected InteractionRangeData interactionRangeData;
 
     // 컴포넌트
     protected Interaction interaction;
@@ -52,12 +47,7 @@ public abstract class Player : MonoBehaviour
     protected void SetupInteractionComponent()
     {
         interaction = gameObject.AddComponent<Interaction>();
-        interaction.Init(
-            interactRange,
-            interactAngle,
-            interactableLayer,
-            useAngleWeight,
-            useDistanceWieght);
+        interaction.Init(interactionRangeData);
         interaction.BindInput(input);
     }
     #endregion

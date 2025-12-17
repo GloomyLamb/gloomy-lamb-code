@@ -19,18 +19,13 @@ public class Interaction : MonoBehaviour
     private IInteractable _curInteractable;
 
     #region 초기화
-    public void Init(
-        float interactRange,
-        float interactAngle,
-        LayerMask interactableLayer,
-        bool useAngleWeight,
-        bool useDistanceWieght)
+    public void Init(InteractionRangeData data)
     {
-        _interactRange = interactRange;
-        _interactAngle = interactAngle;
-        _interactableLayer = interactableLayer;
-        _useAngleWeight = useAngleWeight;
-        _useDistanceWieght = useDistanceWieght;
+        _interactRange = data.InteractRange;
+        _interactAngle = data.InteractAngle;
+        _interactableLayer = data.InteractableLayer;
+        _useAngleWeight = data.UseAngleWeight;
+        _useDistanceWieght = data.UseDistanceWieght;
     }
 
     /// <summary>
