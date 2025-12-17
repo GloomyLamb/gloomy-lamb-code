@@ -44,29 +44,37 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     }
 
     /// <summary>
-    /// 스킬 사용하기
+    /// input handler에 구독할 이벤트
     /// </summary>
     /// <param name="context"></param>
     protected virtual void OnUseSkill(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {
-            if (IsUsable)
-            {
-                Attack();
-                GiveEffect();
-                OnStartSkill?.Invoke(this);
+            UseSkill();
+        }
+    }
 
-                if (_coroutine != null)
-                {
-                    StopCoroutine(_coroutine);
-                }
-                _coroutine = StartCoroutine(nameof(EndSkillCoroutine));
-            }
-            else
+    /// <summary>
+    /// 스킬 내부 로직
+    /// </summary>
+    protected virtual void UseSkill()
+    {
+        if (IsUsable)
+        {
+            Attack();
+            GiveEffect();
+            OnStartSkill?.Invoke(this);
+
+            if (_coroutine != null)
             {
-                Logger.Log($"{skillStatusData.Type} 스킬 사용 불가");
+                StopCoroutine(_coroutine);
             }
+            _coroutine = StartCoroutine(nameof(EndSkillCoroutine));
+        }
+        else
+        {
+            Logger.Log($"{skillStatusData.Type} 스킬 사용 불가");
         }
     }
 
