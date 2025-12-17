@@ -14,22 +14,27 @@ public abstract class BaseUI : MonoBehaviour
         
     }
 
-
-    void RegisterUI()
+    /// <summary>
+    /// 외부 초기화
+    /// </summary>
+    public virtual void Setup()
     {
         
-    }
-
-
-    private void OnDestroy()
-    {
-        UnRegisterUI();
     }
     
-    void UnRegisterUI()
-    {
-        
-    }
-
+    // 현재 불필요
+    // void RegisterUI()
+    // {
+    // }
+    //
+    // private void OnDestroy()
+    // {
+    //     UnRegisterUI();
+    // }
+    //
+    // void UnRegisterUI()
+    // {
+    //     
+    // }
 
 }
