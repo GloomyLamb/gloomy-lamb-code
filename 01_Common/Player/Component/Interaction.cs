@@ -34,7 +34,7 @@ public class Interaction : MonoBehaviour
     /// <param name="input"></param>
     public void BindInput(InputHandler input)
     {
-        input.BindInputEvent(InputMapName.Default, InputActionName.Interaction, OnInteract);
+        InputManager.Instance.BindInputEvent(InputType.Player,InputMapName.Default, InputActionName.Interaction, OnInteract);
     }
 
     /// <summary>

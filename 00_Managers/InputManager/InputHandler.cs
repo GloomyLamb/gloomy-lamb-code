@@ -42,7 +42,7 @@ public class InputHandler
         }
     }
 
-    public bool IsPressed(InputMapName mapName, InputActionName actionName)
+    public bool IsPressed(InputActionName actionName, InputMapName mapName = InputMapName.Default)
     {
         string mapNameString = mapName.ToString();
         string actionNameString = actionName.ToString();
@@ -56,7 +56,7 @@ public class InputHandler
         return false;
     }
 
-    public InputAction GetInputAction(InputMapName mapName, InputActionName actionName)
+    public InputAction GetInputAction(InputActionName actionName, InputMapName mapName = InputMapName.Default)
     {
         string mapNameString = mapName.ToString();
         string actionNameString = actionName.ToString();
@@ -70,9 +70,9 @@ public class InputHandler
         return null;
     }
 
-    public Vector2 GetAxis(InputMapName mapName, InputActionName actionName)
+    public Vector2 GetAxis(InputActionName actionName, InputMapName mapName = InputMapName.Default)
     {
-        InputAction inputAction = GetInputAction(mapName, actionName);
+        InputAction inputAction = GetInputAction(actionName, mapName);
         if (inputAction != null)
         {
             return inputAction.ReadValue<Vector2>();

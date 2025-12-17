@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class DialogueManager : GlobalSingletonManager<DialogueManager>
 {
-    [Header("Input")] [SerializeField] protected InputActionAsset inputActionAsset;
-    protected InputHandler input;
 
     // 얘네를 어떻게 정리해둬야할지... 고민...
     [SerializeField] TalkDialogueUI talkDialogueUI;
@@ -30,15 +28,13 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
 
     protected override void Init()
     {
-        input = new InputHandler(inputActionAsset, InputType.DialogueBox);
-        input.BindInputEvent(InputMapName.Default, InputActionName.Next, OnNextDialogue);
-
+        
         talkDialogueUI?.Setup();
     }
 
     private void Start()
     {
-        InputManager.Instance.UseInput(input);
+        InputManager.Instance.BindInputEvent(InputType.Player, InputMapName.Default, InputActionName.Next, OnNextDialogue);
         InputManager.Instance.LockInput(InputType.DialogueBox);
     }
 

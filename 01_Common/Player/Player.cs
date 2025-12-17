@@ -5,13 +5,6 @@ using UnityEngine.InputSystem;
 // controller 로 빼도 되지만, 우리 Player 들이 생각보다 가벼울 것임
 public abstract class Player : MonoBehaviour
 {
-    [Header("Input")]
-    [SerializeField] protected InputActionAsset inputAction;
-    protected InputHandler input;
-
-    [Header("Pivot")]
-    [SerializeField] protected Transform pivot;
-
     [Header("SO Data")]
     [SerializeField] protected InteractionRangeData interactionRangeData;
 
@@ -23,7 +16,6 @@ public abstract class Player : MonoBehaviour
 
     private void Awake()
     {
-        input = new InputHandler(inputAction, InputType.Player);
         forward = transform.forward;
         Init();
     }
@@ -37,10 +29,10 @@ public abstract class Player : MonoBehaviour
 
     private void OnDestroy()
     {
-        input?.DisposeInputEvent();
     }
 
     #region 컴포넌트 연결
+
     /// <summary>
     /// 상호작용 컴포넌트 설정 및 연결
     /// </summary>
@@ -48,7 +40,7 @@ public abstract class Player : MonoBehaviour
     {
         interaction = gameObject.AddComponent<Interaction>();
         interaction.Init(interactionRangeData);
-        interaction.BindInput(input);
     }
+
     #endregion
 }

@@ -6,14 +6,16 @@ public class ThirdPersonPlayer : Player
 {
     // 설정
     // 필요할 때 SO로 나누기
-    [Header("플레이어 이동 설정")]
+    [Header("플레이어 이동 설정")] 
     [SerializeField] private float moveSpeed;
+
     [SerializeField] private float jumpForce;
 
-    [Header("Ground 설정")]
+    [Header("Ground 설정")] 
     [SerializeField] private float playerScale = 0.02f;
     [SerializeField] public float groundRayDistance = 0.4f;
     [SerializeField] private LayerMask groundLayerMask;
+
 
     // 상태
     private bool jumpDelay = true;
@@ -26,21 +28,20 @@ public class ThirdPersonPlayer : Player
     {
         rb = this.GetComponent<Rigidbody>();
         cam = Camera.main.transform;
-
-        input.BindInputEvent(InputMapName.Default, InputActionName.Jump, OnJump);
-
-        SetupInteractionComponent();        // 상호작용 컴포넌트 세팅
+        SetupInteractionComponent(); // 상호작용 컴포넌트 세팅
     }
 
     private void Start()
     {
-        InputManager.Instance.UseInput(input);
+        InputManager.Instance.BindInputEvent(InputType.Player, InputMapName.Default, InputActionName.Jump, OnJump);
+        InputManager.Instance.UseInput(InputType.Player);
     }
 
     protected override void Update()
     {
         base.Update();
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * 10);
+        this.transform.rotation =
+            Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * 10);
     }
 
     private void FixedUpdate()
@@ -50,7 +51,10 @@ public class ThirdPersonPlayer : Player
 
     private void Move()
     {
-        Vector2 inputDir = input.GetAxis(InputMapName.Default, InputActionName.Move);
+        Vector2 inputDir = InputManager.Instance.GetAxis(InputType.Player, InputActionName.Move);
+        // 곤란...
+        // Vector2 inputDir = InputManager.Instance.GetInputHandler(InputType.Player)
+        //     .GetAxis(InputMapName.Default, InputActionName.Move);
 
         Vector3 camForwardFlat = Vector3.ProjectOnPlane(cam.forward, Vector3.up).normalized;
         Vector3 right = Vector3.Cross(Vector3.up, camForwardFlat).normalized;
@@ -62,7 +66,6 @@ public class ThirdPersonPlayer : Player
             Vector3 newPosition = rb.position + forward * (moveSpeed * Time.deltaTime);
 
             rb.MovePosition(newPosition);
-            //rb.MoveRotation(Quaternion.LookRotation(forward, Vector3.up));
         }
     }
 
@@ -119,10 +122,14 @@ public class ThirdPersonPlayer : Player
     {
         Gizmos.color = Color.red;
 
-        Gizmos.DrawLine(transform.position + (transform.forward * playerScale), transform.position + (transform.forward * playerScale) + (-transform.up * groundRayDistance));
-        Gizmos.DrawLine(transform.position + (-transform.forward * playerScale), transform.position + (-transform.forward * playerScale) + (-transform.up * groundRayDistance));
-        Gizmos.DrawLine(transform.position + (transform.right * playerScale), transform.position + (transform.right * playerScale) + (-transform.up * groundRayDistance));
-        Gizmos.DrawLine(transform.position + (-transform.right * playerScale), transform.position + (-transform.right * playerScale) + (-transform.up * groundRayDistance));
+        Gizmos.DrawLine(transform.position + (transform.forward * playerScale),
+            transform.position + (transform.forward * playerScale) + (-transform.up * groundRayDistance));
+        Gizmos.DrawLine(transform.position + (-transform.forward * playerScale),
+            transform.position + (-transform.forward * playerScale) + (-transform.up * groundRayDistance));
+        Gizmos.DrawLine(transform.position + (transform.right * playerScale),
+            transform.position + (transform.right * playerScale) + (-transform.up * groundRayDistance));
+        Gizmos.DrawLine(transform.position + (-transform.right * playerScale),
+            transform.position + (-transform.right * playerScale) + (-transform.up * groundRayDistance));
 
         Vector3 topStart = transform.position + (transform.up * 0.5f) + (forward * 0.5f);
         Vector3 topEnd = topStart + (forward * 0.1f);
@@ -134,5 +141,4 @@ public class ThirdPersonPlayer : Player
         Gizmos.DrawLine(bottomStart, bottomEnd);
     }
 #endif
-
 }

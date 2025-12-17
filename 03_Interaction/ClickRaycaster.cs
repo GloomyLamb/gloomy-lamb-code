@@ -12,7 +12,6 @@ public class ClickRaycaster : MonoBehaviour
 {
     [Header("Input")]
     [SerializeField] private InputActionAsset _inputActions;
-    private InputHandler _input;
 
     [Header("Ray")]
     [SerializeField] private float _maxDistance = 100f;
@@ -27,19 +26,14 @@ public class ClickRaycaster : MonoBehaviour
 
     private void Init()
     {
-        _input = new InputHandler(_inputActions, InputType.Camera);
-        _input.BindInputEvent(InputMapName.Default, InputActionName.Interaction, OnClick);
     }
 
     private void Start()
     {
-        InputManager.Instance.UseInput(_input);
+        InputManager.Instance.BindInputEvent(InputType.Camera,InputMapName.Default, InputActionName.Interaction, OnClick);
+        InputManager.Instance.UseInput(InputType.Camera);
     }
 
-    private void OnDestroy()
-    {
-        _input?.DisposeInputEvent();
-    }
 
     /// <summary>
     /// input handler - camera의 click 이벤트 콜백

@@ -22,7 +22,7 @@ public class Laser : BaseSkill
     /// <param name="input"></param>
     public void BindInput(InputHandler input)
     {
-        input.BindInputEvent(InputMapName.Default, InputActionName.Skill_Laser, OnSkill);
+        InputManager.Instance.BindInputEvent(InputType.Player,InputMapName.Default, InputActionName.Skill_Laser, OnSkill);
     }
 
     private void OnSkill(InputAction.CallbackContext context)

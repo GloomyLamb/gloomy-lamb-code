@@ -1,58 +1,84 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class InputManager : GlobalSingletonManager<InputManager>
 {
     // todo : InputActionAsset을 다 들고 Get해서 Bind 하는걸로 리팩토링 하기 
+    [SerializeField] private List<InputActionAsset> inputAssets;
+
     Dictionary<InputType, InputHandler> inputHandlers;
 
     protected override void Init()
     {
         inputHandlers = new Dictionary<InputType, InputHandler>();
-
-        foreach (InputType type in Enum.GetValues(typeof(InputType)))
+        for (int i = 0; i < inputAssets.Count; i++)
         {
-            inputHandlers[type] = null;
+            string[] fullInputAssetName = inputAssets[i].name.Split("_");
+            if (fullInputAssetName.Length > 1)
+            {
+                string inputAssetName = fullInputAssetName[1];
+                if (InputType.TryParse(inputAssetName, out InputType inputType))
+                {
+                    if (inputHandlers.ContainsKey(inputType) == false)
+                    {
+                        InputHandler newInputHandler = new InputHandler(inputAssets[i], inputType);
+                        inputHandlers.Add(inputType, newInputHandler);
+                    }
+                }
+            }
         }
-        
+    }
+
+    public InputHandler GetInputHandler(InputType inputType)
+    {
+        if (inputHandlers.ContainsKey(inputType) == false) return null;
+        return inputHandlers[inputType];
+    }
+
+    public void BindInputEvent(InputType inputType, InputMapName inputMapName, InputActionName inputActionName,
+        Action<InputAction.CallbackContext> action)
+    {
+        if (inputHandlers.ContainsKey(inputType) == false) return;
+        if (inputHandlers[inputType] != null)
+        {
+            inputHandlers[inputType].BindInputEvent(inputMapName, inputActionName, action);
+        }
+    }
+
+    public Vector2 GetAxis(InputType inputType,  InputActionName inputActionName, InputMapName inputMapName= InputMapName.Default)
+    {
+        if (inputHandlers.ContainsKey(inputType) == false) return Vector2.zero;
+        return inputHandlers[inputType] != null ? inputHandlers[inputType].GetAxis(inputActionName, inputMapName) : Vector2.zero;
+    }
+
+    
+    public bool IsPressed(InputType inputType, InputActionName inputActionName, InputMapName inputMapName = InputMapName.Default)
+    {
+        if(inputHandlers.ContainsKey(inputType) == false) return false;
+        return inputHandlers[inputType] != null? inputHandlers[inputType].IsPressed(inputActionName, inputMapName) : false;
     }
 
     /// <summary>
-    /// 사용할 InputHandler 넣어주기
-    /// 컨트롤 시작할 플레이어나 오브젝트(UI 등) 
+    /// Input 사용하기
     /// </summary>
-    /// <param name="inputHandler"></param>
-    public void UseInput(InputHandler inputHandler)
+    public void UseInput(InputType inputType)
     {
-        if (inputHandler == null) return;
-
-        inputHandlers[inputHandler.Type]?.SetEnableInput(false);
-        inputHandlers[inputHandler.Type] = inputHandler;
-        inputHandler.SetEnableInput(true);
-        Logger.Log("Enable Input");
-        
+        if (inputHandlers.ContainsKey(inputType) == false) return;
+        inputHandlers[inputType]?.SetEnableInput(true);
     }
 
     /// <summary>
     /// Input 막기
     /// </summary>
-    /// <param name="isLock"></param>
     public void LockInput(InputType inputType)
     {
+        if (inputHandlers.ContainsKey(inputType) == false) return;
         inputHandlers[inputType]?.SetEnableInput(false);
     }
 
-    /// <summary>
-    /// Input 풀기
-    /// </summary>
-    /// <param name="isLock"></param>
-    public void UnlockInput(InputType inputType)
-    {
-        inputHandlers[inputType]?.SetEnableInput(true);
-    }
-    
     /// <summary>
     /// 해당 Input 빼고 모두 꺼줌.
     /// 기존 인풋 상태를 반환하니 저장했다가 필요할 때 Restore 해주기
@@ -61,19 +87,20 @@ public class InputManager : GlobalSingletonManager<InputManager>
     /// <returns></returns>
     public Dictionary<InputType, bool> SoloInput(InputType inputType)
     {
-        Dictionary<InputType, bool> originState =  new Dictionary<InputType, bool>();
-        
+        Dictionary<InputType, bool> originState = new Dictionary<InputType, bool>();
+
         foreach (InputHandler inputHandler in inputHandlers.Values)
         {
-            if(inputHandler == null) continue;
-            
+            if (inputHandler == null) continue;
+
             originState.Add(inputHandler.Type, inputHandler.Enabled);
-            
+
             if (inputHandler.Type == inputType)
-                UnlockInput(inputHandler.Type);
+                UseInput(inputHandler.Type);
             else
                 LockInput(inputHandler.Type);
         }
+
         return originState;
     }
 
@@ -83,18 +110,18 @@ public class InputManager : GlobalSingletonManager<InputManager>
     /// <param name="states"></param>
     public void RestoreInput(Dictionary<InputType, bool> states)
     {
-        if(states == null) return;
+        if (states == null) return;
 
         foreach (InputType inputType in states.Keys)
         {
-            if(states[inputType])
-                UnlockInput(inputType);
+            if (states[inputType])
+                UseInput(inputType);
             else
                 LockInput(inputType);
         }
     }
-    
-    
+
+
     public void HideCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -109,7 +136,10 @@ public class InputManager : GlobalSingletonManager<InputManager>
     {
         foreach (InputType type in inputHandlers.Keys)
         {
-            inputHandlers[type] = null;
+            if (inputHandlers[type] != null)
+            {
+                inputHandlers[type].DisposeInputEvent();
+            }
         }
     }
 }
