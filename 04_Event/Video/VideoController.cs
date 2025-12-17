@@ -54,7 +54,6 @@ public class VideoController : MonoBehaviour
     {
         _videoPlayer.Stop();
         HandleVideoFinished(_videoPlayer);
-        _videoPlayer.clip = null;
     }
 
     /// <summary>
@@ -64,6 +63,7 @@ public class VideoController : MonoBehaviour
     private void HandleVideoFinished(VideoPlayer videoPlayer)
     {
         _videoPlayer.loopPointReached -= HandleVideoFinished;
+        _videoPlayer.clip = null;
         OnVideoFinished?.Invoke();
     }
 
