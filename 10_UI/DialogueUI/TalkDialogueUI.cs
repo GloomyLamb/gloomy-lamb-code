@@ -14,15 +14,18 @@ public class TalkDialogueUI : DialogueBaseUI
 
     [SerializeField] private Transform rightPivot;
 
+    // 피드백 
+    // 이후 어드레서블을 사용하게되면 이 부분은 테이블화 된거에서 빼오면 됨.
+    // portrait 프리팹화해서 쓴거 굿
     [Header("Characters")] 
     [SerializeField] private List<DialoguePortraitPanel> portraitPanelOrigins;
     Dictionary<string, DialoguePortraitPanel> portraitPanels = new Dictionary<string, DialoguePortraitPanel>();
     
     DialoguePortraitPanel currentPortraitPanel;
     
-    public override void Init()
+    public void InitPortrait()
     {
-        base.Init();
+        
         // todo : 캐릭터를 생성해야해
     }
 

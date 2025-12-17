@@ -9,7 +9,7 @@ public abstract class BaseUI : MonoBehaviour
     {
         Init();
     }
-    public virtual void Init()
+    protected virtual void Init()
     {
         
     }

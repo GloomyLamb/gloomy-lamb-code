@@ -18,7 +18,7 @@ public class DialogueBaseUI : BaseUI
     public bool IsPrinting => dialogueCoroutine != null;
 
 
-    public override void Init()
+    protected override void Init()
     {
     }
 
