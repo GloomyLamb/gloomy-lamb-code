@@ -1,8 +1,5 @@
 using UnityEngine;
 
-#if UNITY_EDITOR
-#endif
-
 /// <summary>
 /// NPC 기본 클래스
 /// </summary>
@@ -72,6 +69,10 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         this.player = null;
     }
 
+    /// <summary>
+    /// dont used
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<Player>(out var player))
@@ -81,6 +82,10 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// dont used
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent<Player>(out var player))

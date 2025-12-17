@@ -47,7 +47,7 @@ public abstract class Player : MonoBehaviour
 
     #region 컴포넌트 연결
     /// <summary>
-    /// 상호작용 컴포넌트 설정
+    /// 상호작용 컴포넌트 설정 및 연결
     /// </summary>
     protected void SetupInteractionComponent()
     {

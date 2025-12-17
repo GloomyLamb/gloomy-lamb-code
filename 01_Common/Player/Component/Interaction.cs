@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// 플레이어 컴포넌트로 활용될 상호작용 시스템
+/// </summary>
 public class Interaction : MonoBehaviour
 {
     private float _interactRange;
@@ -19,23 +22,30 @@ public class Interaction : MonoBehaviour
     public void Init(
         float interactRange,
         float interactAngle,
-        LayerMask _interactableLayer,
+        LayerMask interactableLayer,
         bool useAngleWeight,
         bool useDistanceWieght)
     {
         _interactRange = interactRange;
         _interactAngle = interactAngle;
-        this._interactableLayer = _interactableLayer;
+        _interactableLayer = interactableLayer;
         _useAngleWeight = useAngleWeight;
         _useDistanceWieght = useDistanceWieght;
     }
 
+    /// <summary>
+    /// [public] input handler에 interact 이벤트 바인딩
+    /// </summary>
+    /// <param name="input"></param>
     public void BindInput(InputHandler input)
     {
         input.BindInputEvent(InputMapName.Default, InputActionName.Interaction, OnInteract);
     }
-    #endregion
 
+    /// <summary>
+    /// input handler - player의 interact 이벤트 콜백
+    /// </summary>
+    /// <param name="context"></param>
     private void OnInteract(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -43,9 +53,11 @@ public class Interaction : MonoBehaviour
             _curInteractable?.Interact();
         }
     }
+    #endregion
 
+    #region 상호작용 오브젝트 탐색
     /// <summary>
-    /// interactable 오브젝트 탐색
+    /// [public] interactable 오브젝트 탐색
     /// </summary>
     public void UpdateInteractionTarget()
     {
@@ -140,4 +152,5 @@ public class Interaction : MonoBehaviour
         Gizmos.DrawLine(origin, origin + left * _interactRange);
         Gizmos.DrawLine(origin, origin + right * _interactRange);
     }
+    #endregion
 }
