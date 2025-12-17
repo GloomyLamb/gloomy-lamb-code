@@ -57,6 +57,7 @@ public class Interaction : MonoBehaviour
         // 범위에 상호작용 가능한 오브젝트가 없으면 상태 초기화
         if (_curInteractable != null && interactable == null)
         {
+            Logger.Log("상호작용 캐싱 초기화");
             _curInteractable.HideInteractUI();
             _curInteractable = null;
             return;
