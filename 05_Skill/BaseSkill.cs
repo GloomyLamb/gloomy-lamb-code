@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 스킬 기본 클래스
 /// </summary>
-public abstract class SkillBase : MonoBehaviour, IAttackable
+public abstract class BaseSkill : MonoBehaviour, IAttackable
 {
     // todo: 스킬 중 묶을 수 있는 부분이 있으면 묶기
 

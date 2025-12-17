@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-public abstract class NPCEditor<T> : Editor where T : NPCBase
+public abstract class NPCEditor<T> : Editor where T : BaseNPC
 {
     protected T npc;
     protected virtual void OnEnable()

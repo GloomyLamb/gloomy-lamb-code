@@ -58,7 +58,7 @@ public class ClickRaycaster : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, _maxDistance, _layerMask))
             {
-                if (hit.collider.TryGetComponent<NPCBase>(out var npc))
+                if (hit.collider.TryGetComponent<BaseNPC>(out var npc))
                 {
                     npc.Interact();
                 }

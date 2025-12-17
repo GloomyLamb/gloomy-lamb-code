@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// 챕터 1 광선 발사 스킬
 /// </summary>
-public class Laser : SkillBase
+public class Laser : BaseSkill
 {
     [Header("빛 게이지")]
     [SerializeField] private float _useLightGauge = 10f;    // 빛 소모량

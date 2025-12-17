@@ -1,4 +1,4 @@
-public class TestNPC : NPCBase
+public class TestNPC : BaseNPC
 {
     public override void Interact()
     {

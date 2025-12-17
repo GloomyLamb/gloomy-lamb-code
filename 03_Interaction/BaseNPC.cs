@@ -4,7 +4,7 @@ using UnityEngine;
 /// NPC 기본 클래스
 /// </summary>
 [RequireComponent(typeof(CapsuleCollider))]
-public abstract class NPCBase : MonoBehaviour, IInteractable
+public abstract class BaseNPC : MonoBehaviour, IInteractable
 {
     [Header("테스트")]
     [SerializeField] protected bool isTest = false;

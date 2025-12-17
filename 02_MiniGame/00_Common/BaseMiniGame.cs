@@ -14,7 +14,7 @@ public enum GameState
     Exit,
 }
 
-public abstract class MiniGameBase : MonoBehaviour
+public abstract class BaseMiniGame : MonoBehaviour
 {
     #region 필드
     // 게임 상태 관리
