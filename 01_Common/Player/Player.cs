@@ -51,4 +51,16 @@ public abstract class Player : MonoBehaviour
         interaction.BindInput(input);
     }
     #endregion
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    private void Reset()
+    {
+        if (interactionRangeData != null)
+        {
+            interactionRangeData = AssetLoader.FindAndLoadByName<InteractionRangeData>("InteractionRangeData");
+        }
+    }
+#endif
+    #endregion
 }
