@@ -1,13 +1,4 @@
 ﻿
-public enum DialogueEmotionType
-{
-    Default,
-    Smile,
-    Sad,
-    Angry,
-    Shock,
-    Confusion,
-}
 
 public enum DialogueType
 {
@@ -20,4 +11,22 @@ public enum DialogueButtonType
 {
     None,
     NextDialogue,
+}
+
+
+public enum PortraitCharacter
+{
+    None,
+    Dusky,
+    Librarian,
+}
+
+public enum DialogueEmotionType
+{
+    Default,
+    Smile,
+    Sad,
+    Angry,
+    Shock,
+    Confusion,
 }

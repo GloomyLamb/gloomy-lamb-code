@@ -9,14 +9,15 @@ public class DialogueData
     public DialogueType Type => type;
     public string Name => name;
     public string Dialogue => dialogue;
-    public string SprName => sprName;
+    
+    public PortraitCharacter PortraitCharacter => portraitCharacter;
     public DialogueEmotionType Emotion => emotion;
     public List<DialogueButtonData> Buttons => buttons; 
     
     [SerializeField] private DialogueType type;
     [SerializeField] private string name;
     [SerializeField] private string dialogue;
-    [SerializeField] private string sprName;
+    [SerializeField] private PortraitCharacter portraitCharacter = PortraitCharacter.None;
     [SerializeField] private DialogueEmotionType emotion;
     [SerializeField] List<DialogueButtonData> buttons;
 
@@ -28,10 +29,14 @@ public class DialogueData
     
     public DialogueData(string _name, string _dialogue, string _sprName, DialogueEmotionType _emotion, List<DialogueButtonData> _buttons)
     {
-        // type = _type;
         name = _name;
         dialogue = _dialogue;
-        sprName = _sprName;
+
+        if (PortraitCharacter.TryParse(_sprName, out PortraitCharacter _portraitCharacter))
+        {
+            portraitCharacter = _portraitCharacter;
+        }
+        
         emotion = _emotion;
         buttons = _buttons;
 

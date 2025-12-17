@@ -14,7 +14,7 @@ public class DialogueDataPropertyDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
 
         SerializedProperty name = property.FindPropertyRelative("name");
-        SerializedProperty sprName = property.FindPropertyRelative("sprName");
+        SerializedProperty portraitCharacter = property.FindPropertyRelative("portraitCharacter");
         SerializedProperty emotion = property.FindPropertyRelative("emotion");
         SerializedProperty dialogue = property.FindPropertyRelative("dialogue");
         SerializedProperty buttons = property.FindPropertyRelative("buttons");
@@ -32,7 +32,7 @@ public class DialogueDataPropertyDrawer : PropertyDrawer
 
         // 위에 이름이랑 스프라이트 같이 놓기
         EditorGUI.PropertyField(new Rect(top.x, y, nameWidth, line), name, GUIContent.none);
-        EditorGUI.PropertyField(new Rect(top.x + nameWidth + 5, y, sprWidth, line), sprName, GUIContent.none);
+        EditorGUI.PropertyField(new Rect(top.x + nameWidth + 5, y, sprWidth, line), portraitCharacter, GUIContent.none);
         EditorGUI.PropertyField(new Rect(top.x + nameWidth + sprWidth + 10, y, emotionWidth, line), emotion, GUIContent.none);
 
         y += (line + spacing);
