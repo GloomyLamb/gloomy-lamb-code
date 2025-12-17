@@ -84,5 +84,15 @@ public class SkillController : MonoBehaviour
         if (!TryGetSkill(SkillType.Beam, skill)) return;
         Logger.Log($"{_skillDict[SkillType.Beam]} 연결 완료");
     }
+
+    public void Test_UseTestSkill()
+    {
+        if (!_skillDict.TryGetValue(SkillType.Test, out BaseSkill skill))
+        {
+            Logger.Log("스킬 없음");
+            return;
+        }
+        skill.Test_UseSkill();
+    }
     #endregion
 }

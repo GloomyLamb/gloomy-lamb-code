@@ -8,11 +8,12 @@ public class TestSkill : BaseSkill
 
     public override void GiveEffect()
     {
-        throw new System.NotImplementedException();
+        Logger.Log("테스트 스킬 효과");
     }
 
     protected override bool HasEnoughResource()
     {
-        throw new System.NotImplementedException();
+        Logger.Log("테스트 스킬 조건 만족");
+        return true;
     }
 }
