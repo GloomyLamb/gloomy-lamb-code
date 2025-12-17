@@ -91,7 +91,7 @@ public class PoolManager : GlobalSingletonManager<PoolManager>
     /// Scene 벗어날 때 nowPoolDic 버리고 떠나기
     /// </summary>
     /// <param name="scene"></param>
-    void OnSceneUnloaded(Scene scene)
+    protected override void OnSceneUnloaded(Scene scene)
     {
         nowPoolDic.Clear();
     }
