@@ -19,4 +19,7 @@ public enum InputActionName
     Interaction,
     Dash,
     Next,
+
+    // Skill
+    Skill_Laser,
 }
