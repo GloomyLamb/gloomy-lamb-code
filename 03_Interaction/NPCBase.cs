@@ -20,10 +20,6 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     [SerializeField] protected GameObject speechBubblePrefab;
     [SerializeField] protected GameObject speechBubble;
 
-    // 대화창
-    [SerializeField] protected GameObject dialogueUIPrefab;
-    [SerializeField] protected GameObject dialogueUI;
-
     // 캐싱
     protected Transform player;
     private Transform _camera;
@@ -216,10 +212,6 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         if (speechBubblePrefab == null)
         {
             speechBubblePrefab = AssetLoader.FindAndLoadByName("SpeechBubble_Default");
-        }
-        if (dialogueUIPrefab == null)
-        {
-            dialogueUIPrefab = AssetLoader.FindAndLoadByName("DialogueUI");
         }
     }
 
