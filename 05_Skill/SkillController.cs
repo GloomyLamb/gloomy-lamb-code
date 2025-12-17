@@ -43,14 +43,15 @@ public class SkillController : MonoBehaviour
     /// 스킬 사용 시 curSkill에 값 저장
     /// </summary>
     /// <param name="baseSkill"></param>
-    private void HandleStartSkill(BaseSkill baseSkill)
+    private bool HandleStartSkill(BaseSkill baseSkill)
     {
         if (_curSkill != null)
         {
             Logger.LogWarning("이미 다른 스킬 사용 중");
-            return;
+            return false;
         }
         _curSkill = baseSkill;
+        return true;
     }
 
     /// <summary>

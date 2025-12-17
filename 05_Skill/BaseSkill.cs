@@ -20,7 +20,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     protected IDamageable target;
 
     // 이벤트
-    public event Action<BaseSkill> OnStartSkill;
+    public event Func<BaseSkill, bool> OnStartSkill;
     public event Action OnEndSkill;
 
     // 코루틴
@@ -62,9 +62,15 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     {
         if (IsUsable)
         {
+            bool canStart = OnStartSkill == null || OnStartSkill.Invoke(this);
+            if (!canStart)
+            {
+                Logger.LogWarning("스킬 사용 불가");
+                return;
+            }
+
             Attack();
             GiveEffect();
-            OnStartSkill?.Invoke(this);
 
             if (_coroutine != null)
             {
@@ -91,6 +97,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     #region IAttackable 구현
     public virtual void Attack()
     {
+        Logger.Log("공격");
         if (target == null)
         {
             Logger.Log("타겟 없음");
@@ -110,7 +117,9 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     /// <returns></returns>
     protected bool IsCooldownReady()
     {
-        return cooldownTimer > skillStatusData.Cooldown;
+        bool coolReady = cooldownTimer > skillStatusData.Cooldown;
+        Logger.Log($"쿨타임 체크: {coolReady}");
+        return coolReady;
     }
 
     /// <summary>
