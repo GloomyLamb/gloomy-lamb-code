@@ -1,5 +1,10 @@
 public class TestSkill : BaseSkill
 {
+    public void Start()
+    {
+        target = FindObjectOfType<TestShadow>();
+    }
+
     public override void Init(SkillStatusData data)
     {
         base.Init(data);
