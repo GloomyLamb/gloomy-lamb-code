@@ -7,11 +7,13 @@ public class DiaogueAssetEditor : Editor
 {
     SerializedProperty dialogueOrigin;
     SerializedProperty dialogueList;
+    SerializedProperty dialogueType;
 
     private void OnEnable()
     {
         dialogueOrigin = serializedObject.FindProperty("dialogueOrigin");
         dialogueList = serializedObject.FindProperty("dialogueList");
+        dialogueType = serializedObject.FindProperty("dialogueType");
     }
 
     // todo : 시간나면 so 데이터를 역으로 csv로 만드는 버튼 넣기
@@ -34,7 +36,11 @@ public class DiaogueAssetEditor : Editor
             // DialogueAsset targetObj = (DialogueAsset)target;
             // targetObj.RemoveDialogueData();
         }
-
+        
+        EditorGUILayout.Space(10);
+        EditorGUILayout.LabelField("[대화 타입]", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(dialogueType);
+        
         EditorGUILayout.Space(10);
         EditorGUILayout.LabelField("[대사 목록]", EditorStyles.boldLabel);
 
