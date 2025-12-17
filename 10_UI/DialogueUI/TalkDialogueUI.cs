@@ -28,17 +28,17 @@ public class TalkDialogueUI : DialogueBaseUI
 
     protected override void NextDialogueInteranl(DialogueData dialogueData)
     {
-        if (string.IsNullOrEmpty(nameText.text) == false)
-        {
-            namePanel.SetActive(true);
-            nameText.text = nameText.text;
-        }
-        else
+        if (string.IsNullOrEmpty(dialogueData.Name))
         {
             namePanel.SetActive(false);
         }
+        else
+        {
+            namePanel.SetActive(true);
+            nameText.text = dialogueData.Name;
+        }
 
-        if (string.IsNullOrEmpty(nameText.text) == false)
+        if (string.IsNullOrEmpty(dialogueData.SprName) == false)
         {
             if (currentPortraitPanel != null)
             {
