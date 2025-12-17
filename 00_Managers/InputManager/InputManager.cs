@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class InputManager : GlobalSingletonManager<InputManager>
 {
+    // todo : InputActionAsset을 다 들고 Get해서 Bind 하는걸로 리팩토링 하기 
     Dictionary<InputType, InputHandler> inputHandlers;
 
     protected override void Init()

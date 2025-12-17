@@ -128,6 +128,15 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
         if (nowPlayingDialogue == null) return;
         if (nowDialogueIndex >= nowPlayingDialogue.Count)
         {
+            if (nowDialogueUI != null)
+            {
+                if (nowDialogueUI.IsPrinting)
+                {
+                    nowDialogueUI.ShowDialogueImmediately();
+                    return;
+                }
+            }
+
             EndDialogue();
         }
         else
