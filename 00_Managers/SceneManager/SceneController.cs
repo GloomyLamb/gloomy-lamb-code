@@ -115,7 +115,7 @@ public class SceneController
         Logger.Log("scene prefab 생성");
         _sceneDatabase.TryGetScene(SceneType.VideoScene, out GameObject prefab);
         var videoScene = GameObject.Instantiate(prefab).GetComponent<VideoScene>();
-        videoScene.OnSceneLoaded(scene, mode);
+        videoScene.Init();
     }
     #endregion
 }
