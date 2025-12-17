@@ -101,4 +101,9 @@ public class Laser : BaseSkill
         // 범위는 수치로 빼서 테스트 하도록 하기
         return null;
     }
+
+    protected override bool HasEnoughResource()
+    {
+        throw new NotImplementedException();
+    }
 }
