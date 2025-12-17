@@ -70,4 +70,19 @@ public class SkillController : MonoBehaviour
 #endif
     #endregion
 
+    #region 테스트
+    public void Test_GetTestSkill()
+    {
+        TestSkill skill = this.AddComponent<TestSkill>();
+        if (!TryGetSkill(SkillType.Test, skill)) return;
+        Logger.Log($"{_skillDict[SkillType.Test]} 연결 완료");
+    }
+
+    public void Test_GetBeamSkill()
+    {
+        Laser skill = this.AddComponent<Laser>();
+        if (!TryGetSkill(SkillType.Beam, skill)) return;
+        Logger.Log($"{_skillDict[SkillType.Beam]} 연결 완료");
+    }
+    #endregion
 }
