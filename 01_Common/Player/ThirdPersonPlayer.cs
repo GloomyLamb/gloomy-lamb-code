@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,25 +9,27 @@ public class ThirdPersonPlayer : Player
     [Header("플레이어 이동 설정")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
-    
+
     [Header("Ground 설정")]
     [SerializeField] private float playerScale = 0.02f;
     [SerializeField] public float groundRayDistance = 0.4f;
     [SerializeField] private LayerMask groundLayerMask;
-    
+
     // 상태
     private bool jumpDelay = true;
-    
+
     // 필요 컴포넌트
     private Transform cam;
     Rigidbody rb;
 
-    protected  override void Init()
+    protected override void Init()
     {
         rb = this.GetComponent<Rigidbody>();
         cam = Camera.main.transform;
-        
-        input.BindInputEvent(InputMapName.Default,InputActionName.Jump,OnJump);
+
+        input.BindInputEvent(InputMapName.Default, InputActionName.Jump, OnJump);
+
+        SetupInteractionComponent();        // 상호작용 컴포넌트 세팅
     }
 
     private void Start()
@@ -51,18 +50,18 @@ public class ThirdPersonPlayer : Player
 
     private void Move()
     {
-        Vector2 inputDir = input.GetAxis(InputMapName.Default,InputActionName.Move);
-    
+        Vector2 inputDir = input.GetAxis(InputMapName.Default, InputActionName.Move);
+
         Vector3 camForwardFlat = Vector3.ProjectOnPlane(cam.forward, Vector3.up).normalized;
         Vector3 right = Vector3.Cross(Vector3.up, camForwardFlat).normalized;
         Vector3 moveDir = (camForwardFlat * inputDir.y + right * inputDir.x).normalized;
-        
+
         if (moveDir.magnitude > 0.1f)
         {
             forward = moveDir;
             Vector3 newPosition = rb.position + forward * (moveSpeed * Time.deltaTime);
 
-            rb.MovePosition(newPosition); 
+            rb.MovePosition(newPosition);
             //rb.MoveRotation(Quaternion.LookRotation(forward, Vector3.up));
         }
     }

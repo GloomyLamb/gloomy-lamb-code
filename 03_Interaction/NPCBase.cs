@@ -1,8 +1,5 @@
 using UnityEngine;
 
-#if UNITY_EDITOR
-#endif
-
 /// <summary>
 /// NPC 기본 클래스
 /// </summary>
@@ -19,10 +16,6 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
     // 말풍선
     [SerializeField] protected GameObject speechBubblePrefab;
     [SerializeField] protected GameObject speechBubble;
-
-    // 대화창
-    [SerializeField] protected GameObject dialogueUIPrefab;
-    [SerializeField] protected GameObject dialogueUI;
 
     // 캐싱
     protected Transform player;
@@ -76,6 +69,10 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         this.player = null;
     }
 
+    /// <summary>
+    /// dont used
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<Player>(out var player))
@@ -85,6 +82,10 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// dont used
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent<Player>(out var player))
@@ -216,10 +217,6 @@ public abstract class NPCBase : MonoBehaviour, IInteractable
         if (speechBubblePrefab == null)
         {
             speechBubblePrefab = AssetLoader.FindAndLoadByName("SpeechBubble_Default");
-        }
-        if (dialogueUIPrefab == null)
-        {
-            dialogueUIPrefab = AssetLoader.FindAndLoadByName("DialogueUI");
         }
     }
 

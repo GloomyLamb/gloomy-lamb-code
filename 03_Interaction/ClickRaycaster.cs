@@ -41,6 +41,10 @@ public class ClickRaycaster : MonoBehaviour
         _input?.DisposeInputEvent();
     }
 
+    /// <summary>
+    /// input handler - camera의 click 이벤트 콜백
+    /// </summary>
+    /// <param name="context"></param>
     private void OnClick(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
