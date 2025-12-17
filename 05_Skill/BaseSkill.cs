@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// 스킬 기본 클래스
@@ -7,7 +10,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
 {
     #region 필드
     // 스킬 데이터
-    [SerializeField] protected SkillStatusData skillStatusData;
+    protected SkillStatusData skillStatusData;
 
     // 스킬 사용 조건
     protected float cooldownTimer = 0f;                 // 쿨타임 타이머
@@ -15,11 +18,66 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
 
     // 타겟
     protected IDamageable target;
+
+    // 이벤트
+    public event Action<BaseSkill> OnStartSkill;
+    public event Action OnEndSkill;
+
+    // 코루틴
+    private Coroutine _coroutine;
+    private WaitForSeconds _delay;
+    #endregion
+
+    #region 초기화
+    public virtual void Init(SkillStatusData data)
+    {
+        skillStatusData = data;
+        _delay = new WaitForSeconds(data.Duration.TotalTime);
+
+        // input이랑 바인딩하기
+    }
     #endregion
 
     protected virtual void Update()
     {
         cooldownTimer += Time.deltaTime;
+    }
+
+    /// <summary>
+    /// 스킬 사용하기
+    /// </summary>
+    /// <param name="context"></param>
+    protected virtual void OnUseSkill(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (IsUsable)
+            {
+                Attack();
+                GiveEffect();
+                OnStartSkill?.Invoke(this);
+
+                if (_coroutine != null)
+                {
+                    StopCoroutine(_coroutine);
+                }
+                _coroutine = StartCoroutine(nameof(EndSkillCoroutine));
+            }
+            else
+            {
+                Logger.Log($"{skillStatusData.Type} 스킬 사용 불가");
+            }
+        }
+    }
+
+    /// <summary>
+    /// 스킬 총 시간이 지난 후에 스킬 완료 이벤트 사용하기
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator EndSkillCoroutine()
+    {
+        yield return _delay;
+        OnEndSkill?.Invoke();
     }
 
     #region IAttackable 구현
