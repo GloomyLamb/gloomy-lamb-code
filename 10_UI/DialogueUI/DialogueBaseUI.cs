@@ -15,26 +15,27 @@ public class DialogueBaseUI : BaseUI
 
     DialogueData nowDialogueData;
     Coroutine dialogueCoroutine;
+
     public bool IsPrinting => dialogueCoroutine != null;
 
+    public DialogueUIState DialogueUIState => dialogueUIState;
+    protected DialogueUIState dialogueUIState;
 
     protected override void Init()
     {
     }
 
 
-    public void NextDialogue(DialogueData dialogueData)
+    public void NextDialogue(DialogueData dialogueData, bool lastDialogue = false)
     {
         nowDialogueData = dialogueData;
-        NextDialogueInteranl(nowDialogueData);
+        NextDialogueInteranl(nowDialogueData, lastDialogue);
         StartPrintDialogueRoutine(nowDialogueData.Dialogue);
-        //dialogueData.Name
     }
 
-    protected virtual void NextDialogueInteranl(DialogueData dialogueData)
+    protected virtual void NextDialogueInteranl(DialogueData dialogueData, bool lastDialogue = false)
     {
     }
-
 
     // 재정의할 내용이 있을까?
     public virtual void StopDialogue()
@@ -82,5 +83,10 @@ public class DialogueBaseUI : BaseUI
         }
 
         dialogueCoroutine = null;
+    }
+
+    protected void OnNextDialogueButton()
+    {
+        DialogueManager.Instance.NextDialogue();
     }
 }

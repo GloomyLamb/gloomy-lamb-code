@@ -30,3 +30,10 @@ public enum DialogueEmotionType
     Shock,
     Confusion,
 }
+
+
+public enum DialogueUIState
+{
+    Playing,
+    Lock,   
+}

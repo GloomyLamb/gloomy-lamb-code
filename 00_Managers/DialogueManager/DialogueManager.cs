@@ -32,7 +32,7 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
     {
         input = new InputHandler(inputActionAsset, InputType.DialogueBox);
         input.BindInputEvent(InputMapName.Default, InputActionName.Next, OnNextDialogue);
-        
+
         talkDialogueUI?.Setup();
     }
 
@@ -99,19 +99,11 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
         OnDialogueEndAction?.Invoke();
     }
 
-    public void OnNextDialogue(InputAction.CallbackContext context)
+    void OnNextDialogue(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            if (nowPlayingDialogue == null) return;
-            if (nowDialogueIndex >= nowPlayingDialogue.Count)
-            {
-                EndDialogue();
-            }
-            else
-            {
-                NextDialogue();
-            }
+            NextDialogue();
         }
     }
 
@@ -133,19 +125,28 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
 
     public void NextDialogue()
     {
-        if (nowDialogueUI != null)
+        if (nowPlayingDialogue == null) return;
+        if (nowDialogueIndex >= nowPlayingDialogue.Count)
         {
-            if (nowDialogueUI.IsPrinting)
+            EndDialogue();
+        }
+        else
+        {
+            if (nowDialogueUI != null)
             {
-                nowDialogueUI.ShowDialogueImmediately();
-                return;
+                if (nowDialogueUI.IsPrinting)
+                {
+                    nowDialogueUI.ShowDialogueImmediately();
+                    return;
+                }
+
+                bool lastDialogue = nowDialogueIndex == nowPlayingDialogue.Count - 1;
+                nowDialogueUI?.NextDialogue(nowPlayingDialogue[nowDialogueIndex], lastDialogue);
             }
 
-            nowDialogueUI?.NextDialogue(nowPlayingDialogue[nowDialogueIndex]);
+            OnNextDialogueAction?.Invoke();
+            nowDialogueIndex++;
         }
-
-        OnNextDialogueAction?.Invoke();
-        nowDialogueIndex++;
     }
 
 
