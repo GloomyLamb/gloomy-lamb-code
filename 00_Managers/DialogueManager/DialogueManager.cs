@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -33,6 +32,8 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
     {
         input = new InputHandler(inputActionAsset, InputType.DialogueBox);
         input.BindInputEvent(InputMapName.Default, InputActionName.Next, OnNextDialogue);
+        
+        talkDialogueUI?.Setup();
     }
 
     private void Start()

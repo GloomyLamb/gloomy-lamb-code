@@ -17,17 +17,51 @@ public class TalkDialogueUI : DialogueBaseUI
     // 피드백 
     // 이후 어드레서블을 사용하게되면 이 부분은 테이블화 된거에서 빼오면 됨.
     // portrait 프리팹화해서 쓴거 굿
-    [Header("Characters")] 
-    [SerializeField] private List<DialoguePortraitPanel> portraitPanelOrigins;
-    Dictionary<string, DialoguePortraitPanel> portraitPanels = new Dictionary<string, DialoguePortraitPanel>();
-    
+    [Header("Characters")] [SerializeField]
+    private List<DialoguePortraitPanel> portraitPanelOrigins;
+
+    Dictionary<PortraitCharacter, DialoguePortraitPanel> portraitPanels = new Dictionary<PortraitCharacter, DialoguePortraitPanel>();
+
     DialoguePortraitPanel currentPortraitPanel;
-    
-    public void InitPortrait()
+
+    public override void Setup()
     {
-        
-        // todo : 캐릭터를 생성해야해
+        for (int i = 0; i < portraitPanelOrigins.Count; i++)
+        {
+            if (portraitPanelOrigins[i] != null)
+            {
+                string[] portraitNameSplit = portraitPanelOrigins[i].name.Split("_");
+                if (portraitNameSplit.Length > 1)
+                {
+                    string portraitName = portraitNameSplit[1];
+                    DialoguePortraitPanel newPortrait = null;
+
+                    if (portraitName == PortraitCharacter.Dusky.ToString())
+                    {
+                        newPortrait = Instantiate(portraitPanelOrigins[i], leftPivot);
+                    }
+                    else
+                    {
+                        newPortrait = Instantiate(portraitPanelOrigins[i], rightPivot);
+                    }
+
+                    if (newPortrait != null)
+                    {
+                        newPortrait.gameObject.SetActive(false);
+                        newPortrait.name = $"portrait_{portraitName}";
+                        if (PortraitCharacter.TryParse(portraitName, out PortraitCharacter portraitCharacter))
+                        {
+                            if (portraitPanels.ContainsKey(portraitCharacter) == false)
+                            {
+                                portraitPanels.Add(portraitCharacter, newPortrait);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
 
     protected override void NextDialogueInteranl(DialogueData dialogueData)
     {
@@ -41,16 +75,17 @@ public class TalkDialogueUI : DialogueBaseUI
             nameText.text = dialogueData.Name;
         }
 
-        if (string.IsNullOrEmpty(dialogueData.SprName) == false)
+        if (dialogueData.PortraitCharacter == PortraitCharacter.None)
         {
-            if (currentPortraitPanel != null)
+            currentPortraitPanel?.gameObject.SetActive(false);
+        }
+        else
+        {
+            if (portraitPanels.TryGetValue(dialogueData.PortraitCharacter, out DialoguePortraitPanel portraitPanel))
             {
-                currentPortraitPanel.gameObject.SetActive(false);
-            }
-            else
-            {
-                // currentPortraitPanel.gameObject.SetActive(true);
-                // currentPortraitPanel.SetEmoption(dialogueData.Emotion);
+                currentPortraitPanel = portraitPanel;
+                currentPortraitPanel?.gameObject.SetActive(true);
+                currentPortraitPanel?.SetEmotion(dialogueData.Emotion);
             }
         }
     }

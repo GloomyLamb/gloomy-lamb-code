@@ -14,7 +14,7 @@ public class DialoguePortraitPanel : MonoBehaviour
     [SerializeField] Sprite defaultSpr;
     
     
-    public void SetEmoption(DialogueEmotionType emotion)
+    public void SetEmotion(DialogueEmotionType emotion)
     {
         switch (emotion)
         {
