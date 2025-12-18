@@ -22,7 +22,7 @@ public class Interaction : MonoBehaviour
     private IInteractable _curInteractable;
 
     #region 초기화
-    private void Awake()
+    private void Start()
     {
         Init(interactionRangeData);
     }
