@@ -11,6 +11,8 @@ public enum SceneType
     // 테스트용
     NHP_ThreeBiomes,
     VideoTestScene,
+    
+    LibraryScene,
 }
 
 /// <summary>
