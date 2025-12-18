@@ -30,4 +30,8 @@ public class TestShadow : MonoBehaviour, IDamageable
             health = maxHealth;
         }
     }
+
+    public void ApplyEffect()
+    {
+    }
 }
