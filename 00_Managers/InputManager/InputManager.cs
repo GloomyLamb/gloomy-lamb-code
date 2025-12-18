@@ -6,9 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : GlobalSingletonManager<InputManager>
 {
-    // todo : InputActionAsset을 다 들고 Get해서 Bind 하는걸로 리팩토링 하기 
     [SerializeField] private List<InputActionAsset> inputAssets;
-
     Dictionary<InputType, InputHandler> inputHandlers;
 
     protected override void Init()
@@ -38,6 +36,9 @@ public class InputManager : GlobalSingletonManager<InputManager>
         return inputHandlers[inputType];
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void BindInputEvent(InputType inputType, InputMapName inputMapName, InputActionName inputActionName,
         Action<InputAction.CallbackContext> action)
     {
@@ -48,6 +49,11 @@ public class InputManager : GlobalSingletonManager<InputManager>
         }
     }
 
+    /// <summary>
+    /// 원하는 Input Axis 가져오기
+    /// Lock 일 때에는 눌러도 zero예요
+    /// </summary>
+    /// <returns></returns>
     public Vector2 GetAxis(InputType inputType,  InputActionName inputActionName, InputMapName inputMapName= InputMapName.Default)
     {
         if (inputHandlers.ContainsKey(inputType) == false) return Vector2.zero;
