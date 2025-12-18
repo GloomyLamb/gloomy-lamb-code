@@ -13,6 +13,11 @@ public class SkillController : MonoBehaviour
     private readonly Dictionary<SkillType, BaseSkill> _skillDict = new();
     private BaseSkill _curSkill = null;
 
+    private void Start()
+    {
+        InputManager.Instance.UseInput(InputType.Skill);
+    }
+
     /// <summary>
     /// [public] 스킬 획득
     /// </summary>
@@ -63,7 +68,6 @@ public class SkillController : MonoBehaviour
         }
 
         InputManager.Instance.BindInputEvent(inputType, inputMapName, inputActionName, skill.OnUseSkill);
-        InputManager.Instance.UseInput(inputType);
     }
 
     #region curSkill 관리
