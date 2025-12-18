@@ -22,5 +22,6 @@ public enum InputActionName
     Next,
 
     // Skill
+    Skill_Test,
     Skill_Laser,
 }

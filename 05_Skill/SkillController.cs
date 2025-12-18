@@ -110,6 +110,7 @@ public class SkillController : MonoBehaviour
         TestSkill skill = this.AddComponent<TestSkill>();
         if (!TryAcquireSkill(SkillType.Test, skill)) return;
         Logger.Log($"{_skillDict[SkillType.Test]} 연결 완료");
+        BindInput(SkillType.Test, InputType.Skill, InputMapName.Default, InputActionName.Skill_Test);
     }
 
     public void Test_GetBeamSkill()
