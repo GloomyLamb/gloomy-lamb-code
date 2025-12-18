@@ -4,6 +4,7 @@ public enum InputType
     Camera,
     UI,
     DialogueBox,
+    Skill,
 }
 
 public enum InputMapName
