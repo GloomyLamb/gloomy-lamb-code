@@ -11,11 +11,19 @@ public abstract class BaseMoveableState : IState
     }
 
     #region 애니메이션 관리
+    /// <summary>
+    /// 애니메이션 시작
+    /// </summary>
+    /// <param name="animationHash"></param>
     protected void StartAnimation(int animationHash)
     {
         stateMachine.animator.SetBool(animationHash, true);
     }
 
+    /// <summary>
+    /// 애니메이션 정지
+    /// </summary>
+    /// <param name="animationHash"></param>
     protected void StopAnimation(int animationHash)
     {
         stateMachine.animator.SetBool(animationHash, false);
