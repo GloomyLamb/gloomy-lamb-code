@@ -44,10 +44,10 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     }
 
     /// <summary>
-    /// input handler에 구독할 이벤트
+    /// [public] input handler에 구독할 이벤트
     /// </summary>
     /// <param name="context"></param>
-    protected virtual void OnUseSkill(InputAction.CallbackContext context)
+    public virtual void OnUseSkill(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {

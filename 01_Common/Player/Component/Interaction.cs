@@ -26,15 +26,20 @@ public class Interaction : MonoBehaviour
         _interactableLayer = data.InteractableLayer;
         _useAngleWeight = data.UseAngleWeight;
         _useDistanceWieght = data.UseDistanceWieght;
+        BindInput();
     }
 
     /// <summary>
-    /// [public] input handler에 interact 이벤트 바인딩
+    /// input handler에 interact 이벤트 바인딩
     /// </summary>
     /// <param name="input"></param>
-    public void BindInput(InputHandler input)
+    private void BindInput()
     {
-        InputManager.Instance.BindInputEvent(InputType.Player,InputMapName.Default, InputActionName.Interaction, OnInteract);
+        InputManager.Instance.BindInputEvent(
+            InputType.Player,
+            InputMapName.Default,
+            InputActionName.Interaction,
+            OnInteract);
     }
 
     /// <summary>
@@ -47,6 +52,13 @@ public class Interaction : MonoBehaviour
         {
             _curInteractable?.Interact();
         }
+    }
+    #endregion
+
+    #region Unity API
+    private void Update()
+    {
+        UpdateInteractionTarget();
     }
     #endregion
 

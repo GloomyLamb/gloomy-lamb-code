@@ -18,19 +18,14 @@ public class ClickRaycaster : MonoBehaviour
     [SerializeField] private LayerMask _layerMask;
     private Camera _camera;
 
-    private void Awake()
-    {
-        _camera = Camera.main;
-        Init();
-    }
-
-    private void Init()
-    {
-    }
-
     private void Start()
     {
-        InputManager.Instance.BindInputEvent(InputType.Camera,InputMapName.Default, InputActionName.Interaction, OnClick);
+        _camera = Camera.main;
+        InputManager.Instance.BindInputEvent(
+            InputType.Camera,
+            InputMapName.Default,
+            InputActionName.Interaction,
+            OnClick);
         InputManager.Instance.UseInput(InputType.Camera);
     }
 
