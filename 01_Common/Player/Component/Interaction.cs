@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class Interaction : MonoBehaviour
 {
+    [Header("SO Data")]
+    [SerializeField] protected InteractionRangeData interactionRangeData;
+
     private float _interactRange;
     private float _interactAngle;
     private LayerMask _interactableLayer;
@@ -19,6 +22,11 @@ public class Interaction : MonoBehaviour
     private IInteractable _curInteractable;
 
     #region 초기화
+    private void Awake()
+    {
+        Init(interactionRangeData);
+    }
+
     public void Init(InteractionRangeData data)
     {
         _interactRange = data.InteractRange;
@@ -159,5 +167,17 @@ public class Interaction : MonoBehaviour
         Gizmos.DrawLine(origin, origin + left * _interactRange);
         Gizmos.DrawLine(origin, origin + right * _interactRange);
     }
+    #endregion
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    private void Reset()
+    {
+        if (interactionRangeData == null)
+        {
+            interactionRangeData = AssetLoader.FindAndLoadByName<InteractionRangeData>("InteractionRangeData");
+        }
+    }
+#endif
     #endregion
 }
