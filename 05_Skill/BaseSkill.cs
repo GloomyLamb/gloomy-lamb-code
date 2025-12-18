@@ -104,10 +104,14 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
             return;
         }
         target.Damage(skillStatusData.AttackDamage);
+        GiveEffect();
         ResetCooldownTimer();
     }
 
-    public abstract void GiveEffect();
+    public virtual void GiveEffect()
+    {
+        target.ApplyEffect();
+    }
     #endregion
 
     #region 스킬 조건 계산
