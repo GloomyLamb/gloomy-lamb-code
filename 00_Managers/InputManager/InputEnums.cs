@@ -24,4 +24,5 @@ public enum InputActionName
     // Skill
     Skill_Test,
     Skill_Laser,
+    Skill_Beam,
 }
