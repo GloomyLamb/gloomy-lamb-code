@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class SceneSingletonManager<T> : MonoBehaviour where T : SceneSingletonManager<T>
 {
     public static T Instance => instance;
     protected static T instance;
- 
+
 
     protected virtual void Awake()
     {
@@ -18,12 +15,10 @@ public abstract class SceneSingletonManager<T> : MonoBehaviour where T : SceneSi
         }
 
         instance = (T)this;
-        
-        Init();
     }
 
 
-    protected virtual void Init()
+    public virtual void Init()
     {
     }
 
