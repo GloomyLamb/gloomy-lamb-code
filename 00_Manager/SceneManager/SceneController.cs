@@ -13,6 +13,7 @@ public enum SceneType
     VideoTestScene,
     
     LibraryScene,
+    ShadowForestScene,
 }
 
 /// <summary>
