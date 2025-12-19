@@ -125,8 +125,8 @@ public class SceneController
     }
 
     /// <summary>
-    /// 씬 로드 전에 실행할 메서드입니다.
-    /// BaseScene을 가져와 초기화합니다.
+    /// 씬 로드가 완료된 직후 실행됩니다.
+    /// 씬에 BaseScene이 필요한 경우 초기화합니다.
     /// </summary>
     /// <param name="scene"></param>
     /// <param name="mode"></param>
