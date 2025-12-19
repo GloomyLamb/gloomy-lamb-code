@@ -5,14 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum SceneType
-{
-    None,
-    VideoScene,
-    LibraryScene,
-    ShadowForestScene,
-}
-
 /// <summary>
 /// 씬 전환 관리
 /// </summary>
@@ -25,7 +17,6 @@ public class SceneController
 
     private Dictionary<SceneType, Type> _baseSceneTypeDict;
 
-    private BaseScene _curScene;
     private SceneType _curSceneType;
     private string _externalSceneName;
 
@@ -137,22 +128,18 @@ public class SceneController
         if (!_baseSceneTypeDict.TryGetValue(_curSceneType, out Type type))
         {
             Logger.Log("base scene type 없음");
-            _curScene = null;
             return;
         }
 
         if (!_sceneDatabase.TryGetScene(_curSceneType, out GameObject prefab))
         {
             Logger.Log("scene database에 scene data 없음");
-            _curScene = null;
             return;
         }
 
         Logger.Log("scene prefab 생성");
         var sceneObj = (BaseScene)GameObject.Instantiate(prefab).GetComponent(type);
-
         sceneObj.Init();
-        _curScene = sceneObj;
     }
     #endregion
 }
