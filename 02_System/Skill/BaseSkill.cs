@@ -104,7 +104,6 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
             return;
         }
         target.Damage(skillStatusData.AttackDamage);
-        GiveEffect();
         ResetCooldownTimer();
     }
 
@@ -138,14 +137,6 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     private void ResetCooldownTimer()
     {
         cooldownTimer = 0f;
-    }
-    #endregion
-
-    #region 테스트
-    public void Test_UseSkill()
-    {
-        UseSkill();
-        Logger.Log("스킬 사용 테스트");
     }
     #endregion
 }

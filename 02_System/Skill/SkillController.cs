@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -102,32 +101,5 @@ public class SkillController : MonoBehaviour
         _skillStatusDatabase = AssetLoader.FindAndLoadByName<SkillStatusDatabase>("TestSkillStatusDatabase");
     }
 #endif
-    #endregion
-
-    #region 테스트
-    public void Test_GetTestSkill()
-    {
-        TestSkill skill = this.AddComponent<TestSkill>();
-        if (!TryAcquireSkill(SkillType.Test, skill)) return;
-        Logger.Log($"{_skillDict[SkillType.Test]} 연결 완료");
-        BindInput(SkillType.Test, InputType.Skill, InputMapName.Default, InputActionName.Skill_Test);
-    }
-
-    public void Test_GetBeamSkill()
-    {
-        Laser skill = this.AddComponent<Laser>();
-        if (!TryAcquireSkill(SkillType.Beam, skill)) return;
-        Logger.Log($"{_skillDict[SkillType.Beam]} 연결 완료");
-    }
-
-    public void Test_UseTestSkill()
-    {
-        if (!_skillDict.TryGetValue(SkillType.Test, out BaseSkill skill))
-        {
-            Logger.Log("스킬 없음");
-            return;
-        }
-        skill.Test_UseSkill();
-    }
     #endregion
 }
