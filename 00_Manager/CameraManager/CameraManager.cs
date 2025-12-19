@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 // todo: enum은 따로 관리
@@ -451,67 +450,6 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
         }
 
         return cam;
-    }
-    #endregion
-
-    #region 테스트 코드
-    [Header("테스트")]
-    [SerializeField] CinemachineVirtualCamera _testVirtualCam;
-
-    public void Test_PushCamera()
-    {
-        List<CinemachineInfo> infos = new()
-        {
-            FindTestSO("TestVC1"),
-            FindTestSO("TestVC2"),
-            FindTestSO("TestVC3")
-        };
-        Register(infos);
-    }
-
-    public void Test_SwitchCamera1()
-    {
-        SwitchTo(VCType.TestVC1);
-    }
-
-    public void Test_SwitchCamera2()
-    {
-        SwitchTo(VCType.TestVC2);
-    }
-
-    public void Test_SwitchCamera3()
-    {
-        SwitchTo(VCType.TestVC3);
-    }
-
-    /// <summary>
-    /// 외부 카메라 테스트
-    /// </summary>
-    public void Test_ExternalCamera()
-    {
-        SwitchTo(_testVirtualCam);
-    }
-
-    public void Test_ResetCamera()
-    {
-        _sceneCams.Clear();
-        _camDict.Clear();
-        _externalVirtualCam = null;
-    }
-
-    /// <summary>
-    /// 카메라 SO 데이터를 찾아옵니다.
-    /// </summary>
-    /// <param name="name">SO 파일 이름</param>
-    /// <returns></returns>
-    private CinemachineInfo FindTestSO(string name)
-    {
-        Logger.Log($"so 데이터 찾기: {name}");
-        string[] guids = AssetDatabase.FindAssets($"{name} t:CinemachineInfo");
-
-        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-        var def = AssetDatabase.LoadAssetAtPath<CinemachineInfo>(path);
-        return def;
     }
     #endregion
 }
