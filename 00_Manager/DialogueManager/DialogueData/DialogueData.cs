@@ -19,7 +19,7 @@ public class DialogueData
     [SerializeField] private string dialogue;
     [SerializeField] private PortraitCharacter portraitCharacter = PortraitCharacter.None;
     [SerializeField] private DialogueEmotionType emotion;
-    [SerializeField] List<DialogueButtonData> buttons;
+    [SerializeField] List<DialogueButtonData> buttons = new List<DialogueButtonData>();
 
 
     public DialogueData(string _dialogue)
