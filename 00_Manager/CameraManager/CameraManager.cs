@@ -83,7 +83,7 @@ public class CameraManager : GlobalSingletonManager<CameraManager>
 
         if (_player == null)
         {
-            _player = FindObjectOfType<CapsuleCollider>().transform;
+            _player = FindObjectOfType<CapsuleCollider>()?.transform;
         }
 
         if (_camera == null)
