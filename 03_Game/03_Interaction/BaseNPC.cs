@@ -173,41 +173,6 @@ public abstract class BaseNPC : MonoBehaviour, IInteractable
     }
     #endregion
 
-    #region 테스트
-#if UNITY_EDITOR
-    public void Test_ToggleSpeechBubble()
-    {
-        ToggleSpeechBubble();
-    }
-
-    public void Test_SpawnSpeechBubbleDefault()
-    {
-        ClearSpeechBubble();
-        AssetLoader.FindAndLoadByName("SpeechBubble_Default");
-        SpawnSpeechBubble();
-    }
-
-    public void Test_SpawnSpeechBubbleUI()
-    {
-        ClearSpeechBubble();
-        AssetLoader.FindAndLoadByName("SpeechBubble_UI");
-        SpawnSpeechBubble();
-    }
-
-    private void ClearSpeechBubble()
-    {
-        speechBubblePrefab = null;
-        if (speechBubble == null) return;
-
-        if (!Application.isPlaying)
-            DestroyImmediate(speechBubble);
-        else
-            Destroy(speechBubble);
-        speechBubble = null;
-    }
-#endif
-    #endregion
-
     #region 에디터 전용
 #if UNITY_EDITOR
     private void Reset()
