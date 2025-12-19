@@ -33,18 +33,7 @@ public class GameManager : GlobalSingletonManager<GameManager>
     public void ShowVideo(VideoID videoId, SceneType returnScene)
     {
         VideoFlow.SetUp(videoId, returnScene);
-        SceneManager.sceneLoaded += Scene.OnVideoSceneLoaded;
         Scene.LoadSceneWithCoroutine(SceneType.VideoScene);
-    }
-
-    #endregion
-
-    #region 테스트
-
-    // 씬
-    public void TestSceneController()
-    {
-        Scene.LoadSceneWithCoroutine(SceneType.NHP_ThreeBiomes);
     }
 
     #endregion

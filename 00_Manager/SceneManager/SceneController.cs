@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,11 +9,6 @@ public enum SceneType
 {
     None,
     VideoScene,
-
-    // 테스트용
-    NHP_ThreeBiomes,
-    VideoTestScene,
-    
     LibraryScene,
 }
 
@@ -22,16 +19,36 @@ public enum SceneType
 public class SceneController
 {
     #region Fields
-    internal SceneController() { }
 
     [SerializeField] private SceneDatabase _sceneDatabase;
 
-    // todo: 씬 관리 하기 고민
-    // - dict으로 한 번에 정의해서 묶을 지, 씬에 저장해두고, 씬에서 넘어가면 거기서 불러올지
+    private Dictionary<SceneType, Type> _baseSceneTypeDict;
+
+    private BaseScene _curScene;
     private SceneType _curSceneType;
     private string _externalSceneName;
 
     private Coroutine _coroutine;
+    #endregion
+
+    #region 초기화
+    public SceneController()
+    {
+        InitSceneTypeDict();
+    }
+
+    /// <summary>
+    /// BaseScene의 Type을 캐싱해놓을 딕셔너리
+    /// BaseScene에 Init이 있는 경우에만 추가하면 됩니다.
+    /// </summary>
+    private void InitSceneTypeDict()
+    {
+        _baseSceneTypeDict = new()
+        {
+            { SceneType.VideoScene, typeof(VideoScene) },
+            { SceneType.LibraryScene, typeof(LibraryScene) },
+        };
+    }
     #endregion
 
     #region 씬 로드
@@ -49,7 +66,7 @@ public class SceneController
         _curSceneType = type;
         _externalSceneName = null;
 
-        // scene base에서 작성한 scene loaded 메서드로 사용
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         if (_coroutine != null)
         {
@@ -72,8 +89,6 @@ public class SceneController
         }
         _curSceneType = SceneType.None;
         _externalSceneName = sceneName;
-
-        // scene base에서 작성한 scene loaded 메서드로 사용
 
         if (_coroutine != null)
         {
@@ -107,17 +122,36 @@ public class SceneController
             Logger.Log($"로딩 상태: {async.progress * 100}%...");
         }
     }
-    #endregion
 
-    #region 비디오 씬 이동
-    public void OnVideoSceneLoaded(Scene scene, LoadSceneMode mode)
+    /// <summary>
+    /// 씬 로드 전에 실행할 메서드입니다.
+    /// BaseScene을 가져와 초기화합니다.
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        SceneManager.sceneLoaded -= OnVideoSceneLoaded;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        if (!_baseSceneTypeDict.TryGetValue(_curSceneType, out Type type))
+        {
+            Logger.Log("base scene type 없음");
+            _curScene = null;
+            return;
+        }
+
+        if (!_sceneDatabase.TryGetScene(_curSceneType, out GameObject prefab))
+        {
+            Logger.Log("scene database에 scene data 없음");
+            _curScene = null;
+            return;
+        }
 
         Logger.Log("scene prefab 생성");
-        _sceneDatabase.TryGetScene(SceneType.VideoScene, out GameObject prefab);
-        var videoScene = GameObject.Instantiate(prefab).GetComponent<VideoScene>();
-        videoScene.Init();
+        var sceneObj = (BaseScene)GameObject.Instantiate(prefab).GetComponent(type);
+
+        sceneObj.Init();
+        _curScene = sceneObj;
     }
     #endregion
 }
