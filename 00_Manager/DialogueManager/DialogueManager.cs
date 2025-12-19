@@ -34,7 +34,7 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
 
     private void Start()
     {
-        InputManager.Instance.BindInputEvent(InputType.Player, InputMapName.Default, InputActionName.Next, OnNextDialogue);
+        InputManager.Instance.BindInputEvent(InputType.DialogueBox, InputMapName.Default, InputActionName.Next, OnNextDialogue);
         InputManager.Instance.LockInput(InputType.DialogueBox);
     }
 
