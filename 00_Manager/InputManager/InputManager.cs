@@ -60,6 +60,17 @@ public class InputManager : GlobalSingletonManager<InputManager>
         return inputHandlers[inputType] != null ? inputHandlers[inputType].GetAxis(inputActionName, inputMapName) : Vector2.zero;
     }
 
+    /// <summary>
+    /// 원하는 Input float 가져오기
+    /// Lock 일 때에는 눌러도 0 으로 받아짐
+    /// </summary>
+    public float GetFloat(InputType inputType, InputActionName inputActionName,
+        InputMapName inputMapName = InputMapName.Default)
+    {
+        if (inputHandlers.ContainsKey(inputType) == false) return 0f;
+        return inputHandlers[inputType] != null ? inputHandlers[inputType].GetFloat(inputActionName, inputMapName) : 0f;
+    }
+
     
     public bool IsPressed(InputType inputType, InputActionName inputActionName, InputMapName inputMapName = InputMapName.Default)
     {
