@@ -20,14 +20,12 @@ public class MoveController : MonoBehaviour
     protected Vector3 forward;
     
     // 필요 컴포넌트
-    private Transform cam;
     Rigidbody rb;
 
     private void Awake()
     {
         forward = transform.forward;
         rb = this.GetComponent<Rigidbody>();
-        cam = Camera.main.transform;
     }
     
     private void Start()
@@ -48,12 +46,14 @@ public class MoveController : MonoBehaviour
     
     private void Move()
     {
-        Vector2 inputDir = InputManager.Instance.GetAxis(InputType.Player, InputActionName.Move);
+        Vector2 inputValue = InputManager.Instance.GetAxis(InputType.Player, InputActionName.Move);
         
-        Vector3 camForwardFlat = Vector3.ProjectOnPlane(cam.forward, Vector3.up).normalized;
-        Vector3 right = Vector3.Cross(Vector3.up, camForwardFlat).normalized;
-        Vector3 moveDir = (camForwardFlat * inputDir.y + right * inputDir.x).normalized;
-
+        Vector3 inputDir = new Vector3(inputValue.x, 0f, inputValue.y);
+        
+        // todo : CameraManager에서 현재 카메라의 Transform이나 forward를 받아와야 함. 
+        Quaternion yawRotation = Quaternion.Euler(0f, CameraController.Instance.CamTransform.eulerAngles.y, 0f);    // 투영하던 건 쉽게 Quaternion으로 변경
+        Vector3 moveDir = yawRotation * inputDir;
+        
         if (moveDir.magnitude > 0.1f)
         {
             forward = moveDir;
