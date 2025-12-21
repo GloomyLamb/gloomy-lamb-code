@@ -1,11 +1,9 @@
 using System;
-using System.Diagnostics;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Debug = UnityEngine.Debug;
 
-public enum CameraControlType
+public enum CameraViewType
 {
     TpsFollow,
     TpsAutoRotateFollow,
@@ -13,6 +11,16 @@ public enum CameraControlType
     TpsFixed,
     TpsRotableFixed,
     FirstPerson,
+}
+
+[Flags]
+public enum CameraControlOption
+{
+    None = 0,
+    RotationPitch = 1 << 1,
+    RotationYaw = 1 << 2,
+    Zoom = 1 << 3,
+    RotationUsingRightMouse = 1 << 4,
 }
 
 // todo : 카메라 매니저의 카메라를 채가야 할 듯 함...
@@ -24,7 +32,9 @@ public class CameraController : MonoBehaviour
     private static CameraController instance;
 
     [Header("조작 설정")]
-    [SerializeField] private CameraControlType cameraControlType = CameraControlType.TpsAutoRotateFollow;
+    [SerializeField] private CameraViewType cameraViewType = CameraViewType.TpsAutoRotateFollow;
+
+    [SerializeField] private CameraControlOption camControlOption = CameraControlOption.None;
 
     [Header("카메라 조작을 위한 pivot")]
     [SerializeField] private Transform rotPivot;
@@ -33,9 +43,8 @@ public class CameraController : MonoBehaviour
     public Transform target;
 
     [Header("회전 설정")]
-    [SerializeField] bool useRightClick = false;
-
     [SerializeField] private float lookSensitivity = 20;
+
     [SerializeField] private float limitMinX = 0;
     [SerializeField] private float limitMaxX = 90;
 
@@ -92,7 +101,7 @@ public class CameraController : MonoBehaviour
 
         // test
         SetControlCinemachine(virtualCamera);
-        SwitchCameraControl(cameraControlType);
+        SwitchCameraControl(cameraViewType);
     }
 
     public void SetControlCinemachine(CinemachineVirtualCamera _virtualCamera)
@@ -102,20 +111,20 @@ public class CameraController : MonoBehaviour
     }
 
 
-    public void SwitchCameraControl(CameraControlType _cameraControl)
+    public void SwitchCameraControl(CameraViewType cameraView)
     {
-        cameraControlType = _cameraControl;
-        switch (cameraControlType)
+        cameraViewType = cameraView;
+        switch (cameraViewType)
         {
-            case CameraControlType.TpsFollow:
-            case CameraControlType.TpsFixed:
-            case CameraControlType.TpsAutoRotateFollow:
+            case CameraViewType.TpsFollow:
+            case CameraViewType.TpsFixed:
+            case CameraViewType.TpsAutoRotateFollow:
                 InputManager.Instance.LockInput(InputType.Camera);
                 break;
 
-            case CameraControlType.TpsRotableFixed:
-            case CameraControlType.TpsRotatableFollow:
-            case CameraControlType.FirstPerson:
+            case CameraViewType.TpsRotableFixed:
+            case CameraViewType.TpsRotatableFollow:
+            case CameraViewType.FirstPerson:
                 InputManager.Instance.UseInput(InputType.Camera);
                 curRotX = rotPivot.transform.eulerAngles.x;
                 curRotY = rotPivot.transform.eulerAngles.y;
@@ -130,6 +139,17 @@ public class CameraController : MonoBehaviour
         curRotY = target.eulerAngles.y;
     }
 
+    public void SetControlOption(CameraControlOption option, bool useOption)
+    {
+        if (useOption)
+        {
+            camControlOption |= option;
+        }
+        else
+        {
+            camControlOption &= ~option;
+        }
+    }
 
     public void OnClickRightMouseClick(InputAction.CallbackContext context)
     {
@@ -149,30 +169,34 @@ public class CameraController : MonoBehaviour
         InputZoom();
     }
 
-
     public void InputRotate()
     {
-        if (useRightClick && isRightMouseClicked == false) return;
-        switch (cameraControlType)
+        if ((camControlOption.HasFlag(CameraControlOption.RotationUsingRightMouse) && isRightMouseClicked == false)) return;
+
+        Vector2 axis = InputManager.Instance.GetAxis(InputType.Camera, InputActionName.Look);
+
+        if (camControlOption.HasFlag(CameraControlOption.RotationPitch))
         {
-            case CameraControlType.TpsRotableFixed:
-            case CameraControlType.TpsRotatableFollow:
-            case CameraControlType.FirstPerson:
-                Vector2 axis = InputManager.Instance.GetAxis(InputType.Camera, InputActionName.Look);
-                curRotX += (-axis.y * Time.deltaTime * lookSensitivity);
-                curRotX = Mathf.Clamp(curRotX, limitMinX, limitMaxX);
-                curRotY += (axis.x * Time.deltaTime * lookSensitivity);
-                break;
+            curRotX += (-axis.y * Time.deltaTime * lookSensitivity);
+            curRotX = Mathf.Clamp(curRotX, limitMinX, limitMaxX);
+        }
+
+        if (camControlOption.HasFlag(CameraControlOption.RotationYaw))
+        {
+            curRotY += (axis.x * Time.deltaTime * lookSensitivity);
         }
     }
 
     public void InputZoom()
     {
-        if (InputManager.Instance.IsPressed(InputType.Camera, InputActionName.Zoom))
+        if (camControlOption.HasFlag(CameraControlOption.Zoom))
         {
-            float f = InputManager.Instance.GetFloat(InputType.Camera, InputActionName.Zoom) * -1f;
-            f = f * 0.01f;
-            curZoomValue = Mathf.Clamp(curZoomValue + (f * zoomSpeed), minZoom, maxZoom);
+            if (InputManager.Instance.IsPressed(InputType.Camera, InputActionName.Zoom))
+            {
+                float f = InputManager.Instance.GetFloat(InputType.Camera, InputActionName.Zoom) * -1f;
+                f = f * 0.01f;
+                curZoomValue = Mathf.Clamp(curZoomValue + (f * zoomSpeed), minZoom, maxZoom);
+            }
         }
     }
 
@@ -181,13 +205,15 @@ public class CameraController : MonoBehaviour
         rotPivot.position = target.position;
         rotPivot.rotation = Quaternion.Euler(curRotX, curRotY, 0);
 
-        switch (cameraControlType)
+        switch (cameraViewType)
         {
-            case CameraControlType.TpsRotableFixed:
-            case CameraControlType.TpsRotatableFollow:
-            case CameraControlType.FirstPerson:
-                float calcMaxValue = Mathf.Lerp(minVerticalLength, maxVerticalLength, curZoomValue / (maxZoom - minZoom));
-                tpsCinemachine.VerticalArmLength = Mathf.Lerp(calcMaxValue, minVerticalLength, curRotX / (limitMaxX - limitMinX));
+            case CameraViewType.TpsRotableFixed:
+            case CameraViewType.TpsRotatableFollow:
+            case CameraViewType.FirstPerson:
+                float calcMaxValue =
+                    Mathf.Lerp(minVerticalLength, maxVerticalLength, curZoomValue / (maxZoom - minZoom));
+                tpsCinemachine.VerticalArmLength =
+                    Mathf.Lerp(calcMaxValue, minVerticalLength, curRotX / (limitMaxX - limitMinX));
                 break;
         }
 
