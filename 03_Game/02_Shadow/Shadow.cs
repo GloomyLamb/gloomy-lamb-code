@@ -11,6 +11,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [SerializeField] protected float movementSpeed = 10f;
     [field: SerializeField] public float MovementSpeedModitier { get; set; } = 1f;
     protected float rotatingDamping = 60f;
+    [SerializeField] protected float damage = 10f;
 
     // IDamageable
     public virtual void ApplyEffect()

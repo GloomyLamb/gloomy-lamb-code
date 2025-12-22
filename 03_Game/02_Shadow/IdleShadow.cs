@@ -28,4 +28,12 @@ public class IdleShadow : Shadow
     {
         stateMachine.Update();
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            damageable.Damage(damage);
+        }
+    }
 }
