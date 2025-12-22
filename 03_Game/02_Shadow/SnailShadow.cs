@@ -5,6 +5,6 @@ public class SnailShadow : Shadow
 {
     private void Awake()
     {
-        stateMachine = new SnailShadowStateMachine(animator);
+        stateMachine = new SnailShadowStateMachine(this, animator);
     }
 }

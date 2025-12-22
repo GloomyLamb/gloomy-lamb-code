@@ -1,6 +1,6 @@
 public class SnailShadowState : BaseShadowState
 {
-    public SnailShadowState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SnailShadowState(ShadowStateMachine stateMachine) : base(stateMachine)
     {
     }
 }

@@ -3,7 +3,7 @@
 /// </summary>
 public class SnailShadowGroundState : SnailShadowState
 {
-    public SnailShadowGroundState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SnailShadowGroundState(ShadowStateMachine stateMachine) : base(stateMachine)
     {
     }
 

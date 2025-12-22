@@ -5,6 +5,6 @@ public class IdleShadow : Shadow
 {
     private void Awake()
     {
-        stateMachine = new IdleShadowStateMachine(animator);
+        stateMachine = new IdleShadowStateMachine(this, animator);
     }
 }

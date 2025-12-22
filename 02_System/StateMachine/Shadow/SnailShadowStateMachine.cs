@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SnailShadowStateMachine : ShadowStateMachine
 {
-    public SnailShadowStateMachine(Animator animator) : base(animator)
+    public SnailShadowStateMachine(Shadow shadow, Animator animator) : base(shadow, animator)
     {
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DogShadowStateMachine : ShadowStateMachine
 {
-    public DogShadowStateMachine(Animator animator) : base(animator)
+    public DogShadowStateMachine(Shadow shadow, Animator animator) : base(shadow, animator)
     {
     }
 }
