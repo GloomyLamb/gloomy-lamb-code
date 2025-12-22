@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class ShadowStateMachine : MoveableStateMachine
 {
-    protected Shadow shadow;
+    public Shadow Shadow { get; private set; }
 
     public ShadowStateMachine(Shadow shadow, Animator animator) : base(animator)
     {
-        this.shadow = shadow;
+        Shadow = shadow;
     }
 }

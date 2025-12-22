@@ -7,12 +7,12 @@ public class IdleShadowGroundState : IdleShadowState
     public override void Enter()
     {
         base.Enter();
-        // todo: ground parameter
+        StartAnimation(StateMachine.IdleShadow.AnimationData.GroundParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        // todo: ground parameter
+        StopAnimation(StateMachine.IdleShadow.AnimationData.GroundParameterHash);
     }
 }

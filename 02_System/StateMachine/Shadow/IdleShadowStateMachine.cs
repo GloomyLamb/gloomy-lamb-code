@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class IdleShadowStateMachine : ShadowStateMachine
 {
+    public IdleShadow IdleShadow { get; private set; }
     // todo: state 만들기
     // idle, chase, +) transform
     // Ground
@@ -16,7 +17,15 @@ public class IdleShadowStateMachine : ShadowStateMachine
 
     public IdleShadowStateMachine(Shadow shadow, Animator animator) : base(shadow, animator)
     {
+        IdleShadow = shadow as IdleShadow;
+
         IdleState = new IdleShadowIdleState(this);
+        WalkState = new IdleShadowWalkState(this);
+        RunState = new IdleShadowRunState(this);
+        TransformState = new IdleShadowTransformState(this);
+
+        HitState = new IdleShadowHitState(this);
+        BoundState = new IdleShadowBoundState(this);
 
         ChangeState(IdleState);
     }
