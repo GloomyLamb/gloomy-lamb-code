@@ -1,4 +1,3 @@
-
 public class IdleShadowIdleState : IdleShadowGroundState
 {
     public IdleShadowIdleState(ShadowStateMachine stateMachine) : base(stateMachine)
@@ -16,5 +15,14 @@ public class IdleShadowIdleState : IdleShadowGroundState
     {
         base.Exit();
         StopAnimation(StateMachine.IdleShadow.AnimationData.IdleParameterHash);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        if (StateMachine.IdleShadow.Target != null)
+        {
+            StateMachine.ChangeState(StateMachine.WalkState);
+        }
     }
 }
