@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +7,7 @@ using UnityEngine;
 public class SkillController : MonoBehaviour
 {
     [SerializeField] private SkillStatusDatabase _skillStatusDatabase;
-
+    
     // 스킬 상태 관리
     private readonly Dictionary<SkillType, BaseSkill> _skillDict = new();
     private BaseSkill _curSkill = null;

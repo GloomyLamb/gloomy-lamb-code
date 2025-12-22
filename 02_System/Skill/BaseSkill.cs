@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +11,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     #region 필드
     // 스킬 데이터
     protected SkillStatusData skillStatusData;
-
+    protected BeamSkillData beamSkillData;
     // 스킬 사용 조건
     protected float cooldownTimer = 0f;                 // 쿨타임 타이머
     public bool IsUsable => IsCooldownReady() && HasEnoughResource();
