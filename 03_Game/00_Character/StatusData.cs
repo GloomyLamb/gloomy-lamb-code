@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 
+[CreateAssetMenu(fileName = "New StatusData", menuName = "SO/Character Status Data")]
 public class StatusData : ScriptableObject
 {
     [SerializeField] private int _maxHp;
