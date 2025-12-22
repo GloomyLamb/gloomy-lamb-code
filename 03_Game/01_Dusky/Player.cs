@@ -11,8 +11,8 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 
     public Status Status => _status;
     protected Status _status;
-
-    protected StateMachine _curStateMachine;
+    
+    protected StateMachine _stateMachine;
 
     private void Awake()
     {
