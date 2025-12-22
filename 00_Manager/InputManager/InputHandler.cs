@@ -81,6 +81,17 @@ public class InputHandler
         return Vector2.zero;
     }
 
+    public float GetFloat(InputActionName actionName, InputMapName mapName = InputMapName.Default)
+    {
+        InputAction inputAction = GetInputAction(actionName, mapName);
+        if (inputAction != null)
+        {
+            return inputAction.ReadValue<float>();
+        }
+
+        return 0f;
+    }
+
     public void BindInputEvent(InputMapName mapName, InputActionName actionName,
         Action<InputAction.CallbackContext> action)
     {

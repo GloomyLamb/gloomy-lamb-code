@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,3 +58,16 @@ public static class ListExtension
     }
 }
 #endregion
+
+public static class FLagEnumExtension
+{
+    /// <summary>
+    /// Flags 가 붙은 enum 에서만 써주세요
+    /// </summary>
+    public static bool HasFlag<T>(this T value, T flag) where T : Enum
+    {
+        int _value = Convert.ToInt32(value);
+        int _flag = Convert.ToInt32(flag);
+        return  (_value & _flag) == _flag;
+    }
+}
