@@ -10,6 +10,7 @@ public class IdleShadowStateMachine : ShadowStateMachine
     public IdleShadowWalkState WalkState { get; private set; }
     public IdleShadowRunState RunState { get; private set; }
     public IdleShadowExpandState ExpandState { get; private set; }
+    public IdleShadowReduceState ReduceState { get; private set; }
     public IdleShadowTransformState TransformState { get; private set; }
 
     // Attack
@@ -21,9 +22,12 @@ public class IdleShadowStateMachine : ShadowStateMachine
         IdleShadow = shadow as IdleShadow;
 
         IdleState = new IdleShadowIdleState(this);
+
         WalkState = new IdleShadowWalkState(this);
         RunState = new IdleShadowRunState(this);
         ExpandState = new IdleShadowExpandState(this);
+        ReduceState = new IdleShadowReduceState(this);
+
         TransformState = new IdleShadowTransformState(this);
 
         HitState = new IdleShadowHitState(this);
