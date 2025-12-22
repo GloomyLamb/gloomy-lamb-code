@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
-    [Header("애니메이터")]
+    [Header("애니메이션")]
     [SerializeField] protected Animator animator;
 
     protected ShadowStateMachine stateMachine;
