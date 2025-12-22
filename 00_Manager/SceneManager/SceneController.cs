@@ -15,7 +15,7 @@ public class SceneController
 
     [SerializeField] private SceneDatabase _sceneDatabase;
 
-    private Dictionary<SceneType, Type> _baseSceneTypeDict;
+    private Dictionary<SceneType, Type> _sceneTypeDict;
 
     private SceneType _curSceneType;
     private string _externalSceneName;
@@ -35,7 +35,7 @@ public class SceneController
     /// </summary>
     private void InitSceneTypeDict()
     {
-        _baseSceneTypeDict = new()
+        _sceneTypeDict = new()
         {
             { SceneType.VideoScene, typeof(VideoScene) },
             { SceneType.LibraryScene, typeof(LibraryScene) },
@@ -125,7 +125,7 @@ public class SceneController
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
-        if (!_baseSceneTypeDict.TryGetValue(_curSceneType, out Type type))
+        if (!_sceneTypeDict.TryGetValue(_curSceneType, out Type type))
         {
             Logger.Log("base scene type 없음");
             return;
