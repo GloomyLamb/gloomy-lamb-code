@@ -5,7 +5,10 @@ using UnityEngine.Events;
 /// </summary>
 public class BaseDuskyState : BaseMoveableState
 {
-    public BaseDuskyState(MoveableStateMachine stateMachine) : base(stateMachine)
+    protected DuskyPlayer _player;
+    
+    public BaseDuskyState(MoveableStateMachine stateMachine, DuskyPlayer player) : base(stateMachine)
     {
+        _player = player;
     }
 }

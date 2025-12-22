@@ -20,13 +20,13 @@ public class DuskyStateMachine : MoveableStateMachine
     private BaseDuskyState _moveState;
 
 
-    public DuskyStateMachine(Animator animator) : base(animator)
+    public DuskyStateMachine(Animator animator, DuskyPlayer player) : base(animator)
     {
-        _idleState = new DuskyIdleState(this);
-        _jumpState = new DuskyJumpState(this);
-        _hitState = new DuskyHitState(this);
-        _attackState = new DuskyAttackState(this);
-        _dieState = new DuskyDieState(this);
-        _moveState = new DuskyMoveState(this);
+        _idleState = new DuskyIdleState(this, player);
+        _jumpState = new DuskyJumpState(this, player);
+        _hitState = new DuskyHitState(this,player);
+        _attackState = new DuskyAttackState(this, player);
+        _dieState = new DuskyDieState(this, player);
+        _moveState = new DuskyMoveState(this, player);
     }
 }
