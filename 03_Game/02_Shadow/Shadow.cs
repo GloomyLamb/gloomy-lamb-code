@@ -1,21 +1,27 @@
 using UnityEngine;
 
-public class Shadow : MonoBehaviour, IAttackable
+public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
-    [Header("상태 관리")]
-    [SerializeField] private Animator _animator;
-    public ShadowStateMachine StateMachine { get; private set; }
+    [Header("애니메이터")]
+    [SerializeField] protected Animator animator;
 
-    private void Awake()
-    {
-        StateMachine = new ShadowStateMachine(_animator);
-    }
+    protected ShadowStateMachine stateMachine;
 
-    public void Attack()
+    // IDamageable
+    public virtual void ApplyEffect()
     {
     }
 
-    public void GiveEffect()
+    public virtual void Damage(float damage)
+    {
+    }
+
+    // IAttackable
+    public virtual void Attack()
+    {
+    }
+
+    public virtual void GiveEffect()
     {
     }
 
@@ -23,7 +29,7 @@ public class Shadow : MonoBehaviour, IAttackable
 #if UNITY_EDITOR
     private void Reset()
     {
-        _animator = transform.FindChild<Animator>("Model");
+        animator = transform.FindChild<Animator>("Model");
     }
 #endif
     #endregion
