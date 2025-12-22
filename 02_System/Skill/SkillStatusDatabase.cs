@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new SkillStatusDatabase", menuName = "SO/Skill/Skill Status Database")]

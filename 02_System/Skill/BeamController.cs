@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using System;
 public class BeamController : MonoBehaviour
 {
     [Header("References")]
         public Transform cornTransform;
         public Light spotLight;
      
-    [Header("Input")]   // 임시 인풋용 F키
-        public KeyCode activateKey = KeyCode.F;
+  
 
     [Header("Beam parmeters (Tune in Inspector)")]
     [Tooltip("빔이 확장되어 나아가는 속도")]
@@ -40,13 +39,7 @@ public class BeamController : MonoBehaviour
     private void Update()
     {
         
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log("F 키 입력 감지");
-            currentLength = 0f;
-            isExpanding = true;
-            SetEnabled(true); 
-        }
+      
         if (!isExpanding) return;
 
         currentLength += expandSpeed * Time.deltaTime;
@@ -60,14 +53,17 @@ public class BeamController : MonoBehaviour
         ApplyBeam(currentLength);
     }
 
-    void SetEnabled(bool on)
+    public void SetEnabled(bool on)
     {
-        if(cornTransform != null)
+      
+        if (cornTransform != null)
             cornTransform.gameObject.SetActive(on);
 
         if(spotLight != null)
             spotLight.enabled = on;
-    }
+      
+    
+}
 
     void ApplyBeam(float length) 
     {
@@ -81,7 +77,17 @@ public class BeamController : MonoBehaviour
 
         cornTransform.localScale = new Vector3(widthXZ, visibleLength, widthXZ);
     }
+    public void PlayBeam()
+    {
+
+        SetEnabled(true);
+        currentLength = 0f;
+        isExpanding = true;
+        ApplyBeam(0f);
+        
+    }
 }
+
 
     
 
