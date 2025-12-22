@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MoveController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("이동 설정")] 
     [SerializeField] MoveStatusData moveStatusData;
