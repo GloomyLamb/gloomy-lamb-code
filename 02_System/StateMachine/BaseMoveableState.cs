@@ -31,23 +31,23 @@ public abstract class BaseMoveableState : IState
     #endregion
 
     #region IState 구현
-    public void Enter()
+    public virtual void Enter()
     {
     }
 
-    public void Exit()
+    public virtual void Exit()
     {
     }
 
-    public void HandleInput()
+    public virtual void HandleInput()
     {
     }
 
-    public void PhysicsUpdate()
+    public virtual void PhysicsUpdate()
     {
     }
 
-    public void Update()
+    public virtual void Update()
     {
     }
     #endregion
