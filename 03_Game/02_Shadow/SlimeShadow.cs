@@ -46,6 +46,6 @@ public class SlimeShadow : Shadow
     {
         Vector3 dir = (Target.position - transform.position).normalized;
         dir.y = 0f;
-        transform.position += dir * MovementSpeed * Time.deltaTime;
+        transform.position += dir * MovementSpeed * MovementSpeedModitier * Time.deltaTime;
     }
 }
