@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ShadowStateMachine : MoveableStateMachine
 {
@@ -7,5 +7,9 @@ public class ShadowStateMachine : MoveableStateMachine
     public ShadowStateMachine(Shadow shadow, Animator animator) : base(animator)
     {
         this.shadow = shadow;
+    }
+    public virtual void Init() 
+    { 
+
     }
 }
