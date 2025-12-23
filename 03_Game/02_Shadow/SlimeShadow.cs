@@ -7,12 +7,12 @@ public class SlimeShadow : Shadow
 {
     [field: SerializeField] public SlimeShadowAnimationData AnimationData { get; private set; }
 
-    [field: SerializeField] public Transform Target { get; private set; }
+    [field: SerializeField] public Transform Target;
+
 
     private void Awake()
     {
         AnimationData.Initialize();
-
         stateMachine = new SlimeShadowStateMachine(this, animator);
     }
 
@@ -29,11 +29,23 @@ public class SlimeShadow : Shadow
         stateMachine.Update();
     }
 
+    private void FixedUpdate()
+    {
+        stateMachine.PhysicsUpdate();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
             damageable.Damage(damage);
         }
+    }
+
+    public void HandleMove()
+    {
+        Vector3 dir = (Target.position - transform.position).normalized;
+        dir.y = 0f;
+        transform.position += dir * MovementSpeed * Time.deltaTime;
     }
 }

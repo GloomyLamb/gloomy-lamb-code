@@ -7,12 +7,13 @@ public class DogShadow : Shadow
 {
     [field: SerializeField] public DogShadowAnimationData AnimationData { get; private set; }
 
-    [field: SerializeField] public Transform Target { get; private set; }
+    [field: SerializeField] public Transform Target;
+
 
     private void Awake()
     {
-        stateMachine = new DogShadowStateMachine(this, animator);
         AnimationData.Initialize();
+        stateMachine = new DogShadowStateMachine(this, animator);
     }
 
     private void Start()
@@ -39,5 +40,12 @@ public class DogShadow : Shadow
         {
             damageable.Damage(damage);
         }
+    }
+
+    public void HandleMove()
+    {
+        Vector3 dir = (Target.position - transform.position).normalized;
+        dir.y = 0f;
+        transform.position += dir * MovementSpeed * Time.deltaTime;
     }
 }
