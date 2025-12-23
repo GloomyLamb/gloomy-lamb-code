@@ -8,6 +8,7 @@ public class DogShadowBarkState : DogShadowSkillState
     {
         base.Enter();
         StartAnimation(StateMachine.DogShadow.AnimationData.BarkParameterHash);
+        // todo: 짖기 스킬 연결
     }
 
     public override void Exit()

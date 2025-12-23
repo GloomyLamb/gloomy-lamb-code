@@ -12,6 +12,7 @@ public class DogShadow : Shadow
     // todo: SO로 분리, 스킬 추가
     [SerializeField] private float _biteRange = 3f;
     public float SqrBiteRange => _biteRange * _biteRange;
+    public int BiteCount { get; set; } = 0;
 
     private void Awake()
     {
