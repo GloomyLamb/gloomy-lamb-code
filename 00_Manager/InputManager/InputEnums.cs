@@ -18,6 +18,7 @@ public enum InputActionName
     Look,
     Jump,
     Interaction,
+    Attack,
     Dash,
     Next,
 

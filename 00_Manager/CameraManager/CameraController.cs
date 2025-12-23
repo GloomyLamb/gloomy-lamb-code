@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private CameraControlOption camControlOption = CameraControlOption.None;
 
     [Header("카메라 조작을 위한 pivot")]
-    [SerializeField] private Transform rotPivot;
+    [SerializeField] private Transform lookPivot;
 
     [Header("pivot이 따라다닐 target")]
     public Transform target;
@@ -188,6 +188,7 @@ public class CameraController : MonoBehaviour
         if ((camControlOption.HasFlag(CameraControlOption.RotationUsingRightMouse) &&
              isRightMouseClicked == false)) return;
 
+        // todo: Mac 에서 받아지는 값 다른지 가영님 PC로 로그찍고 확인해보기 
         Vector2 axis = InputManager.Instance.GetAxis(InputType.Camera, InputActionName.Look);
 
         if (camControlOption.HasFlag(CameraControlOption.RotationPitch))
@@ -217,8 +218,8 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        rotPivot.position = target.position;
-        rotPivot.rotation = Quaternion.Euler(curRotX, curRotY, 0);
+        lookPivot.position = target != null ? target.position : Vector3.zero;
+        lookPivot.rotation = Quaternion.Euler(curRotX, curRotY, 0);
 
         float calcMaxValue = Mathf.Lerp(minVerticalLength, maxVerticalLength, curZoomValue / (maxZoom - minZoom));
         // switch (cameraViewType)

@@ -4,11 +4,11 @@
 public abstract class BaseDuskyState : IState
 {
     protected DuskyPlayer player;
-    protected DuskyStateMachine StateMachine;
+    protected DuskyStateMachine stateMachine;
 
     public BaseDuskyState(StateMachine stateMachine, DuskyPlayer player)
     {
-        StateMachine = stateMachine as DuskyStateMachine;
+        this.stateMachine = stateMachine as DuskyStateMachine;
         this.player = player;
     }
 
