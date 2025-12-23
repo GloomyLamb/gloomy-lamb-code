@@ -4,7 +4,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 {
     private float _maxScale = 2f;
 
-    public SlimeShadowExpandState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowExpandState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 

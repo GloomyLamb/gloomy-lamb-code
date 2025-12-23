@@ -5,12 +5,13 @@ public class SlimeShadowRunState : SlimeShadowChaseState
     private float _patternTime;
     private float _timer;
 
-    public SlimeShadowRunState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowRunState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
+        _timer = 0f;
         StateMachine.SlimeShadow.MovementSpeedModitier = 2f;
         base.Enter();
     }
@@ -27,7 +28,6 @@ public class SlimeShadowRunState : SlimeShadowChaseState
         _timer += Time.deltaTime;
         if (_timer > _patternTime)
         {
-            _timer = 0f;
             Logger.Log("확대 패턴 진입");
             StateMachine.ChangeState(StateMachine.ExpandState);
         }

@@ -4,7 +4,7 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
 {
     private float _minScale = 1f;
 
-    public SlimeShadowReduceState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowReduceState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 

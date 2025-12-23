@@ -1,6 +1,6 @@
 public class SlimeShadowIdleState : SlimeShadowGroundState
 {
-    public SlimeShadowIdleState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowIdleState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 

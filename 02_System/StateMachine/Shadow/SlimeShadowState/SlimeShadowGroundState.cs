@@ -1,6 +1,8 @@
+using UnityEngine;
+
 public class SlimeShadowGroundState : SlimeShadowState
 {
-    public SlimeShadowGroundState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowGroundState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -14,5 +16,19 @@ public class SlimeShadowGroundState : SlimeShadowState
     {
         base.Exit();
         StopAnimation(StateMachine.SlimeShadow.AnimationData.GroundParameterHash);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            StateMachine.ChangeState(StateMachine.HitState);
+        }
+        else if (Input.GetKey(KeyCode.Alpha3))
+        {
+            StateMachine.ChangeState(StateMachine.BoundState);
+        }
     }
 }
