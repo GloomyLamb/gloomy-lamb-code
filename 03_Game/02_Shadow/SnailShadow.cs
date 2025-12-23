@@ -14,6 +14,8 @@ public class SnailShadow : Shadow
 
     protected override void Awake()
     {
+        base.Awake();
+
         stateMachine = new SnailShadowStateMachine(this);
     }
 

@@ -11,6 +11,8 @@ public class SlimeShadow : Shadow
 
     protected override void Awake()
     {
+        base.Awake();
+
         AnimationData.Initialize();
         stateMachine = new SlimeShadowStateMachine(this);
     }

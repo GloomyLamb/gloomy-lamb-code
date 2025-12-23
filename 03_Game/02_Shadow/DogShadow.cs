@@ -16,6 +16,8 @@ public class DogShadow : Shadow
 
     protected override void Awake()
     {
+        base.Awake();
+
         AnimationData.Initialize();
         stateMachine = new DogShadowStateMachine(this);
     }
