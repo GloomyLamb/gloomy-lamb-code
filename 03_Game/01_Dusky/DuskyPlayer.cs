@@ -1,22 +1,29 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DuskyPlayer : Player
 {
-    // 어디에 달고 Skill 들이 어떻게 알고 놔줄지?
-    public Transform SkillPivot => skillPivot;
-    [SerializeField] private Transform skillPivot;
-    
-    
+    [SerializeField] protected List<Transform> _skillPivot;
+
+    public DuskyStateMachine StateMachine => stateMachine;
+    protected DuskyStateMachine stateMachine;
+
+
     protected override void Init()
     {
-        _stateMachine = new DuskyStateMachine(_animator);
-    }
+        stateMachine = new DuskyStateMachine(animator, this);
 
-    private void Update()
-    {
+        PlayerController controller = GetComponent<PlayerController>();
+        if (controller != null)
+        {
+            controller.OnInputMoveStartAction += OnMoveStart;
+            controller.OnInputMoveEndAction += OnMoveEnd;
+            controller.OnInputJumpAction += OnJump;
+            controller.OnInputAttackAction += OnAttack;    
+        }
         
     }
 
@@ -24,5 +31,48 @@ public class DuskyPlayer : Player
     {
         InputManager.Instance.UseInput(InputType.Player);
     }
-    
+
+    private void Update()
+    {
+    }
+
+    public override void Attack()
+    {
+    }
+
+    public override void GiveEffect()
+    {
+    }
+
+    public override void Damage(float damage)
+    {
+    }
+
+    public override void ApplyEffect()
+    {
+    }
+
+    public override void OnMoveStart()
+    {
+        stateMachine.ChangeState(stateMachine.MoveState);
+    }
+
+    public override void OnMoveEnd()
+    {
+        if (stateMachine.CurState == stateMachine.MoveState)
+            stateMachine.ChangeState(stateMachine.IdleState);
+    }
+
+    public override void OnJump()
+    {
+    }
+
+    public override void OnAttack()
+    {
+    }
+
+    public override void OnLanding()
+    {
+        
+    }
 }

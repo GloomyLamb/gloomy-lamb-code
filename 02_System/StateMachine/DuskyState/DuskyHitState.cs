@@ -1,6 +1,6 @@
 ﻿public class DuskyHitState : BaseDuskyState
 {
-    public DuskyHitState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public DuskyHitState(MoveableStateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
     {
     }
 

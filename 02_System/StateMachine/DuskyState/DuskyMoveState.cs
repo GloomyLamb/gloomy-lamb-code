@@ -1,21 +1,21 @@
 ﻿public class DuskyMoveState : BaseDuskyState
 {
-    public DuskyMoveState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public DuskyMoveState(MoveableStateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
     {
     }
 
     public override void Enter()
     {
-        stateMachine.animator.SetBool(AnimatorParameters.IsMove, true);
+        StartAnimation(AnimatorParameters.IsMove);
     }
 
     public override void Update()
     {
-        base.Update();
+        
     }
     
     public override void Exit()
     {
-        stateMachine.animator.SetBool(AnimatorParameters.IsMove, false);
+        StopAnimation(AnimatorParameters.IsMove);
     }
 }

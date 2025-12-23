@@ -12,6 +12,7 @@ public interface IState
 /// </summary>
 public abstract class StateMachine
 {
+    public IState CurState => curState;
     protected IState curState;
 
     public void ChangeState(IState state)
