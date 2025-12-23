@@ -17,6 +17,9 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     public SlimeShadowHitState HitState { get; private set; }
     public SlimeShadowBoundState BoundState { get; private set; }
 
+    // 추적
+    public int ChaseCount { get; private set; } = 0;
+
     public SlimeShadowStateMachine(Shadow shadow, Animator animator) : base(shadow, animator)
     {
         SlimeShadow = shadow as SlimeShadow;
@@ -34,6 +37,12 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         BoundState = new SlimeShadowBoundState(this);
 
         ChangeState(IdleState);
+    }
+
+    public void PlusChaseCount()
+    {
+        ChaseCount++;
+        Logger.Log($"추격 횟수: {ChaseCount}");
     }
 
     public void StopAnimator()

@@ -28,6 +28,12 @@ public class SlimeShadowIdleState : SlimeShadowGroundState
     {
         base.Update();
 
+        if (StateMachine.ChaseCount == 11)
+        {
+            Logger.Log("확대 패턴 진입");
+            StateMachine.ChangeState(StateMachine.ExpandState);
+        }
+
         _timer += Time.deltaTime;
         if (StateMachine.SlimeShadow.Target != null)
         {

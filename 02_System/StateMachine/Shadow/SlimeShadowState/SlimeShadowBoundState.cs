@@ -45,10 +45,10 @@ public class SlimeShadowBoundState : SlimeShadowAttackState
 
             if (_coroutine != null)
             {
-                CoroutineRunner.instance.StopCoroutine(_coroutine);
+                Unity.VisualScripting.CoroutineRunner.instance.StopCoroutine(_coroutine);
                 _coroutine = null;
             }
-            _coroutine = CoroutineRunner.instance.StartCoroutine(Binding());
+            _coroutine = Unity.VisualScripting.CoroutineRunner.instance.StartCoroutine(Binding());
 
             _done = true;
         }

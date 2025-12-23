@@ -30,6 +30,7 @@ public class SlimeShadowChaseState : SlimeShadowGroundState
         if (_timer > _patternTime)
         {
             Logger.Log("정지");
+            StateMachine.PlusChaseCount();
             StateMachine.ChangeState(StateMachine.IdleState);
         }
     }
