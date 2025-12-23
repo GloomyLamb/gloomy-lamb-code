@@ -1,4 +1,4 @@
-public class SlimeShadowStateMachine : StateMachine
+public class SlimeShadowStateMachine : ShadowStateMachine
 {
     public SlimeShadow Shadow { get; private set; }
 
@@ -10,16 +10,12 @@ public class SlimeShadowStateMachine : StateMachine
     public IState ExpandState { get; private set; }
     public IState ReduceState { get; private set; }
     public IState TransformState { get; private set; }
-
-    // Battle
-    public IState HitState { get; private set; }
-    public IState BoundState { get; private set; }
     #endregion
 
     // 추적
     public int ChaseCount { get; private set; } = 0;
 
-    public SlimeShadowStateMachine(SlimeShadow shadow)
+    public SlimeShadowStateMachine(SlimeShadow shadow) : base(shadow)
     {
         Shadow = shadow;
 
@@ -31,9 +27,6 @@ public class SlimeShadowStateMachine : StateMachine
         ReduceState = new SlimeShadowReduceState(this);
 
         TransformState = new SlimeShadowTransformState(this);
-
-        HitState = new SlimeShadowHitState(this);
-        BoundState = new SlimeShadowBoundState(this);
 
         ChangeState(IdleState);
     }

@@ -1,4 +1,4 @@
-public class DogShadowStateMachine : StateMachine
+public class DogShadowStateMachine : ShadowStateMachine
 {
     public DogShadow Shadow { get; private set; }
 
@@ -11,13 +11,9 @@ public class DogShadowStateMachine : StateMachine
     // Skill
     public IState BiteState { get; private set; }
     public IState BarkState { get; private set; }
-
-    // Battle
-    public IState HitState { get; private set; }
-    public IState BoundState { get; private set; }
     #endregion
 
-    public DogShadowStateMachine(DogShadow shadow)
+    public DogShadowStateMachine(DogShadow shadow) : base(shadow)
     {
         Shadow = shadow;
 
@@ -27,9 +23,6 @@ public class DogShadowStateMachine : StateMachine
 
         BiteState = new DogShadowBiteState(this);
         BarkState = new DogShadowBarkState(this);
-
-        HitState = new DogShadowHitState(this);
-        BoundState = new DogShadowBoundState(this);
 
         ChangeState(IdleState);
     }
