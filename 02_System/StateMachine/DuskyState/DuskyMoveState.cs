@@ -1,4 +1,4 @@
-﻿public class DuskyMoveState : BaseDuskyState
+﻿public class DuskyMoveState : BaseDuskyState, IMovableState
 {
     public DuskyMoveState(MoveableStateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
     {
@@ -9,11 +9,6 @@
         StartAnimation(AnimatorParameters.IsMove);
     }
 
-    public override void Update()
-    {
-        
-    }
-    
     public override void Exit()
     {
         StopAnimation(AnimatorParameters.IsMove);
