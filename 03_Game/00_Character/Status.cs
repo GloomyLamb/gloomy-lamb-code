@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class Status
 {
-    public int MaxHp => _maxHp;
-    private int _maxHp;
+    public float MaxHp => _maxHp;
+    private float _maxHp;
 
-    public int Hp => _hp;
-    private int _hp;
+    public float Hp => _hp;
+    private float _hp;
 
-    public Status(int maxHp)
+    public Status(float maxHp)
     {
         _maxHp = maxHp;
         _hp = maxHp;
     }
 
 
-    public int AddHp(int hp)
+    public float AddHp(float hp)
     {
         _hp += hp;
         _hp = Mathf.Clamp(_hp, 0, _maxHp);
