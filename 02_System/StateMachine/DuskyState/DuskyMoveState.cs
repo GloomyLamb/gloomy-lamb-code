@@ -7,6 +7,7 @@
     public override void Enter()
     {
         StartAnimation(AnimatorParameters.IsMove);
+        player.Animator.SetFloat(AnimatorParameters.MoveSpeed, 0);
     }
 
     public override void Exit()
