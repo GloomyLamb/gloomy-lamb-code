@@ -50,6 +50,6 @@ public class ForestShadowController : ShadowController
     {
         Vector3 dir = (Target.position - transform.position).normalized;
         dir.y = 0f;
-        transform.position += dir * _curShadow.MovementSpeed * Time.deltaTime;
+        transform.position += dir * _curShadow.MovementSpeed * _curShadow.MovementSpeedModitier * Time.deltaTime;
     }
 }

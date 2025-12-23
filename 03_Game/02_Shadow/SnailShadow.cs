@@ -1,10 +1,69 @@
-/// <summary>
+﻿/// <summary>
 /// 그림자 - 달팽이
 /// </summary>
+using System;
+using Unity.VisualScripting;
+using UnityEngine;
+using System.Collections;
 public class SnailShadow : Shadow
 {
+
+    [Header("Snail Slime")]
+    [SerializeField] private GameObject slimePrefab;
+    [SerializeField] private float spawnInterval = 1f;
+    [SerializeField] private float slimeDestroyTime = 3f;
+    [SerializeField] private Vector3 spawnOffset = Vector3.zero;
+    private Coroutine slimeRoutine;
     private void Awake()
     {
         stateMachine = new SnailShadowStateMachine(this, animator);
+        stateMachine.Init();
+    }
+
+    public void StartSlime()
+    {
+        if (slimePrefab == null)
+        {
+            return;
+        }
+
+        if (slimeRoutine != null) StopCoroutine(slimeRoutine);
+        slimeRoutine = StartCoroutine(SlimeTrailCoroutine());
+
+
+    }
+
+    public void StopSlime()
+    {
+        if (slimeRoutine != null)
+        {
+            StopCoroutine(slimeRoutine);
+            slimeRoutine = null;
+        }
+    }
+
+    private IEnumerator SlimeTrailCoroutine()
+    {
+        // Chase 전환 “시점부터” 생성되게: 즉시 1번 뿌리고 싶으면 아래 SpawnSlime() 유지
+        // 전환 후 3초 뒤부터 뿌리고 싶으면 이 줄을 지우고 WaitForSeconds부터 시작
+        SpawnSlime();
+
+        var wait = new WaitForSeconds(spawnInterval);
+
+        while (true)
+        {
+            yield return wait;
+            SpawnSlime();
+        }
+    }
+
+    private void SpawnSlime()
+    {
+        Vector3 pos = transform.position + spawnOffset;
+        Quaternion rot = Quaternion.identity;
+
+        GameObject slime = Instantiate(slimePrefab, pos, rot);
+        slime.transform.localScale = spawnOffset;
+        Destroy(slime, slimeDestroyTime);
     }
 }

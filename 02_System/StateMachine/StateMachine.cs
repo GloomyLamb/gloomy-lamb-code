@@ -1,4 +1,4 @@
-public interface IState
+﻿public interface IState
 {
     public void Enter();
     public void Exit();
@@ -17,9 +17,9 @@ public abstract class StateMachine
 
     public void ChangeState(IState state)
     {
-        curState?.Exit();
-        curState = state;
-        curState?.Enter();
+        curState?.Exit();    //이전상태 Exit 호출 함으로써 idle 종료처리 
+        curState = state;    //현재상태 교체 Idle -> Chase 
+        curState?.Enter();   //Chase 상태 Enter 호출 함으로써 Chase 시작처리
     }
 
     public void HandleInput()

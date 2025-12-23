@@ -1,10 +1,11 @@
-/// <summary>
+﻿/// <summary>
 /// 그림자 - 달팽이 기본 지면 상태
 /// </summary>
 public class SnailShadowGroundState : SnailShadowState
 {
     public SnailShadowGroundState(ShadowStateMachine stateMachine) : base(stateMachine)
     {
+
     }
 
     public override void Enter()
