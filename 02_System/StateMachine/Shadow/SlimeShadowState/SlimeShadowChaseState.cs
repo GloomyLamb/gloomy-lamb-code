@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SlimeShadowChaseState : SlimeShadowGroundState
@@ -40,5 +41,22 @@ public class SlimeShadowChaseState : SlimeShadowGroundState
         base.PhysicsUpdate();
 
         StateMachine.Shadow.HandleMove();
+    }
+
+    protected IEnumerator ScaleUp(float size, float duration)
+    {
+        Transform target = StateMachine.Shadow.transform;
+        Vector3 startScale = target.localScale;
+        Vector3 endScale = startScale * size;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.localScale = endScale;
     }
 }

@@ -9,4 +9,10 @@ public class ShadowTransformState : CommonShadowState
         base.Enter();
         shadow.Animator.SetTrigger(shadow.CommonAnimationData.TransformParameterHash);
     }
+
+    public override void Update()
+    {
+        base.Update();
+        shadow.Transform();
+    }
 }

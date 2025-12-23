@@ -30,7 +30,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     private WaitForSeconds _boundTimer;
 
     // 변형
-    private bool _canTransform;
+    public event Action OnTransform;
 
     protected virtual void Awake()
     {
@@ -42,9 +42,10 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void Update()
     {
-        if (_canTransform)
+        if (CanTransform())
         {
-            Transform();
+            ResetTransformFlag();
+            stateMachine.ChangeState(stateMachine.TransformState);
             return;
         }
 
@@ -101,9 +102,19 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     #region 변형
     public void Transform()
     {
-        _canTransform = false;
-        stateMachine.ChangeState(stateMachine.TransformState);
+        OnTransform?.Invoke();
     }
+
+    /// <summary>
+    /// 변환 조건 확인하기
+    /// </summary>
+    /// <returns></returns>
+    protected abstract bool CanTransform();
+
+    /// <summary>
+    /// 변환 조건 초기화하기
+    /// </summary>
+    protected abstract void ResetTransformFlag();
     #endregion
 
     #region 에디터 전용

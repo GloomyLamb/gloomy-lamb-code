@@ -9,6 +9,11 @@ public class SlimeShadow : Shadow
 
     [field: SerializeField] public Transform Target;
 
+    // 변환 조건
+    private bool _checkExpand;
+    private bool CheckScale => transform.localScale.x < 1f;
+    public bool IsHitting { get; set; } // 일단 맞을 때 이거 변환
+
     protected override void Awake()
     {
         base.Awake();
@@ -39,4 +44,21 @@ public class SlimeShadow : Shadow
         dir.y = 0f;
         transform.position += dir * MovementSpeed * MovementSpeedModitier * Time.deltaTime;
     }
+
+    #region 변형
+    protected override bool CanTransform()
+    {
+        return _checkExpand && CheckScale;
+    }
+
+    protected override void ResetTransformFlag()
+    {
+        _checkExpand = false;
+    }
+
+    public void CheckExpand()
+    {
+        _checkExpand = true;
+    }
+    #endregion
 }

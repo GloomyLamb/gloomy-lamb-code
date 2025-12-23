@@ -65,4 +65,13 @@ public class SnailShadow : Shadow
         slime.transform.localScale = spawnOffset;
         Destroy(slime, slimeDestroyTime);
     }
+
+    protected override bool CanTransform()
+    {
+        return false;
+    }
+
+    protected override void ResetTransformFlag()
+    {
+    }
 }

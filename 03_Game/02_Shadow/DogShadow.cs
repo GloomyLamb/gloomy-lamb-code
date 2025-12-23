@@ -14,6 +14,7 @@ public class DogShadow : Shadow
     public float SqrBiteRange => _biteRange * _biteRange;
     public int BiteCount { get; set; } = 0;
 
+    #region 초기화
     protected override void Awake()
     {
         base.Awake();
@@ -29,6 +30,7 @@ public class DogShadow : Shadow
             Target = FindObjectOfType<Player>().transform;
         }
     }
+    #endregion
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -43,5 +45,14 @@ public class DogShadow : Shadow
         Vector3 dir = (Target.position - transform.position).normalized;
         dir.y = 0f;
         transform.position += dir * MovementSpeed * MovementSpeedModitier * Time.deltaTime;
+    }
+
+    protected override bool CanTransform()
+    {
+        return false;
+    }
+
+    protected override void ResetTransformFlag()
+    {
     }
 }

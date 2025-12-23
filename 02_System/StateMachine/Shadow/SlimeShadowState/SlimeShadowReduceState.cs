@@ -4,6 +4,8 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
 {
     private float _minScale = 1f;
 
+    private Coroutine _coroutine;
+
     public SlimeShadowReduceState(StateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -22,15 +24,16 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
     {
         base.Update();
 
-        Transform transform = StateMachine.Shadow.transform;
-
-        // todo: 광선에 맞고 있는지 계속 확인
-        if (transform.localScale.x > _minScale)
+        if (!StateMachine.Shadow.IsHitting)
         {
-            transform.localScale -= Vector3.one * Time.deltaTime;
             return;
         }
 
-        transform.localScale = Vector3.one;
+        if (_coroutine != null)
+        {
+            CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+        _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(ScaleUp(_minScale, 0.5f));
     }
 }

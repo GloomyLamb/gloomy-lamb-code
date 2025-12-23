@@ -37,6 +37,10 @@ public class ForestShadowController : ShadowController
         _idleShadow.OnMove += HandleMove;
         _dogShadow.OnMove += HandleMove;
         _snailShadow.OnMove += HandleMove;
+
+        _idleShadow.OnTransform += TransformToDog;
+        _dogShadow.OnTransform += TransformToSnail;
+        _snailShadow.OnTransform += TransformToDog;
     }
 
     private void OnDisable()
@@ -44,6 +48,10 @@ public class ForestShadowController : ShadowController
         _idleShadow.OnMove -= HandleMove;
         _dogShadow.OnMove -= HandleMove;
         _snailShadow.OnMove -= HandleMove;
+
+        _idleShadow.OnTransform -= TransformToDog;
+        _dogShadow.OnTransform -= TransformToSnail;
+        _snailShadow.OnTransform -= TransformToDog;
     }
 
     private void HandleMove()
@@ -52,4 +60,27 @@ public class ForestShadowController : ShadowController
         dir.y = 0f;
         transform.position += dir * _curShadow.MovementSpeed * _curShadow.MovementSpeedModitier * Time.deltaTime;
     }
+
+    #region 변형
+    private void TransformToSlime()
+    {
+        _idleShadow.gameObject.SetActive(true);
+        _dogShadow.gameObject.SetActive(false);
+        _snailShadow.gameObject.SetActive(false);
+    }
+
+    private void TransformToDog()
+    {
+        _idleShadow.gameObject.SetActive(false);
+        _dogShadow.gameObject.SetActive(true);
+        _snailShadow.gameObject.SetActive(false);
+    }
+
+    private void TransformToSnail()
+    {
+        _idleShadow.gameObject.SetActive(false);
+        _dogShadow.gameObject.SetActive(false);
+        _snailShadow.gameObject.SetActive(true);
+    }
+    #endregion
 }
