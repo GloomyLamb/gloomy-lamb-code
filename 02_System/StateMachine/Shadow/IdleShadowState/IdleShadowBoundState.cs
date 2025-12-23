@@ -8,13 +8,13 @@ public class IdleShadowBoundState : IdleShadowAttackState
     {
         StateMachine.IdleShadow.MovementSpeedModitier = 0f;
         base.Enter();
-        StartAnimation(StateMachine.IdleShadow.AnimationData.BoundParameterHash);
+        StartAnimation(StateMachine.IdleShadow.AnimationData.HitParameterHash);
     }
 
     public override void Exit()
     {
         StateMachine.IdleShadow.MovementSpeedModitier = 0f;
         base.Exit();
-        StopAnimation(StateMachine.IdleShadow.AnimationData.BoundParameterHash);
+        StopAnimation(StateMachine.IdleShadow.AnimationData.HitParameterHash);
     }
 }

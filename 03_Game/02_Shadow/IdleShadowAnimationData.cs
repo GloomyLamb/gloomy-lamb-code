@@ -8,18 +8,18 @@ public class IdleShadowAnimationData
     [SerializeField] private string _chaseParameterName = "Chase";
     [SerializeField] private string _transformParameterName = "Transform";
 
-    [SerializeField] private string _attackParameterName = "@Attack";
+    [SerializeField] private string _battleParameterName = "@Battle";
+    [SerializeField] private string _attackParameterName = "Attack";
     [SerializeField] private string _hitParameterName = "Hit";
-    [SerializeField] private string _boundParameterName = "Bound";
 
     public int GroundParameterHash { get; private set; }
     public int IdleParameterHash { get; private set; }
     public int ChaseParameterHash { get; private set; }
     public int TransformParameterHash { get; private set; }
 
+    public int BattleParameterHash { get; private set; }
     public int AttackParameterHash { get; private set; }
     public int HitParameterHash { get; private set; }
-    public int BoundParameterHash { get; private set; }
 
     public void Initialize()
     {
@@ -28,8 +28,8 @@ public class IdleShadowAnimationData
         ChaseParameterHash = Animator.StringToHash(_chaseParameterName);
         TransformParameterHash = Animator.StringToHash(_transformParameterName);
 
+        BattleParameterHash = Animator.StringToHash(_battleParameterName);
         AttackParameterHash = Animator.StringToHash(_attackParameterName);
         HitParameterHash = Animator.StringToHash(_hitParameterName);
-        BoundParameterHash = Animator.StringToHash(_boundParameterName);
     }
 }
