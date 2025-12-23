@@ -13,6 +13,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     protected float rotatingDamping = 60f;
     [SerializeField] protected float damage = 10f;
 
+    // todo: 타겟팅, 이동 통합
+
     // IDamageable
     public virtual void ApplyEffect()
     {
