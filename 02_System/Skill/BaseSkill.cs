@@ -33,8 +33,6 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     {
         skillStatusData = data;
         _delay = new WaitForSeconds(data.Duration.TotalTime);
-
-        // input이랑 바인딩하기
     }
     #endregion
 

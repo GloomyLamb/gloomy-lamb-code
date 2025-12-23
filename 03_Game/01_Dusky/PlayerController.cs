@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,13 @@ public class PlayerController : MonoBehaviour
     
     // 필요 컴포넌트
     Rigidbody rb;
+    
+    
+    public event Action OnInputMoveStartAction;
+    public event Action OnInputMoveEndAction;
+    public event Action OnInputAttackAction;
+    public event Action OnInputJumpAction;
+    
 
     private void Awake()
     {
@@ -51,7 +59,9 @@ public class PlayerController : MonoBehaviour
         Vector3 inputDir = new Vector3(inputValue.x, 0f, inputValue.y);
         
         // todo : CameraManager에서 현재 카메라의 Transform이나 forward를 받아와야 함. 
-        Quaternion yawRotation = Quaternion.Euler(0f, CameraController.Instance.CamTransform.eulerAngles.y, 0f);    // 투영하던 건 쉽게 Quaternion으로 변경
+        Quaternion yawRotation = Quaternion.Euler(0f, 
+            CameraController.Instance.CamTransform.eulerAngles.y
+            , 0f);    // 투영하던 건 쉽게 Quaternion으로 변경
         Vector3 moveDir = yawRotation * inputDir;
         
         if (moveDir.magnitude > 0.1f)
@@ -83,6 +93,8 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded() == false) return false;
         return true;
     }
+    
+    
 
     bool IsGrounded()
     {

@@ -1,46 +1,43 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // todo : Player 구조 다같이 이야기 해보기
 // controller 로 빼도 되지만, 우리 Player 들이 생각보다 가벼울 것임
 public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 {
-    [SerializeField] protected Animator _animator;
-    [SerializeField] StatusData _statusData;
-    public Vector3 Forward => _forward;
-    protected Vector3 _forward;
+    [Header("스탯 SO")] [SerializeField] StatusData _statusData;
 
-    public Status Status => _status;
-    protected Status _status;
-    
-    protected StateMachine _stateMachine;
+    [Header("프리팹 설정")] [SerializeField] protected Animator animator;
+    public Status Status => status;
+    protected Status status;
+
 
     private void Awake()
     {
-        _forward = transform.forward;
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
 
-        if (_animator == null)
-            _animator = GetComponentInChildren<Animator>();
-
-        _status = _statusData?.GetNewStatus();
+        status = _statusData?.GetNewStatus();
 
         Init();
     }
 
     protected abstract void Init();
 
-    public virtual void Attack()
-    {
-    }
+    public abstract void Attack();
 
-    public virtual void GiveEffect()
-    {
-    }
+    public abstract void GiveEffect();
 
-    public virtual void Damage(float damage)
-    {
-    }
+    public abstract void Damage(float damage);
 
-    public virtual void ApplyEffect()
-    {
-    }
+    public abstract void ApplyEffect();
+
+
+    public abstract void OnMoveStart();
+    public abstract void OnMoveEnd();
+    public abstract void OnJump();
+    public abstract void OnAttack();
+
+    public abstract void OnLanding();
 }
