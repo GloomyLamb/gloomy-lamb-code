@@ -4,17 +4,17 @@ using UnityEngine;
 /// 코루틴 러너
 /// 씬 전환 시 파괴 허용
 /// </summary>
-public class CoroutineRunner : MonoBehaviour
+public class CustomCoroutineRunner : MonoBehaviour
 {
-    private static CoroutineRunner _instance;
-    public static CoroutineRunner Instance
+    private static CustomCoroutineRunner _instance;
+    public static CustomCoroutineRunner Instance
     {
         get
         {
             if (_instance == null)
             {
                 var obj = new GameObject("CoroutineRunner");
-                var coroutineRunner = obj.AddComponent<CoroutineRunner>();
+                var coroutineRunner = obj.AddComponent<CustomCoroutineRunner>();
                 _instance = coroutineRunner;
             }
             return _instance;
