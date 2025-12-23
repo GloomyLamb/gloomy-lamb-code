@@ -23,6 +23,8 @@ public class IdleShadowReduceState : IdleShadowChaseState
         base.Update();
 
         Transform transform = StateMachine.IdleShadow.transform;
+
+        // todo: 광선에 맞고 있는지 계속 확인
         if (transform.localScale.x > _minScale)
         {
             transform.localScale -= Vector3.one * Time.deltaTime;
