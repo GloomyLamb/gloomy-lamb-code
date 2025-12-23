@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class IdleShadowReduceState : IdleShadowChaseState
+public class SlimeShadowReduceState : SlimeShadowChaseState
 {
     private float _minScale = 1f;
 
-    public IdleShadowReduceState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowReduceState(ShadowStateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -22,7 +22,7 @@ public class IdleShadowReduceState : IdleShadowChaseState
     {
         base.Update();
 
-        Transform transform = StateMachine.IdleShadow.transform;
+        Transform transform = StateMachine.SlimeShadow.transform;
 
         // todo: 광선에 맞고 있는지 계속 확인
         if (transform.localScale.x > _minScale)

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class IdleShadowAnimationData
+public class SlimeShadowAnimationData
 {
     [SerializeField] private string _groundParameterName = "@Ground";
     [SerializeField] private string _idleParameterName = "Idle";

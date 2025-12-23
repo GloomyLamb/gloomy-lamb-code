@@ -1,17 +1,17 @@
 using UnityEngine;
 
-public class IdleShadowRunState : IdleShadowChaseState
+public class SlimeShadowWalkState : SlimeShadowChaseState
 {
     private float _patternTime;
     private float _timer;
 
-    public IdleShadowRunState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowWalkState(ShadowStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.IdleShadow.MovementSpeedModitier = 2f;
+        StateMachine.SlimeShadow.MovementSpeedModitier = 1.3f;
         base.Enter();
     }
 
@@ -28,8 +28,7 @@ public class IdleShadowRunState : IdleShadowChaseState
         if (_timer > _patternTime)
         {
             _timer = 0f;
-            Logger.Log("확대 패턴 진입");
-            StateMachine.ChangeState(StateMachine.ExpandState);
+            StateMachine.ChangeState(StateMachine.RunState);
         }
     }
 }

@@ -1,6 +1,6 @@
-public class IdleShadowAttackState : IdleShadowState
+public class SlimeShadowAttackState : SlimeShadowState
 {
-    public IdleShadowAttackState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowAttackState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 
