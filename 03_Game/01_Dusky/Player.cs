@@ -6,10 +6,12 @@ using UnityEngine;
 // controller 로 빼도 되지만, 우리 Player 들이 생각보다 가벼울 것임
 public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 {
-    [Header("스탯 SO")] [SerializeField] protected StatusData statusData;
+    [Header("스탯 SO")]
+    [SerializeField] protected StatusData statusData;
     [SerializeField] protected MoveStatusData moveStatusData;
 
-    [Header("프리팹 설정")] [SerializeField] protected Animator animator;
+    [Header("프리팹 설정")]
+    [SerializeField] protected Animator animator;
 
     public Status Status => status;
     protected Status status;
@@ -46,4 +48,16 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
     public abstract void GiveEffect();
     public abstract void Damage(float damage);
     public abstract void ApplyEffect();
+    
+    // todo : 버프 디버프 받는걸로 변경해야함. 구조는 나중에! 중간발표대비 임시구현
+    public virtual void TakeSlowDown()
+    {
+        
+    }
+
+    public virtual void TakeStun()
+    {
+        
+    }
+    
 }
