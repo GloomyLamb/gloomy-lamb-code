@@ -56,6 +56,16 @@ public class DuskyPlayer : Player
                 stateMachine.ChangeState(stateMachine.IdleState);
             }
         }
+
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            TakeStun();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            TakeSlowDown();
+        }
     }
 
     private void FixedUpdate()
@@ -66,13 +76,22 @@ public class DuskyPlayer : Player
 
     public override void Move()
     {
+        if (nowCondition.HasFlag(CharacterCondition.Stun))
+        {
+            return;
+        }
+        
         // Flags 검사 추가해야함. (스턴)
-
         if (stateMachine.CurState is IMovableState)
         {
             if (_lastMoveInputValue.magnitude > 0.1f)
             {
-                Vector3 newPosition = rb.position + _lastMoveInputValue * (moveStatusData.MoveSpeed * Time.fixedDeltaTime);
+                float moveSpeed = moveStatusData.MoveSpeed;
+                if (nowCondition.HasFlag(CharacterCondition.Slow))
+                    moveSpeed = moveSpeed * 0.3f; // 기획서에 3배로 되어있다... todo : 수치 빼는건 나중에
+                
+                
+                Vector3 newPosition = rb.position + _lastMoveInputValue * (moveSpeed * Time.fixedDeltaTime);
                 rb.MovePosition(newPosition);
             }
         }
@@ -86,20 +105,16 @@ public class DuskyPlayer : Player
     {
     }
 
-    public override void Damage(float damage)
-    {
-    }
-
     public override void ApplyEffect()
     {
     }
 
     public override void OnMoveStart(Vector2 inputValue)
     {
-        if (stateMachine.CanChange(stateMachine.MoveState))
-        {
-            stateMachine.ChangeState(stateMachine.MoveState);
-        }
+        // if (stateMachine.CanChange(stateMachine.MoveState))
+        // {
+        //     stateMachine.ChangeState(stateMachine.MoveState);
+        // }
     }
 
     public override void OnMoveEnd(Vector2 inputValue)
@@ -118,7 +133,8 @@ public class DuskyPlayer : Player
             return;
         }
 
-        if (stateMachine.CurState != stateMachine.MoveState)
+        if (stateMachine.CurState != stateMachine.MoveState &&
+            nowCondition.HasFlag(CharacterCondition.Stun) == false)
         {
             if (stateMachine.CanChange(stateMachine.MoveState))
             {
@@ -141,6 +157,7 @@ public class DuskyPlayer : Player
 
     public override void OnJump()
     {
+        if (nowCondition.HasFlag(CharacterCondition.Stun)) return;
         if (IsGrounded() == false) return;
 
         if (stateMachine.CanChange(stateMachine.JumpState))
@@ -160,10 +177,22 @@ public class DuskyPlayer : Player
         }
     }
 
+    public override void Damage(float damage)
+    {
+        base.Damage(damage);
+        stateMachine.ChangeState(stateMachine.HitState);
+    }
+
     IEnumerator JumpDelaRotuine()
     {
         _jumpDelay = true;
         yield return _jumpDelayWait;
         _jumpDelay = false;
+    }
+
+    public override void TakeStun()
+    {
+        base.TakeStun();
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
 }
