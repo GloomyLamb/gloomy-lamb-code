@@ -32,6 +32,5 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
         }
 
         transform.localScale = Vector3.one;
-        StateMachine.ChangeState(StateMachine.TransformState);
     }
 }

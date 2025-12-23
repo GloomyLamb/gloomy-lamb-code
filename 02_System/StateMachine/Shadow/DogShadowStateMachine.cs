@@ -5,7 +5,6 @@ public class DogShadowStateMachine : ShadowStateMachine
     #region States
     // Ground
     public IState ChaseState { get; private set; }
-    public IState TransformState { get; private set; }
 
     // Skill
     public IState BiteState { get; private set; }
@@ -18,7 +17,6 @@ public class DogShadowStateMachine : ShadowStateMachine
 
         ChaseState = new DogShadowChaseState(this);
         IdleState = new DogShadowIdleState(this);
-        TransformState = new DogShadowTransformState(this);
 
         BiteState = new DogShadowBiteState(this);
         BarkState = new DogShadowBarkState(this);

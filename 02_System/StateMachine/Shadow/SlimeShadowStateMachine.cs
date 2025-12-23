@@ -8,7 +8,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     public IState RunState { get; private set; }
     public IState ExpandState { get; private set; }
     public IState ReduceState { get; private set; }
-    public IState TransformState { get; private set; }
     #endregion
 
     // 추적
@@ -24,8 +23,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         RunState = new SlimeShadowRunState(this);
         ExpandState = new SlimeShadowExpandState(this);
         ReduceState = new SlimeShadowReduceState(this);
-
-        TransformState = new SlimeShadowTransformState(this);
 
         ChangeState(IdleState);
     }

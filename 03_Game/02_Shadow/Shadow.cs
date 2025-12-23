@@ -29,6 +29,9 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     private WaitForSeconds _stopTimer;
     private WaitForSeconds _boundTimer;
 
+    // 변형
+    private bool _canTransform;
+
     protected virtual void Awake()
     {
         CommonAnimationData.Initialize();
@@ -39,6 +42,12 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void Update()
     {
+        if (_canTransform)
+        {
+            Transform();
+            return;
+        }
+
         stateMachine?.Update();
     }
 
@@ -86,6 +95,14 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         yield return _boundTimer;
         Animator.speed = 1f;
         stateMachine.ChangeState(stateMachine.IdleState);
+    }
+    #endregion
+
+    #region 변형
+    public void Transform()
+    {
+        _canTransform = false;
+        stateMachine.ChangeState(stateMachine.TransformState);
     }
     #endregion
 
