@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
@@ -14,6 +15,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [SerializeField] protected float damage = 10f;
 
     // todo: 타겟팅, 이동 통합
+    // 움직임 이벤트
+    public Action OnMove;
 
     // IDamageable
     public virtual void ApplyEffect()
