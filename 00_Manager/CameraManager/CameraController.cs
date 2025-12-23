@@ -105,6 +105,9 @@ public class CameraController : MonoBehaviour
         // test
         SetControlCinemachine(virtualCamera);
         //SwitchCameraControl(cameraViewType);
+
+        lookPivot.transform.parent = target.transform;
+        lookPivot.transform.localPosition = Vector3.zero;
     }
 
     public void SetControlCinemachine(CinemachineVirtualCamera _virtualCamera)
@@ -218,7 +221,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        lookPivot.position = target != null ? target.position : Vector3.zero;
+        //lookPivot.position = target != null ? target.position : Vector3.zero;
         lookPivot.rotation = Quaternion.Euler(curRotX, curRotY, 0);
 
         float calcMaxValue = Mathf.Lerp(minVerticalLength, maxVerticalLength, curZoomValue / (maxZoom - minZoom));
