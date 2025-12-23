@@ -13,7 +13,7 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     public SlimeShadowReduceState ReduceState { get; private set; }
     public SlimeShadowTransformState TransformState { get; private set; }
 
-    // Attack
+    // Battle
     public SlimeShadowHitState HitState { get; private set; }
     public SlimeShadowBoundState BoundState { get; private set; }
 
