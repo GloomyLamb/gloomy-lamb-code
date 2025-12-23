@@ -24,7 +24,21 @@ public class DuskyAttackState : BaseDuskyState
         stateMachine.animator.SetTrigger(AnimatorParameters.Attack);
         _attackRotuine = CoroutineRunner.instance.StartCoroutine(AttackRoutine());
     }
-    
+
+    public override void Update()
+    {
+        AnimatorStateInfo animInfo = stateMachine.animator.GetCurrentAnimatorStateInfo(0);
+
+        if (animInfo.IsName(AnimatorParameters.AttackName) && animInfo.normalizedTime >= 1f)
+        {
+            DuskyStateMachine duskySm = (DuskyStateMachine)stateMachine;
+            if (duskySm != null)
+            {
+                stateMachine.ChangeState(duskySm.IdleState);
+            }
+        }
+    }
+
     public override void Exit()
     {
         CoroutineRunner.instance.StopCoroutine(_attackRotuine);
