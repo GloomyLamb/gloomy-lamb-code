@@ -128,8 +128,14 @@ public class DuskyPlayer : Player
             }
         }
 
+        Quaternion yawRotation = Quaternion.identity;
+        
         Vector3 inputDir = new Vector3(inputValue.x, 0f, inputValue.y);
-        Quaternion yawRotation = Quaternion.Euler(0f, CameraController.Instance.CamTransform.eulerAngles.y, 0f); // 투영하던 건 쉽게 Quaternion으로 변경
+        if(CameraController.Instance !=null)
+            yawRotation = Quaternion.Euler(0f, CameraController.Instance.CamTransform.eulerAngles.y, 0f); // 투영하던 건 쉽게 Quaternion으로 변경
+        else
+            yawRotation = Quaternion.Euler(0f, Camera.main.transform.eulerAngles.y, 0f );
+        
         Vector3 moveDir = yawRotation * inputDir;
 
         _lastMoveInputValue = moveDir;
