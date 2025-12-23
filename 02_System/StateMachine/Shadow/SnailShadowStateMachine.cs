@@ -5,7 +5,6 @@ public class SnailShadowStateMachine : ShadowStateMachine      // StateMachineì
     public SnailShadow Shadow { get; private set; }
 
     public Transform Target { get; set; }
-    public IState IdleState { get; set; }
     public IState ChaseState { get; set; }
 
     public SnailShadowStateMachine(SnailShadow shadow) : base(shadow)

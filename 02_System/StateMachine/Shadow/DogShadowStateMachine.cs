@@ -5,7 +5,6 @@ public class DogShadowStateMachine : ShadowStateMachine
     #region States
     // Ground
     public IState ChaseState { get; private set; }
-    public IState IdleState { get; private set; }
     public IState TransformState { get; private set; }
 
     // Skill

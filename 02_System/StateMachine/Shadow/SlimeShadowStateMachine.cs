@@ -4,7 +4,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
 
     #region States
     // Ground
-    public IState IdleState { get; private set; }
     public IState WalkState { get; private set; }
     public IState RunState { get; private set; }
     public IState ExpandState { get; private set; }

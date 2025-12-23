@@ -11,7 +11,8 @@ public class SnailShadow : Shadow
     [SerializeField] private float slimeDestroyTime = 3f;
     [SerializeField] private Vector3 spawnOffset = Vector3.zero;
     private Coroutine slimeRoutine;
-    private void Awake()
+
+    protected override void Awake()
     {
         stateMachine = new SnailShadowStateMachine(this);
     }

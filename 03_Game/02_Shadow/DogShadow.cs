@@ -14,7 +14,7 @@ public class DogShadow : Shadow
     public float SqrBiteRange => _biteRange * _biteRange;
     public int BiteCount { get; set; } = 0;
 
-    private void Awake()
+    protected override void Awake()
     {
         AnimationData.Initialize();
         stateMachine = new DogShadowStateMachine(this);

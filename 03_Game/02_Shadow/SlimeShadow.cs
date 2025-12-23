@@ -9,8 +9,7 @@ public class SlimeShadow : Shadow
 
     [field: SerializeField] public Transform Target;
 
-
-    private void Awake()
+    protected override void Awake()
     {
         AnimationData.Initialize();
         stateMachine = new SlimeShadowStateMachine(this);
