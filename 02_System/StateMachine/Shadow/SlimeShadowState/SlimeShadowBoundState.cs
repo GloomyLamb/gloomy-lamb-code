@@ -1,5 +1,15 @@
+using System.Collections;
+using Unity.VisualScripting;
+using UnityEngine;
+
 public class SlimeShadowBoundState : SlimeShadowAttackState
 {
+    private float _stopPoint = 0.1f;
+    private float _timer;
+    private bool _done = false;
+
+    private Coroutine _coroutine;
+
     public SlimeShadowBoundState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -16,5 +26,38 @@ public class SlimeShadowBoundState : SlimeShadowAttackState
         StateMachine.SlimeShadow.MovementSpeedModitier = 0f;
         base.Exit();
         StopAnimation(StateMachine.SlimeShadow.AnimationData.HitParameterHash);
+        _done = false;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (_timer < _stopPoint)
+        {
+            _timer += Time.deltaTime;
+            return;
+        }
+
+        if (!_done)
+        {
+            StateMachine.StopAnimator();
+
+            if (_coroutine != null)
+            {
+                CoroutineRunner.instance.StopCoroutine(_coroutine);
+                _coroutine = null;
+            }
+            _coroutine = CoroutineRunner.instance.StartCoroutine(nameof(Binding));
+
+            _done = true;
+        }
+    }
+
+    private IEnumerator Binding()
+    {
+        yield return new WaitForSeconds(3f);
+        StateMachine.StartAnimator();
+        StateMachine.ChangeState(StateMachine.IdleState);
     }
 }

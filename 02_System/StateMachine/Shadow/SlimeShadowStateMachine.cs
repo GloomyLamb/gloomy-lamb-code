@@ -35,4 +35,14 @@ public class SlimeShadowStateMachine : ShadowStateMachine
 
         ChangeState(IdleState);
     }
+
+    public void StopAnimator()
+    {
+        animator.speed = 0f;
+    }
+
+    public void StartAnimator()
+    {
+        animator.speed = 1f;
+    }
 }
