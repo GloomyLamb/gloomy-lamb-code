@@ -6,70 +6,55 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("이동 설정")] 
-    [SerializeField] MoveStatusData moveStatusData;
     
     [Header("Ground 설정")] 
     [SerializeField] private float playerScale = 0.02f;
     [SerializeField] public float groundRayDistance = 0.4f;
     [SerializeField] private LayerMask groundLayerMask;
 
-    // 상태
-    private bool jumpDelay = true;
-    
-    // 캐릭터 방향
-    public Vector3 Forward => forward;
-    protected Vector3 forward;
-    
-    // 필요 컴포넌트
-    Rigidbody rb;
+    private Vector3 _inputForward;
     
     
-    public event Action OnInputMoveStartAction;
-    public event Action OnInputMoveEndAction;
+    public event Action<Vector3> OnInputMoveStartAction;
+    public event Action<Vector3> OnInputMoveAction;
+    public event Action<Vector3> OnInputMoveEndAction;
     public event Action OnInputAttackAction;
     public event Action OnInputJumpAction;
     
 
     private void Awake()
     {
-        forward = transform.forward;
-        rb = this.GetComponent<Rigidbody>();
+        
     }
     
     private void Start()
     {
         InputManager.Instance.BindInputEvent(InputType.Player, InputMapName.Default, InputActionName.Jump, OnJump);
-        
     }
     
     private void Update()
     {
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * 10);
+        InputMove();
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(_inputForward), Time.deltaTime * 10);
     }
 
-    private void FixedUpdate()
-    {
-        Move();
-    }
     
-    private void Move()
+    private void InputMove()
     {
         Vector2 inputValue = InputManager.Instance.GetAxis(InputType.Player, InputActionName.Move);
         
         Vector3 inputDir = new Vector3(inputValue.x, 0f, inputValue.y);
         
         // todo : CameraManager에서 현재 카메라의 Transform이나 forward를 받아와야 함. 
-        Quaternion yawRotation = Quaternion.Euler(0f, 
-            CameraController.Instance.CamTransform.eulerAngles.y
-            , 0f);    // 투영하던 건 쉽게 Quaternion으로 변경
+        Quaternion yawRotation = Quaternion.Euler(0f, CameraController.Instance.CamTransform.eulerAngles.y, 0f);    // 투영하던 건 쉽게 Quaternion으로 변경
+        
         Vector3 moveDir = yawRotation * inputDir;
         
         if (moveDir.magnitude > 0.1f)
         {
-            forward = moveDir;
-            Vector3 newPosition = rb.position + forward * (moveStatusData.MoveSpeed * Time.deltaTime);
-
-            rb.MovePosition(newPosition);
+            _inputForward = moveDir;
+            // Vector3 newPosition = rb.position + forward * (moveStatusData.MoveSpeed * Time.deltaTime);
+            // rb.MovePosition(newPosition);
         }
     }
 
@@ -80,16 +65,16 @@ public class PlayerController : MonoBehaviour
         {
             if (CanJump())
             {
-                jumpDelay = false;
-                StartCoroutine(JumpDelayRoutine());
-                rb.AddForce(Vector3.up * moveStatusData.JumpForce, ForceMode.Impulse);
+                //jumpDelay = false;
+                //StartCoroutine(JumpDelayRoutine());
+                //rb.AddForce(Vector3.up * moveStatusData.JumpForce, ForceMode.Impulse);
             }
         }
     }
     
     public bool CanJump()
     {
-        if (jumpDelay == false) return false;
+        //if (jumpDelay == false) return false;
         if (IsGrounded() == false) return false;
         return true;
     }
@@ -117,11 +102,11 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    IEnumerator JumpDelayRoutine()
-    {
-        yield return new WaitForSeconds(moveStatusData.JumpDelayTime);
-        jumpDelay = true;
-    }
+    // IEnumerator JumpDelayRoutine()
+    // {
+    //     yield return new WaitForSeconds(moveStatusData.JumpDelayTime);
+    //     jumpDelay = true;
+    // }
 
 #if UNITY_EDITOR
     
@@ -138,10 +123,10 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(transform.position + (-transform.right * playerScale),
             transform.position + (-transform.right * playerScale) + (-transform.up * groundRayDistance));
 
-        Vector3 topStart = transform.position + (transform.up * 0.5f) + (forward * 0.5f);
-        Vector3 topEnd = topStart + (forward * 0.1f);
-        Vector3 bottomStart = transform.position + (forward * 0.5f);
-        Vector3 bottomEnd = bottomStart + (forward * 0.1f);
+        Vector3 topStart = transform.position + (transform.up * 0.5f) + (_inputForward * 0.5f);
+        Vector3 topEnd = topStart + (_inputForward * 0.1f);
+        Vector3 bottomStart = transform.position + (_inputForward * 0.5f);
+        Vector3 bottomEnd = bottomStart + (_inputForward * 0.1f);
 
         Gizmos.color = Color.red;
         Gizmos.DrawLine(topStart, topEnd);

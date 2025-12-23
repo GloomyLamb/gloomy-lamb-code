@@ -6,11 +6,17 @@ using UnityEngine;
 // controller 로 빼도 되지만, 우리 Player 들이 생각보다 가벼울 것임
 public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 {
-    [Header("스탯 SO")] [SerializeField] StatusData _statusData;
+    [Header("스탯 SO")] [SerializeField] protected StatusData statusData;
+    [SerializeField] protected MoveStatusData moveStatusData;
 
     [Header("프리팹 설정")] [SerializeField] protected Animator animator;
+
     public Status Status => status;
     protected Status status;
+
+    // 캐릭터 방향
+    public Vector3 Forward => forward;
+    protected Vector3 forward;
 
 
     private void Awake()
@@ -18,26 +24,26 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
 
-        status = _statusData?.GetNewStatus();
+        status = statusData?.GetNewStatus();
+        forward = transform.forward;
 
         Init();
     }
 
     protected abstract void Init();
 
-    public abstract void Attack();
-
-    public abstract void GiveEffect();
-
-    public abstract void Damage(float damage);
-
-    public abstract void ApplyEffect();
-
-
-    public abstract void OnMoveStart();
-    public abstract void OnMoveEnd();
+    public abstract void OnMoveStart(Vector3 inputDir);
+    public abstract void OnMoveEnd(Vector3 inputDir);
+    public abstract void OnMove(Vector3 inputDir);
     public abstract void OnJump();
     public abstract void OnAttack();
-
     public abstract void OnLanding();
+
+    public abstract void Move();
+    public abstract void Jump();
+
+    public abstract void Attack();
+    public abstract void GiveEffect();
+    public abstract void Damage(float damage);
+    public abstract void ApplyEffect();
 }
