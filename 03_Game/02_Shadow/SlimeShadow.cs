@@ -13,7 +13,7 @@ public class SlimeShadow : Shadow
     private void Awake()
     {
         AnimationData.Initialize();
-        stateMachine = new SlimeShadowStateMachine(this, animator);
+        stateMachine = new SlimeShadowStateMachine(this);
     }
 
     private void Start()

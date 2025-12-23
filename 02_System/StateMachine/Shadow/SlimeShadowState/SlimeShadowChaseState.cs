@@ -5,7 +5,7 @@ public class SlimeShadowChaseState : SlimeShadowGroundState
     private float _timer;
     private float _patternTime = 1f;
 
-    public SlimeShadowChaseState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowChaseState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -13,13 +13,13 @@ public class SlimeShadowChaseState : SlimeShadowGroundState
     {
         _timer = 0f;
         base.Enter();
-        StartAnimation(StateMachine.SlimeShadow.AnimationData.ChaseParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.SlimeShadow.AnimationData.ChaseParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
     }
 
     public override void Update()
@@ -39,6 +39,6 @@ public class SlimeShadowChaseState : SlimeShadowGroundState
     {
         base.PhysicsUpdate();
 
-        StateMachine.SlimeShadow.HandleMove();
+        StateMachine.Shadow.HandleMove();
     }
 }

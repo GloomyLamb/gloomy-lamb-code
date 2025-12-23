@@ -1,15 +1,13 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 /// <summary>
 /// 그림자 - 달팽이 기본 움직임
 /// </summary>
 public class SnailShadowIdleState : SnailShadowGroundState        // 목표 감지 로직 포함
 {
-    private readonly SnailShadowStateMachine snailSM; 
-    public SnailShadowIdleState(ShadowStateMachine stateMachine) : base(stateMachine)
+    private readonly SnailShadowStateMachine snailSM;
+    public SnailShadowIdleState(StateMachine stateMachine) : base(stateMachine)
     {
-      snailSM = (SnailShadowStateMachine)stateMachine; // 상태 머신 캐스팅
+        snailSM = (SnailShadowStateMachine)stateMachine; // 상태 머신 캐스팅
     }
 
     public override void Enter()
@@ -19,16 +17,16 @@ public class SnailShadowIdleState : SnailShadowGroundState        // 목표 감�
     }
     public override void Update()
     {
-       Transform target = GameObject.FindGameObjectWithTag("Player")?.transform;
+        Transform target = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        if(target == null) 
-     
+        if (target == null)
+
             return;
         snailSM.Target = target;  // 타겟 설정
         snailSM.ChangeState(snailSM.ChaseState); // ChaseState로 전환시도 
     }
 
-    
+
     public override void Exit()
     {
         base.Exit();

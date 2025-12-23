@@ -4,9 +4,9 @@ using UnityEngine;
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
     [Header("애니메이션")]
-    [SerializeField] protected Animator animator;
+    [field: SerializeField] public Animator Animator;
 
-    protected ShadowStateMachine stateMachine;
+    protected StateMachine stateMachine;
 
     // todo: 추후 SO로 분리
     [field: SerializeField] public float MovementSpeed { get; set; } = 10f;
@@ -50,7 +50,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 #if UNITY_EDITOR
     private void Reset()
     {
-        animator = transform.FindChild<Animator>("Model");
+        Animator = transform.FindChild<Animator>("Model");
     }
 #endif
     #endregion

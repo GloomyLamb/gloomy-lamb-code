@@ -4,7 +4,7 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
 {
     private float _minScale = 1f;
 
-    public SlimeShadowReduceState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowReduceState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -22,7 +22,7 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
     {
         base.Update();
 
-        Transform transform = StateMachine.SlimeShadow.transform;
+        Transform transform = StateMachine.Shadow.transform;
 
         // todo: 광선에 맞고 있는지 계속 확인
         if (transform.localScale.x > _minScale)

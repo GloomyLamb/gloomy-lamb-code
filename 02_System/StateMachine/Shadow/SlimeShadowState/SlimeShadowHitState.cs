@@ -5,22 +5,22 @@ public class SlimeShadowHitState : SlimeShadowAttackState
     private float _timer;
     private float _animationTime = 1f;
 
-    public SlimeShadowHitState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowHitState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
         _timer = 0f;
-        StateMachine.SlimeShadow.MovementSpeedModitier = 0f;
+        StateMachine.Shadow.MovementSpeedModitier = 0f;
         base.Enter();
-        StartAnimation(StateMachine.SlimeShadow.AnimationData.HitParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.HitParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.SlimeShadow.AnimationData.HitParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.HitParameterHash);
     }
 
     public override void Update()

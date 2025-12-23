@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class SlimeShadowGroundState : SlimeShadowState
 {
-    public SlimeShadowGroundState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowGroundState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
-        StartAnimation(StateMachine.SlimeShadow.AnimationData.GroundParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.GroundParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.SlimeShadow.AnimationData.GroundParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.GroundParameterHash);
     }
 
     public override void Update()

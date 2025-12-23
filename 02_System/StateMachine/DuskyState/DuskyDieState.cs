@@ -1,16 +1,16 @@
 ﻿public class DuskyDieState : BaseDuskyState
 {
-    public DuskyDieState(MoveableStateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
+    public DuskyDieState(StateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
     {
     }
 
     public override void Enter()
     {
-        stateMachine.animator.SetTrigger(AnimatorParameters.Die);
+        player.Animator.SetTrigger(AnimatorParameters.Die);
     }
 
     public override void Exit()
     {
-        
+
     }
 }

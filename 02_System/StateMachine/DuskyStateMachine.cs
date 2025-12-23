@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class DuskyStateMachine : MoveableStateMachine
+public class DuskyStateMachine : StateMachine
 {
     public IState IdleState => _idleState;
     public IState JumpState => _jumpState;
@@ -24,8 +22,7 @@ public class DuskyStateMachine : MoveableStateMachine
 
     public event Action OnAttackAction;
 
-
-    public DuskyStateMachine(Animator animator, DuskyPlayer player) : base(animator)
+    public DuskyStateMachine(DuskyPlayer player)
     {
         _idleState = new DuskyIdleState(this, player);
         _jumpState = new DuskyJumpState(this, player);

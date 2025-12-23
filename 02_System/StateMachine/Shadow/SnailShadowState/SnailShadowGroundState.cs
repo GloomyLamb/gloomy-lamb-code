@@ -3,9 +3,8 @@
 /// </summary>
 public class SnailShadowGroundState : SnailShadowState
 {
-    public SnailShadowGroundState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SnailShadowGroundState(StateMachine stateMachine) : base(stateMachine)
     {
-
     }
 
     public override void Enter()

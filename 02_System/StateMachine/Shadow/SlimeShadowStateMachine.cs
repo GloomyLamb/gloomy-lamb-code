@@ -1,8 +1,6 @@
-using UnityEngine;
-
-public class SlimeShadowStateMachine : ShadowStateMachine
+public class SlimeShadowStateMachine : StateMachine
 {
-    public SlimeShadow SlimeShadow { get; private set; }
+    public SlimeShadow Shadow { get; private set; }
     // todo: state 만들기
     // idle, chase, +) transform
     // Ground
@@ -20,9 +18,9 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     // 추적
     public int ChaseCount { get; private set; } = 0;
 
-    public SlimeShadowStateMachine(Shadow shadow, Animator animator) : base(shadow, animator)
+    public SlimeShadowStateMachine(SlimeShadow shadow)
     {
-        SlimeShadow = shadow as SlimeShadow;
+        Shadow = shadow;
 
         IdleState = new SlimeShadowIdleState(this);
 
@@ -47,11 +45,11 @@ public class SlimeShadowStateMachine : ShadowStateMachine
 
     public void StopAnimator()
     {
-        animator.speed = 0f;
+        Shadow.Animator.speed = 0f;
     }
 
     public void StartAnimator()
     {
-        animator.speed = 1f;
+        Shadow.Animator.speed = 1f;
     }
 }

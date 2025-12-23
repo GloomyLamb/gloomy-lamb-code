@@ -8,24 +8,24 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 
     private Coroutine _coroutine;
 
-    public SlimeShadowExpandState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowExpandState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.SlimeShadow.MovementSpeedModitier = 2f;
+        StateMachine.Shadow.MovementSpeedModitier = 2f;
         base.Enter();
 
         if (_coroutine != null)
         {
-            CoroutineRunner.Instance.StopCoroutine(_coroutine);
+            CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
             _coroutine = null;
         }
 
         if (!_isExpanded)
         {
-            _coroutine = CoroutineRunner.Instance.StartCoroutine(ScaleUp(_maxScale, 0.5f));
+            _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(ScaleUp(_maxScale, 0.5f));
             _isExpanded = true;
         }
     }
@@ -53,7 +53,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
     /// <returns></returns>
     private IEnumerator ScaleUp(float size, float duration)
     {
-        Transform target = StateMachine.SlimeShadow.transform;
+        Transform target = StateMachine.Shadow.transform;
         Vector3 startScale = target.localScale;
         Vector3 endScale = startScale * size;
         float elapsed = 0f;

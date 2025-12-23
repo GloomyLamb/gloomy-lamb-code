@@ -1,28 +1,28 @@
 public class DogShadowBiteState : DogShadowSkillState
 {
-    public DogShadowBiteState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public DogShadowBiteState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.DogShadow.BiteCount++;
+        StateMachine.Shadow.BiteCount++;
         base.Enter();
-        StartAnimation(StateMachine.DogShadow.AnimationData.BiteParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.BiteParameterHash);
         // todo: 물기 스킬 연결
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.DogShadow.AnimationData.BiteParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.BiteParameterHash);
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (StateMachine.DogShadow.BiteCount > 3)
+        if (StateMachine.Shadow.BiteCount > 3)
         {
             Logger.Log("짖기 3회 넘음");
             StateMachine.ChangeState(StateMachine.BarkState);

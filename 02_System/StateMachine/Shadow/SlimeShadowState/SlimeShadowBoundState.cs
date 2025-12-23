@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlimeShadowBoundState : SlimeShadowAttackState
@@ -10,22 +9,22 @@ public class SlimeShadowBoundState : SlimeShadowAttackState
 
     private Coroutine _coroutine;
 
-    public SlimeShadowBoundState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowBoundState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.SlimeShadow.MovementSpeedModitier = 0f;
+        StateMachine.Shadow.MovementSpeedModitier = 0f;
         base.Enter();
-        StartAnimation(StateMachine.SlimeShadow.AnimationData.HitParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.HitParameterHash);
     }
 
     public override void Exit()
     {
-        StateMachine.SlimeShadow.MovementSpeedModitier = 0f;
+        StateMachine.Shadow.MovementSpeedModitier = 0f;
         base.Exit();
-        StopAnimation(StateMachine.SlimeShadow.AnimationData.HitParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.HitParameterHash);
         _done = false;
     }
 

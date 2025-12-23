@@ -1,8 +1,6 @@
-using UnityEngine;
-
-public class DogShadowStateMachine : ShadowStateMachine
+public class DogShadowStateMachine : StateMachine
 {
-    public DogShadow DogShadow { get; private set; }
+    public DogShadow Shadow { get; private set; }
 
     // Ground
     public DogShadowChaseState ChaseState { get; private set; }
@@ -17,9 +15,9 @@ public class DogShadowStateMachine : ShadowStateMachine
     public DogShadowHitState HitState { get; private set; }
     public DogShadowBoundState BoundState { get; private set; }
 
-    public DogShadowStateMachine(Shadow shadow, Animator animator) : base(shadow, animator)
+    public DogShadowStateMachine(DogShadow shadow)
     {
-        DogShadow = shadow as DogShadow;
+        Shadow = shadow;
 
         ChaseState = new DogShadowChaseState(this);
         IdleState = new DogShadowIdleState(this);

@@ -6,22 +6,22 @@ public class SlimeShadowIdleState : SlimeShadowGroundState
     private float _patternTime = 0.5f;
     private bool _fastMode;
 
-    public SlimeShadowIdleState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowIdleState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
         _timer = 0f;
-        StateMachine.SlimeShadow.MovementSpeedModitier = 0f;
+        StateMachine.Shadow.MovementSpeedModitier = 0f;
         base.Enter();
-        StartAnimation(StateMachine.SlimeShadow.AnimationData.IdleParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.IdleParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.SlimeShadow.AnimationData.IdleParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.IdleParameterHash);
     }
 
     public override void Update()
@@ -35,7 +35,7 @@ public class SlimeShadowIdleState : SlimeShadowGroundState
         }
 
         _timer += Time.deltaTime;
-        if (StateMachine.SlimeShadow.Target != null)
+        if (StateMachine.Shadow.Target != null)
         {
             if (_timer > _patternTime && !_fastMode)
             {

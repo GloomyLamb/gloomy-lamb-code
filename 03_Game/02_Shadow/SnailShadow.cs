@@ -1,13 +1,10 @@
-﻿/// <summary>
+﻿using System.Collections;
+/// <summary>
 /// 그림자 - 달팽이
 /// </summary>
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using System.Collections;
 public class SnailShadow : Shadow
 {
-
     [Header("Snail Slime")]
     [SerializeField] private GameObject slimePrefab;
     [SerializeField] private float spawnInterval = 1f;
@@ -16,8 +13,7 @@ public class SnailShadow : Shadow
     private Coroutine slimeRoutine;
     private void Awake()
     {
-        stateMachine = new SnailShadowStateMachine(this, animator);
-        stateMachine.Init();
+        stateMachine = new SnailShadowStateMachine(this);
     }
 
     public void StartSlime()

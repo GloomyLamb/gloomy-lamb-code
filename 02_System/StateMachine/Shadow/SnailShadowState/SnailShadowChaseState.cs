@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 public class SnailShadowChaseState : SnailShadowGroundState
 {
@@ -9,7 +7,7 @@ public class SnailShadowChaseState : SnailShadowGroundState
 
     private float nextUpdateTime;
     private const float updateInterval = 0.1f;
-    public SnailShadowChaseState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SnailShadowChaseState(StateMachine stateMachine) : base(stateMachine)
     {
         snailSM = (SnailShadowStateMachine)stateMachine; // 상태 머신 캐스팅
         agent = GetAgentSafely(); // NavMeshAgent 컴포넌트 가져오기
@@ -18,7 +16,7 @@ public class SnailShadowChaseState : SnailShadowGroundState
     public override void Enter()
     {
         base.Enter();
-        snailSM.Snail?.StartSlime();
+        snailSM.Shadow?.StartSlime();
         // idle 움직임 애니메이션 시작
         if (agent != null)
         {
@@ -53,7 +51,7 @@ public class SnailShadowChaseState : SnailShadowGroundState
     {
         base.Exit();
         // idle 움직임 애니메이션 종료
-        snailSM.Snail.StopSlime();
+        snailSM.Shadow.StopSlime();
     }
     private NavMeshAgent GetAgentSafely()
     {

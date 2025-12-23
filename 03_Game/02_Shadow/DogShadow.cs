@@ -17,7 +17,7 @@ public class DogShadow : Shadow
     private void Awake()
     {
         AnimationData.Initialize();
-        stateMachine = new DogShadowStateMachine(this, animator);
+        stateMachine = new DogShadowStateMachine(this);
     }
 
     private void Start()

@@ -1,18 +1,18 @@
 public class DogShadowBattleState : DogShadowState
 {
-    public DogShadowBattleState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public DogShadowBattleState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
-        StartAnimation(StateMachine.DogShadow.AnimationData.BattleParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.BattleParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.DogShadow.AnimationData.BattleParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.BattleParameterHash);
     }
 }

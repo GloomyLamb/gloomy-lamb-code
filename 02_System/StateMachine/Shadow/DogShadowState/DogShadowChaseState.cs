@@ -2,30 +2,30 @@ using UnityEngine;
 
 public class DogShadowChaseState : DogShadowGroundState
 {
-    public DogShadowChaseState(MoveableStateMachine stateMachine) : base(stateMachine)
+    public DogShadowChaseState(StateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
-        StartAnimation(StateMachine.DogShadow.AnimationData.ChaseParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.DogShadow.AnimationData.ChaseParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
     }
 
     public override void Update()
     {
         base.Update();
 
-        Transform shadowT = StateMachine.DogShadow.transform;
-        Transform targetT = StateMachine.DogShadow.Target.transform;
+        Transform shadowT = StateMachine.Shadow.transform;
+        Transform targetT = StateMachine.Shadow.Target.transform;
 
-        if ((targetT.position - shadowT.position).sqrMagnitude < StateMachine.DogShadow.SqrBiteRange)
+        if ((targetT.position - shadowT.position).sqrMagnitude < StateMachine.Shadow.SqrBiteRange)
         {
             StateMachine.ChangeState(StateMachine.BiteState);
         }
@@ -39,6 +39,6 @@ public class DogShadowChaseState : DogShadowGroundState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        StateMachine.DogShadow.HandleMove();
+        StateMachine.Shadow.HandleMove();
     }
 }

@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class DuskyPlayer : Player
 {
@@ -16,7 +13,7 @@ public class DuskyPlayer : Player
 
     protected override void Init()
     {
-        stateMachine = new DuskyStateMachine(animator, this);
+        stateMachine = new DuskyStateMachine(this);
 
         PlayerController controller = GetComponent<PlayerController>();
         if (controller != null)
@@ -92,7 +89,7 @@ public class DuskyPlayer : Player
         if (stateMachine.CurState is DuskyMoveState ||
             stateMachine.CurState is DuskyJumpState)
         {
-            
+
         }
     }
 

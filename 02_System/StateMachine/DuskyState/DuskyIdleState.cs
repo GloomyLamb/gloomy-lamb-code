@@ -1,6 +1,6 @@
 ﻿public class DuskyIdleState : BaseDuskyState
 {
-    public DuskyIdleState(MoveableStateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
+    public DuskyIdleState(StateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
     {
     }
 
@@ -12,7 +12,7 @@
     {
         base.Update();
     }
-    
+
     public override void Exit()
     {
     }

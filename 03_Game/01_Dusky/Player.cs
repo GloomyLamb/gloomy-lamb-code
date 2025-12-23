@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 // todo : Player 구조 다같이 이야기 해보기
@@ -12,6 +10,7 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 
     [Header("프리팹 설정")]
     [SerializeField] protected Animator animator;
+    public Animator Animator => animator;
 
     public Status Status => status;
     protected Status status;
@@ -48,16 +47,16 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
     public abstract void GiveEffect();
     public abstract void Damage(float damage);
     public abstract void ApplyEffect();
-    
+
     // todo : 버프 디버프 받는걸로 변경해야함. 구조는 나중에! 중간발표대비 임시구현
     public virtual void TakeSlowDown()
     {
-        
+
     }
 
     public virtual void TakeStun()
     {
-        
+
     }
-    
+
 }

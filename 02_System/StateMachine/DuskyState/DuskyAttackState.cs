@@ -10,9 +10,9 @@ public class DuskyAttackState : BaseDuskyState
     private float _attackAnimTiming;
     private Action _attackAction;
     private Coroutine _attackRotuine;
-    
-    public DuskyAttackState(MoveableStateMachine stateMachine, DuskyPlayer player,
-    float attackAnimDelay, Action attackAction ) : base(stateMachine, player)
+
+    public DuskyAttackState(StateMachine stateMachine, DuskyPlayer player,
+    float attackAnimDelay, Action attackAction) : base(stateMachine, player)
     {
         _attackAnimTiming = attackAnimDelay;
         _attackAction = attackAction;
@@ -21,10 +21,10 @@ public class DuskyAttackState : BaseDuskyState
 
     public override void Enter()
     {
-        stateMachine.animator.SetTrigger(AnimatorParameters.Attack);
+        player.Animator.SetTrigger(AnimatorParameters.Attack);
         _attackRotuine = CoroutineRunner.instance.StartCoroutine(AttackRoutine());
     }
-    
+
     public override void Exit()
     {
         CoroutineRunner.instance.StopCoroutine(_attackRotuine);
