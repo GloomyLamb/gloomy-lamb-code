@@ -18,6 +18,7 @@ public class SnailShadowChaseState : SnailShadowGroundState
     public override void Enter()
     {
         base.Enter();
+        snailSM.Snail?.StartSlime();
         // idle 움직임 애니메이션 시작
         if (agent != null)
         {
@@ -52,6 +53,7 @@ public class SnailShadowChaseState : SnailShadowGroundState
     {
         base.Exit();
         // idle 움직임 애니메이션 종료
+        snailSM.Snail.StopSlime();
     }
     private NavMeshAgent GetAgentSafely()
     {

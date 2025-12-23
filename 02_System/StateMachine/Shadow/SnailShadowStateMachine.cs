@@ -5,8 +5,11 @@ public class SnailShadowStateMachine : ShadowStateMachine      // StateMachineÏù
     public Transform Target { get; set; }
     public IState IdleState { get; set; }
     public IState ChaseState { get; set; }
+
+    public SnailShadow Snail { get; private set; }
     public SnailShadowStateMachine(Shadow shadow, Animator animator) : base(shadow, animator)
     {
+        Snail = shadow as SnailShadow;
         IdleState = new SnailShadowIdleState(this);
         ChaseState = new SnailShadowChaseState(this);
         ChangeState(IdleState);

@@ -1,4 +1,4 @@
-public class IdleShadowGroundState : IdleShadowState
+﻿public class IdleShadowGroundState : IdleShadowState    //isGround 처리 함으로써 상속하는 친구들 모두 중복코드 제거
 {
     public IdleShadowGroundState(ShadowStateMachine stateMachine) : base(stateMachine)
     {
