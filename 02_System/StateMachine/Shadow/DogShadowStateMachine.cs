@@ -30,5 +30,7 @@ public class DogShadowStateMachine : ShadowStateMachine
 
         HitState = new DogShadowHitState(this);
         BoundState = new DogShadowBoundState(this);
+
+        ChangeState(IdleState);
     }
 }

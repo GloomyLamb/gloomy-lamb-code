@@ -15,4 +15,14 @@ public class DogShadowIdleState : DogShadowGroundState
         base.Exit();
         StopAnimation(StateMachine.DogShadow.AnimationData.IdleParameterHash);
     }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (StateMachine.DogShadow.Target != null)
+        {
+            StateMachine.ChangeState(StateMachine.ChaseState);
+        }
+    }
 }

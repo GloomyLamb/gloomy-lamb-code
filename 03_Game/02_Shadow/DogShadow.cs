@@ -5,11 +5,14 @@ using UnityEngine;
 /// </summary>
 public class DogShadow : Shadow
 {
+    [field: SerializeField] public DogShadowAnimationData AnimationData { get; private set; }
+
     [field: SerializeField] public Transform Target { get; private set; }
 
     private void Awake()
     {
         stateMachine = new DogShadowStateMachine(this, animator);
+        AnimationData.Initialize();
     }
 
     private void Start()
@@ -23,6 +26,11 @@ public class DogShadow : Shadow
     private void Update()
     {
         stateMachine.Update();
+    }
+
+    private void FixedUpdate()
+    {
+        stateMachine.PhysicsUpdate();
     }
 
     private void OnCollisionEnter(Collision collision)
