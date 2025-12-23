@@ -1,19 +1,20 @@
 public class SlimeShadowStateMachine : StateMachine
 {
     public SlimeShadow Shadow { get; private set; }
-    // todo: state 만들기
-    // idle, chase, +) transform
+
+    #region States
     // Ground
-    public SlimeShadowIdleState IdleState { get; private set; }
-    public SlimeShadowWalkState WalkState { get; private set; }
-    public SlimeShadowRunState RunState { get; private set; }
-    public SlimeShadowExpandState ExpandState { get; private set; }
-    public SlimeShadowReduceState ReduceState { get; private set; }
-    public SlimeShadowTransformState TransformState { get; private set; }
+    public IState IdleState { get; private set; }
+    public IState WalkState { get; private set; }
+    public IState RunState { get; private set; }
+    public IState ExpandState { get; private set; }
+    public IState ReduceState { get; private set; }
+    public IState TransformState { get; private set; }
 
     // Battle
-    public SlimeShadowHitState HitState { get; private set; }
-    public SlimeShadowBoundState BoundState { get; private set; }
+    public IState HitState { get; private set; }
+    public IState BoundState { get; private set; }
+    #endregion
 
     // 추적
     public int ChaseCount { get; private set; } = 0;
