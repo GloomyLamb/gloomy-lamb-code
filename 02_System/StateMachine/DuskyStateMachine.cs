@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,13 +20,15 @@ public class DuskyStateMachine : MoveableStateMachine
     private BaseDuskyState _dieState;
     private BaseDuskyState _moveState;
 
+    public event Action OnAttackAction;
+
 
     public DuskyStateMachine(Animator animator, DuskyPlayer player) : base(animator)
     {
         _idleState = new DuskyIdleState(this, player);
         _jumpState = new DuskyJumpState(this, player);
         _hitState = new DuskyHitState(this,player);
-        _attackState = new DuskyAttackState(this, player);
+        _attackState = new DuskyAttackState(this, player, 0.2f, OnAttackAction);
         _dieState = new DuskyDieState(this, player);
         _moveState = new DuskyMoveState(this, player);
     }

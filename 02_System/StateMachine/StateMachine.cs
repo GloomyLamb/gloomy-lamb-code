@@ -36,4 +36,9 @@ public abstract class StateMachine
     {
         curState?.PhysicsUpdate();
     }
+
+    public virtual bool CanChange(IState nextState)
+    {
+        return true;
+    }
 }
