@@ -28,16 +28,6 @@ public class DogShadow : Shadow
         }
     }
 
-    private void Update()
-    {
-        stateMachine.Update();
-    }
-
-    private void FixedUpdate()
-    {
-        stateMachine.PhysicsUpdate();
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))

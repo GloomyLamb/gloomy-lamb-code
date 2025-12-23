@@ -7,7 +7,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [SerializeField] protected Animator animator;
 
     protected ShadowStateMachine stateMachine;
-    
+
     // todo: 추후 SO로 분리
     [field: SerializeField] public float MovementSpeed { get; set; } = 10f;
     [field: SerializeField] public float MovementSpeedModitier { get; set; } = 1f;
@@ -18,10 +18,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     // 움직임 이벤트
     public Action OnMove;
 
-
     protected virtual void Update()
     {
-        
         stateMachine?.Update();
     }
 
@@ -29,6 +27,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     {
         stateMachine?.PhysicsUpdate();
     }
+
     // IDamageable
     public virtual void ApplyEffect()
     {
