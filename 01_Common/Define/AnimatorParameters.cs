@@ -38,7 +38,7 @@ public static class AnimatorParameters
     /// <summary>
     /// 지면 위에 있지 않은 상태일때 true
     /// </summary>
-    public static readonly int IsJumping = Animator.StringToHash("IsFalling");
+    public static readonly int IsFalling = Animator.StringToHash("IsFalling");
     
     
 }

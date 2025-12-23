@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class IdleShadowExpandState : IdleShadowChaseState
+public class SlimeShadowExpandState : SlimeShadowChaseState
 {
     private float _maxScale = 2f;
 
-    public IdleShadowExpandState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowExpandState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.IdleShadow.MovementSpeedModitier = 2f;
+        StateMachine.SlimeShadow.MovementSpeedModitier = 2f;
         base.Enter();
     }
 
@@ -23,7 +23,7 @@ public class IdleShadowExpandState : IdleShadowChaseState
     {
         base.Update();
 
-        Transform transform = StateMachine.IdleShadow.transform;
+        Transform transform = StateMachine.SlimeShadow.transform;
         if (transform.localScale.x < _maxScale)
         {
             transform.localScale += Vector3.one * Time.deltaTime;

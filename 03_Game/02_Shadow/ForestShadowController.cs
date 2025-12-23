@@ -6,7 +6,7 @@ using UnityEngine;
 public class ForestShadowController : ShadowController
 {
     [Header("Shadows")]
-    [SerializeField] private IdleShadow _idleShadow;
+    [SerializeField] private SlimeShadow _idleShadow;
     [SerializeField] private DogShadow _dogShadow;
     [SerializeField] private SnailShadow _snailShadow;
 }

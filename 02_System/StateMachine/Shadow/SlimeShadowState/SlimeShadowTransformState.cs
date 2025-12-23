@@ -1,12 +1,12 @@
-public class IdleShadowTransformState : IdleShadowGroundState
+public class SlimeShadowTransformState : SlimeShadowGroundState
 {
-    public IdleShadowTransformState(ShadowStateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowTransformState(MoveableStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.IdleShadow.MovementSpeedModitier = 0f;
+        StateMachine.SlimeShadow.MovementSpeedModitier = 0f;
         base.Enter();
     }
 

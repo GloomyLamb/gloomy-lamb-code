@@ -1,11 +1,11 @@
 using UnityEngine;
 
 /// <summary>
-/// 그림자 - 기본
+/// 그림자 - 슬라임
 /// </summary>
-public class IdleShadow : Shadow
+public class SlimeShadow : Shadow
 {
-    [field: SerializeField] public IdleShadowAnimationData AnimationData { get; private set; }
+    [field: SerializeField] public SlimeShadowAnimationData AnimationData { get; private set; }
 
     [field: SerializeField] public Transform Target { get; private set; }
 
@@ -13,7 +13,7 @@ public class IdleShadow : Shadow
     {
         AnimationData.Initialize();
 
-        stateMachine = new IdleShadowStateMachine(this, animator);
+        stateMachine = new SlimeShadowStateMachine(this, animator);
     }
 
     private void Start()
