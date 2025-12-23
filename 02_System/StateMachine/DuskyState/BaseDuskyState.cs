@@ -33,15 +33,10 @@ public abstract class BaseDuskyState : IState
     #endregion
 
     #region IState 구현
-    public virtual void Enter()
-    {
 
-    }
+    public abstract void Enter();
 
-    public virtual void Exit()
-    {
-
-    }
+    public abstract void Exit();
 
     public virtual void HandleInput()
     {
