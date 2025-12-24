@@ -4,7 +4,7 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
 {
     private Coroutine _coroutine;
 
-    public SlimeShadowReduceState(StateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowReduceState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 
@@ -24,7 +24,7 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
     {
         base.Update();
 
-        if (!StateMachine.Shadow.IsHitting)
+        if (!shadow.IsHitting)
         {
             return;
         }
@@ -36,6 +36,6 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
         }
         _coroutine = CustomCoroutineRunner
             .Instance
-            .StartCoroutine(ScaleUp(StateMachine.Shadow.MinScale, 0.5f));
+            .StartCoroutine(ScaleUp(shadow.MinScale, 0.5f));
     }
 }

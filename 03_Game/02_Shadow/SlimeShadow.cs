@@ -12,6 +12,7 @@ public class SlimeShadow : Shadow
     [field: SerializeField] public float MaxScale { get; private set; } = 3f;
     [field: SerializeField] public float MinScale { get; private set; } = 1f;
     public bool IsFastMode { get; set; }
+    public int ChaseCount { get; private set; } = 0;
 
     // 변형 조건
     private bool _checkExpand;
@@ -31,6 +32,12 @@ public class SlimeShadow : Shadow
         {
             damageable.Damage(damage);
         }
+    }
+
+    public void PlusChaseCount()
+    {
+        ChaseCount++;
+        Logger.Log($"추격 횟수: {ChaseCount}");
     }
 
     #region 변형

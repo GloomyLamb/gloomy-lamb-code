@@ -1,51 +1,46 @@
 using UnityEngine;
 
-public class SlimeShadowIdleState : SlimeShadowGroundState
+public class SlimeShadowIdleState : ShadowIdleState
 {
+    private SlimeShadow _shadow;
+    private SlimeShadowStateMachine _stateMachine;
+
     private float _timer;
     private float _patternTime = 0.5f;
 
-    public SlimeShadowIdleState(StateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowIdleState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
+        _shadow = shadow as SlimeShadow;
+        _stateMachine = stateMachine as SlimeShadowStateMachine;
     }
 
     public override void Enter()
     {
         _timer = 0f;
-        StateMachine.Shadow.SetMovementModifier(MovementType.Stop);
         base.Enter();
-        StartAnimation(StateMachine.Shadow.AnimationData.IdleParameterHash);
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-        StopAnimation(StateMachine.Shadow.AnimationData.IdleParameterHash);
     }
 
     public override void Update()
     {
-        base.Update();
-
-        if (StateMachine.ChaseCount == 11)
+        if (_shadow.ChaseCount == 11)
         {
             Logger.Log("확대 패턴 진입");
-            StateMachine.ChangeState(StateMachine.ExpandState);
+            StateMachine.ChangeState(this._stateMachine.ExpandState);
         }
 
         _timer += Time.deltaTime;
-        if (StateMachine.Shadow.Target != null)
+        if (_shadow.Target != null)
         {
-            if (_timer > _patternTime && !StateMachine.Shadow.IsFastMode)
+            if (_timer > _patternTime && !_shadow.IsFastMode)
             {
                 Logger.Log("저속 이동");
-                StateMachine.Shadow.IsFastMode = true;
-                StateMachine.ChangeState(StateMachine.WalkState);
+                _shadow.IsFastMode = true;
+                StateMachine.ChangeState(_stateMachine.WalkState);
             }
-            else if (_timer > _patternTime && StateMachine.Shadow.IsFastMode)
+            else if (_timer > _patternTime && _shadow.IsFastMode)
             {
                 Logger.Log("고속 이동");
-                StateMachine.ChangeState(StateMachine.RunState);
+                StateMachine.ChangeState(_stateMachine.RunState);
             }
         }
     }

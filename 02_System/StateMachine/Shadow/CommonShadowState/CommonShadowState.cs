@@ -1,9 +1,9 @@
 public class CommonShadowState : IState
 {
     protected Shadow shadow;
-    protected StateMachine StateMachine { get; private set; }
+    protected ShadowStateMachine StateMachine { get; private set; }
 
-    public CommonShadowState(Shadow shadow, StateMachine stateMachine)
+    public CommonShadowState(Shadow shadow, ShadowStateMachine stateMachine)
     {
         this.shadow = shadow;
         StateMachine = stateMachine;

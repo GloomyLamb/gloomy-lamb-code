@@ -6,7 +6,7 @@ public class ShadowTransformState : CommonShadowState
     private Coroutine _coroutine;
     private WaitForSeconds _delay;
 
-    public ShadowTransformState(Shadow shadow, StateMachine stateMachine) : base(shadow, stateMachine)
+    public ShadowTransformState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
         _delay = new WaitForSeconds(1f);
     }

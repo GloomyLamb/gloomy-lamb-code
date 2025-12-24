@@ -2,13 +2,10 @@
 {                                                               // IState 타입으로 cur 로 저장하여 ChangeState로 상태를 갈아끼우는 역할이라고 이해.
     public SnailShadow Shadow { get; private set; }
 
-    public IState ChaseState { get; set; }
-
     public SnailShadowStateMachine(SnailShadow shadow) : base(shadow)
     {
         Shadow = shadow;
 
-        IdleState = new SnailShadowIdleState(this);
-        ChaseState = new SnailShadowChaseState(this);
+        ChaseState = new SnailShadowChaseState(shadow, this);
     }
 }

@@ -11,25 +11,18 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     #endregion
 
     // 추적
-    public int ChaseCount { get; private set; } = 0;
 
     public SlimeShadowStateMachine(SlimeShadow shadow) : base(shadow)
     {
         Shadow = shadow;
+        IdleState = new SlimeShadowIdleState(shadow, this);
 
-        IdleState = new SlimeShadowIdleState(this);
-
-        WalkState = new SlimeShadowWalkState(this);
-        RunState = new SlimeShadowRunState(this);
-        ExpandState = new SlimeShadowExpandState(this);
-        ReduceState = new SlimeShadowReduceState(this);
+        WalkState = new SlimeShadowWalkState(shadow, this);
+        RunState = new SlimeShadowRunState(shadow, this);
+        ExpandState = new SlimeShadowExpandState(shadow, this);
+        ReduceState = new SlimeShadowReduceState(shadow, this);
     }
 
-    public void PlusChaseCount()
-    {
-        ChaseCount++;
-        Logger.Log($"추격 횟수: {ChaseCount}");
-    }
 
     public void StopAnimator()
     {

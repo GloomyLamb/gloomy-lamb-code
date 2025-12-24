@@ -3,7 +3,6 @@ using UnityEngine;
 [System.Serializable]
 public class ShadowAnimationData
 {
-    [SerializeField] private string _groundParameterName = "@Ground";
     [SerializeField] private string _idleParameterName = "Idle";
     [SerializeField] private string _chaseParameterName = "Chase";
     [SerializeField] private string _transformParameterName = "Transform";
@@ -11,7 +10,6 @@ public class ShadowAnimationData
     [SerializeField] private string _attackParameterName = "Attack";
     [SerializeField] private string _hitParameterName = "Hit";
 
-    public int GroundParameterHash { get; private set; }
     public int IdleParameterHash { get; private set; }
     public int ChaseParameterHash { get; private set; }
     public int TransformParameterHash { get; private set; }
@@ -23,7 +21,6 @@ public class ShadowAnimationData
     {
         Logger.Log("기본 애니메이션 데이터 초기화");
 
-        GroundParameterHash = Animator.StringToHash(_groundParameterName);
         IdleParameterHash = Animator.StringToHash(_idleParameterName);
         ChaseParameterHash = Animator.StringToHash(_chaseParameterName);
         TransformParameterHash = Animator.StringToHash(_transformParameterName);

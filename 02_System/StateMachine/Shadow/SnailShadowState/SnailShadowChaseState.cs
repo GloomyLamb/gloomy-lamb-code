@@ -1,38 +1,21 @@
-﻿public class SnailShadowChaseState : SnailShadowGroundState
+﻿public class SnailShadowChaseState : ShadowChaseState
 {
     private readonly SnailShadowStateMachine snailSM;
 
-    public SnailShadowChaseState(StateMachine stateMachine) : base(stateMachine)
+    public SnailShadowChaseState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
-        snailSM = (SnailShadowStateMachine)stateMachine; // 상태 머신 캐스팅
+        snailSM = stateMachine as SnailShadowStateMachine;
     }
 
     public override void Enter()
     {
-        StateMachine.Shadow.SetMovementModifier(MovementType.Default);
         base.Enter();
-        StartAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
         snailSM.Shadow?.StartSlime();
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        StateMachine.Shadow.OnMove?.Invoke();
-
-        //  타겟이 사라졌으면 Idle로 복귀
-        if (StateMachine.Shadow.Target == null)
-        {
-            snailSM.ChangeState(snailSM.IdleState);
-            return;
-        }
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
         snailSM.Shadow.StopSlime();
     }
 }

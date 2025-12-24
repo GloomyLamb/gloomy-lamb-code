@@ -6,14 +6,14 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 
     private Coroutine _coroutine;
 
-    public SlimeShadowExpandState(StateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowExpandState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.Shadow.SetMovementModifier(MovementType.Run);
-        StateMachine.Shadow.CheckExpand();
+        shadow.SetMovementModifier(MovementType.Run);
+        shadow.CheckExpand();
         base.Enter();
 
         if (_coroutine != null)
@@ -26,7 +26,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
         {
             _coroutine = CustomCoroutineRunner
                 .Instance
-                .StartCoroutine(ScaleUp(StateMachine.Shadow.MaxScale, 0.5f));
+                .StartCoroutine(ScaleUp(shadow.MaxScale, 0.5f));
             _isExpanded = true;
         }
     }
@@ -44,7 +44,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
         if (Input.GetKey(KeyCode.Alpha1))
         {
             Logger.Log("축소 패턴 진입");
-            StateMachine.ChangeState(StateMachine.ReduceState);
+            StateMachine.ChangeState(stateMachine.ReduceState);
         }
     }
 }

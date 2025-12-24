@@ -1,6 +1,6 @@
 public class ShadowHitState : CommonShadowState
 {
-    public ShadowHitState(Shadow shadow, StateMachine stateMachine) : base(shadow, stateMachine)
+    public ShadowHitState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 }

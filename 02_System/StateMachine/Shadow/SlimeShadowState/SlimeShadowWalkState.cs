@@ -4,14 +4,14 @@ public class SlimeShadowWalkState : SlimeShadowChaseState
 {
     private float _timer;
 
-    public SlimeShadowWalkState(StateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowWalkState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 
     public override void Enter()
     {
         _timer = 0f;
-        StateMachine.Shadow.SetMovementModifier(MovementType.Default);
+        shadow.SetMovementModifier(MovementType.Default);
         base.Enter();
     }
 
@@ -23,7 +23,7 @@ public class SlimeShadowWalkState : SlimeShadowChaseState
     public override void Update()
     {
         _timer += Time.deltaTime;
-        if (_timer > StateMachine.Shadow.SlowChasePatternTime)
+        if (_timer > shadow.SlowChasePatternTime)
         {
             StateMachine.ChangeState(StateMachine.IdleState);
         }

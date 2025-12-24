@@ -1,45 +1,34 @@
 using UnityEngine;
 
-public class DogShadowChaseState : DogShadowGroundState
+public class DogShadowChaseState : ShadowChaseState
 {
-    public DogShadowChaseState(StateMachine stateMachine) : base(stateMachine)
+    private DogShadowStateMachine _stateMachine;
+
+    public DogShadowChaseState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
+        _stateMachine = stateMachine as DogShadowStateMachine;
     }
 
     public override void Enter()
     {
-        StateMachine.Shadow.SetMovementModifier(MovementType.Default);
         base.Enter();
-        StartAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-        StopAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
     }
 
     public override void Update()
     {
         base.Update();
 
-        Transform shadowT = StateMachine.Shadow.transform;
-        Transform targetT = StateMachine.Shadow.Target.transform;
+        Transform shadowT = shadow.transform;
+        Transform targetT = shadow.Target.transform;
 
-        if ((targetT.position - shadowT.position).sqrMagnitude < StateMachine.Shadow.SqrBiteRange)
+        if ((targetT.position - shadowT.position).sqrMagnitude < _stateMachine.Shadow.SqrBiteRange)
         {
-            StateMachine.ChangeState(StateMachine.BiteState);
+            StateMachine.ChangeState(_stateMachine.BiteState);
         }
         else
         {
             // todo - bark 조건 보완
-            StateMachine.ChangeState(StateMachine.BarkState);
+            StateMachine.ChangeState(_stateMachine.BarkState);
         }
-    }
-
-    public override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
-        StateMachine.Shadow.OnMove?.Invoke();
     }
 }

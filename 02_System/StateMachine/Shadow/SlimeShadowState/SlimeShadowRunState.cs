@@ -1,12 +1,12 @@
 public class SlimeShadowRunState : SlimeShadowChaseState
 {
-    public SlimeShadowRunState(StateMachine stateMachine) : base(stateMachine)
+    public SlimeShadowRunState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 
     public override void Enter()
     {
-        StateMachine.Shadow.SetMovementModifier(MovementType.Run);
+        shadow.SetMovementModifier(MovementType.Run);
         base.Enter();
     }
 
