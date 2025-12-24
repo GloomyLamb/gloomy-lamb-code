@@ -9,6 +9,7 @@ public class ShadowAnimationData
 
     [SerializeField] private string _attackParameterName = "Attack";
     [SerializeField] private string _hitParameterName = "Hit";
+    [SerializeField] private string _boundParameterName = "Bound";
 
     public int IdleParameterHash { get; private set; }
     public int ChaseParameterHash { get; private set; }
@@ -16,6 +17,7 @@ public class ShadowAnimationData
 
     public int AttackParameterHash { get; private set; }
     public int HitParameterHash { get; private set; }
+    public int BoundParameterHash { get; private set; }
 
     public virtual void Initialize()
     {
@@ -27,5 +29,6 @@ public class ShadowAnimationData
 
         AttackParameterHash = Animator.StringToHash(_attackParameterName);
         HitParameterHash = Animator.StringToHash(_hitParameterName);
+        BoundParameterHash = Animator.StringToHash(_boundParameterName);
     }
 }

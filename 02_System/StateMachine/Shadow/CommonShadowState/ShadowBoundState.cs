@@ -11,9 +11,10 @@ public class ShadowBoundState : CommonShadowState
 
     public override void Enter()
     {
+        Logger.Log("Enter Bound State");
         shadow.SetMovementModifier(MovementType.Stop);
         base.Enter();
-        shadow.Animator.SetTrigger(shadow.AnimationData.HitParameterHash);
+        shadow.Animator.SetBool(shadow.AnimationData.BoundParameterHash, true);
 
         if (_boundCoroutine != null)
         {
@@ -21,6 +22,12 @@ public class ShadowBoundState : CommonShadowState
             _boundCoroutine = null;
         }
         _boundCoroutine = CustomCoroutineRunner.Instance.StartCoroutine(Binding());
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        shadow.Animator.SetBool(shadow.AnimationData.BoundParameterHash, false);
     }
 
     private IEnumerator Binding()
