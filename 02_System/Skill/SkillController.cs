@@ -9,13 +9,9 @@ public class SkillController : MonoBehaviour
     [SerializeField] private SkillStatusDatabase _skillStatusDatabase;
     
     // 스킬 상태 관리
-    private readonly Dictionary<SkillType, BaseSkill> _skillDict = new();
+    protected readonly Dictionary<SkillType, BaseSkill> skillDict = new();
     private BaseSkill _curSkill = null;
 
-    private void Start()
-    {
-        InputManager.Instance.UseInput(InputType.Skill);
-    }
 
     /// <summary>
     /// [public] 스킬 획득
@@ -31,13 +27,13 @@ public class SkillController : MonoBehaviour
             return false;
         }
 
-        if (_skillDict.ContainsKey(type))
+        if (skillDict.ContainsKey(type))
         {
             Logger.LogWarning("이미 존재하는 스킬");
             return false;
         }
 
-        _skillDict.Add(type, baseSkill);
+        skillDict.Add(type, baseSkill);
 
         baseSkill.Init(data);
         baseSkill.OnStartSkill += HandleStartSkill;
@@ -45,29 +41,7 @@ public class SkillController : MonoBehaviour
 
         return true;
     }
-
-    /// <summary>
-    /// [public] 스킬과 input 묶기
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="inputType"></param>
-    /// <param name="inputMapName"></param>
-    /// <param name="inputActionName"></param>
-    public void BindInput(
-        SkillType type,
-        InputType inputType,
-        InputMapName inputMapName,
-        InputActionName inputActionName
-        )
-    {
-        if (!_skillDict.TryGetValue(type, out BaseSkill skill))
-        {
-            Logger.LogWarning($"{skill} 없음");
-            return;
-        }
-
-        InputManager.Instance.BindInputEvent(inputType, inputMapName, inputActionName, skill.OnUseSkill);
-    }
+    
 
     #region curSkill 관리
     /// <summary>

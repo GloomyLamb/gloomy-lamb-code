@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class DuskyPlayer : Player
 {
-    [SerializeField] protected List<Transform> _skillPivot;
-
     public DuskyStateMachine StateMachine => stateMachine;
     protected DuskyStateMachine stateMachine;
 
