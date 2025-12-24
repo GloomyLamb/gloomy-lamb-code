@@ -22,6 +22,7 @@ public class SnailShadow : Shadow
         base.Awake();
 
         stateMachine = new SnailShadowStateMachine(this);
+        stateMachine.Init();
     }
 
     protected override void Update()

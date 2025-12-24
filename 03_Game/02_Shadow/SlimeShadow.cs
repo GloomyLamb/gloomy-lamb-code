@@ -28,6 +28,7 @@ public class SlimeShadow : Shadow
         base.Awake();
 
         stateMachine = new SlimeShadowStateMachine(this);
+        stateMachine.Init();
     }
 
     private void OnCollisionEnter(Collision collision)

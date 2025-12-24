@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,13 +14,16 @@ public class CommonShadowState : IState
     protected bool useCoroutine;
     protected Coroutine coroutine;
 
+    public event Action OnUpdate;
+    public event Action OnFixedUpdate;
+
     public CommonShadowState(Shadow shadow, ShadowStateMachine stateMachine)
     {
         this.shadow = shadow;
         StateMachine = stateMachine;
     }
 
-    protected void Init(
+    public void Init(
         MovementType movementType,
         int animParameterHash,
         AnimType animType = AnimType.Bool,
@@ -56,11 +60,11 @@ public class CommonShadowState : IState
         shadow.SetMovementModifier(movementType);
         switch (animType)
         {
-            case AnimType.Trigger:
-                shadow.Animator.SetTrigger(animParameterHash);
-                break;
             case AnimType.Bool:
                 shadow.Animator.SetBool(animParameterHash, true);
+                break;
+            case AnimType.Trigger:
+                shadow.Animator.SetTrigger(animParameterHash);
                 break;
             default:
                 break;
@@ -90,10 +94,12 @@ public class CommonShadowState : IState
 
     public virtual void PhysicsUpdate()
     {
+        OnFixedUpdate?.Invoke();
     }
 
     public virtual void Update()
     {
+        OnUpdate?.Invoke();
     }
     #endregion
 }

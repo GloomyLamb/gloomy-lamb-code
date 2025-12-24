@@ -5,7 +5,6 @@ public class ShadowBoundState : CommonShadowState
 {
     public ShadowBoundState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
-        Init(MovementType.Stop, shadow.AnimationData.BoundParameterHash, AnimType.Bool, true);
     }
 
     protected override IEnumerator StateCoroutine()

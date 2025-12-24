@@ -6,7 +6,6 @@ public class ShadowHitState : CommonShadowState
 
     public ShadowHitState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
-        Init(MovementType.Stop, shadow.AnimationData.HitParameterHash, AnimType.Trigger);
     }
 
     protected override void ResetParameter()
