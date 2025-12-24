@@ -14,12 +14,29 @@ public class SnailShadow : Shadow
     [SerializeField] private Vector3 spawnOffset = Vector3.zero;
     private Coroutine slimeRoutine;
 
+    // 변형
+    [Header("변형")]
+    [SerializeField] private float _cycleTime = 10f;
+    private float _timer;
+
     protected override void Awake()
     {
         base.Awake();
 
         AnimationData.Initialize();
         stateMachine = new SnailShadowStateMachine(this);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        _timer += Time.deltaTime;
+        if (_timer > _cycleTime)
+        {
+            _timer = 0f;
+            stateMachine.ChangeState(stateMachine.TransformState);
+        }
     }
 
     public void StartSlime()
