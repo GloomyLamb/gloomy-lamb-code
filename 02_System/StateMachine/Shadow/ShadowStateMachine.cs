@@ -13,8 +13,8 @@ public class ShadowStateMachine : StateMachine
     {
         this.shadow = shadow;
 
-        IdleState = new ShadowIdleState(shadow, this);
-        ChaseState = new ShadowChaseState(shadow, this);
+        IdleState = new CommonShadowState(shadow, this);
+        ChaseState = new CommonShadowState(shadow, this);
         TransformState = new ShadowTransformState(shadow, this);
 
         HitState = new ShadowHitState(shadow, this);

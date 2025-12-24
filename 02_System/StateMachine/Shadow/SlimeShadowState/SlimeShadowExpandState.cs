@@ -12,7 +12,6 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 
     public override void Enter()
     {
-        shadow.SetMovementModifier(MovementType.Run);
         shadow.CheckExpand();
         base.Enter();
 

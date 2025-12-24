@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SlimeShadowChaseState : ShadowChaseState
+public class SlimeShadowChaseState : CommonShadowState
 {
     protected SlimeShadow shadow;
     protected SlimeShadowStateMachine stateMachine;
@@ -12,10 +12,6 @@ public class SlimeShadowChaseState : ShadowChaseState
     {
         this.shadow = shadow as SlimeShadow;
         this.stateMachine = stateMachine as SlimeShadowStateMachine;
-    }
-
-    protected override void ResetParameter()
-    {
     }
 
     public override void Update()
