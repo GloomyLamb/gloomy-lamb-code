@@ -1,98 +1,117 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+
 
 public class HowlWind : MonoBehaviour
 {
     [Header("설정")]
-    [SerializeField] float innerRadius = 2f;
-    [SerializeField] float outerRadius = 3f;
-    [SerializeField] float expandSpeed = 5f;
-
-    [Header("판정 범위")]
-    [SerializeField] float halfHeight = 0.5f;
-
+    [SerializeField] float _width = 2f;
+    [SerializeField] private float _maxRadius = 3f;
+    [SerializeField] float _expandSpeed = 5f;
+    
+    [Header("판정 높이")]
+    [SerializeField] float checkHeight = 0.5f;
+    
+    [Header("데미지")]
+    [SerializeField]
+    private float _damage = 10f;
+    
     [Header("라인 그리기")]
     [SerializeField] LineRenderer line;
     [SerializeField] int lineSegment = 64;
+
+    float _radius = 0f;
+    
+    
+    private void Start()
+    {
+        if (line != null)
+            line.positionCount = lineSegment;
+    }
     
     
     void Update()
     {
-        outerRadius += expandSpeed * Time.deltaTime;
-        innerRadius += expandSpeed * Time.deltaTime;
+        DrawRing();
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, outerRadius);
+        _radius += _expandSpeed * Time.deltaTime;
 
-        Vector3 center = transform.position;
+        Collider[] hits = Physics.OverlapSphere(transform.position, _radius + (_width / 2));
+
 
         foreach (var hit in hits)
         {
+            if (hit is MeshCollider) continue;  // closestPoint가 MeshCollider 몬쓴다고 워닝 떠서 넘김!
+            
             Vector3 pos = hit.transform.position;
+            float dist = Vector3.Distance(this.transform.position, hit.transform.position);
 
-            // float yDelta = Mathf.Abs(pos.y - center.y);
-            // if (yDelta > halfHeight)
-            //     continue;
-
-            Vector2 c = new Vector2(center.x, center.z);
-            Vector2 p = new Vector2(pos.x, pos.z);
-            float dist = Vector2.Distance(c, p);
-
-            if (dist >= innerRadius && dist <= outerRadius)
+            if (dist >= (_radius - _width / 2) && dist <= (_radius + _width / 2))
             {
-                Debug.Log(hit.name);
+                float hitY = hit.ClosestPoint(transform.position).y;
+                if (hitY >= this.transform.position.y - (checkHeight) &&
+                    hitY <= this.transform.position.y + (checkHeight))
+                {
+                    Player player = hit.transform.GetComponent<Player>();
+                    player.Damage(_damage);
+                    // Debug.Log(
+                    //     $"{hit.name} : {hitY}, {this.transform.position.y - (checkHeight / 2)}, {this.transform.position.y + (checkHeight / 2)}");
+                }
             }
         }
+
+        // todo : 나중에 풀로 넣어서 쓰기
+        if (_radius >= _maxRadius)
+        {
+            Destroy(gameObject);
+        }
     }
-    
+
     void DrawRing()
     {
-        float centerRadius = (innerRadius + outerRadius) * 0.5f;
-        line.widthMultiplier = outerRadius - innerRadius;
+        float centerRadius = _radius;
+        line.widthMultiplier = _width;
 
-        float angleStep = 2f * Mathf.PI / lineSegment;
+        float angleStep = 360f / lineSegment;
         Vector3 center = transform.position;
 
         for (int i = 0; i < lineSegment; i++)
         {
             float angle = angleStep * i;
-            Vector3 pos = new Vector3(
-                Mathf.Cos(angle) * centerRadius,
-                0f,
-                Mathf.Sin(angle) * centerRadius
-            );
-
-            line.SetPosition(i, center + pos);
+            Vector3 dir = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
+            line.SetPosition(i, center + dir * centerRadius);
         }
+    }
+
+
+    void OnValidate()
+    {
+        if (line == null) return;
+        DrawRing();
     }
 
 
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
-        int segmentCount = 32;
         Vector3 center = transform.position;
 
         Gizmos.color = Color.red;
-        DrawCircle(center + Vector3.up * halfHeight, innerRadius, segmentCount);
-        DrawCircle(center - Vector3.up * halfHeight, innerRadius, segmentCount);
-
-        Gizmos.color = Color.yellow;
-        DrawCircle(center + Vector3.up * halfHeight, outerRadius, segmentCount);
-        DrawCircle(center - Vector3.up * halfHeight, outerRadius, segmentCount);
+        DrawCircle(center, (_radius) + (_width / 2));
     }
 
-    void DrawCircle(Vector3 center, float radius, int segments)
+    void DrawCircle(Vector3 center, float radius)
     {
-        float angleStep = Mathf.PI * 2f / segments;
-        Vector3 prevPoint = Vector3.zero;
+        float angleStep = 360f / lineSegment;
 
-        for (int i = 0; i <= segments; i++)
+        Vector3 dir = Quaternion.AngleAxis(0, Vector3.up) * Vector3.forward;
+        Vector3 prevPoint = center + dir * radius;
+
+        for (int i = 1; i <= lineSegment; i++)
         {
             float angle = angleStep * i;
 
-            Vector3 point = new Vector3(Mathf.Cos(angle) * radius, 0f, Mathf.Sin(angle) * radius) + center;
+            dir = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
+            Vector3 point = center + dir * radius;
 
             if (i > 0)
             {
