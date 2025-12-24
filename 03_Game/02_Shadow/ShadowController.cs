@@ -11,7 +11,7 @@ public abstract class ShadowController : MonoBehaviour
     [field: SerializeField] public Transform Target { get; private set; }
 
     private float _agentTimer;
-    private const float _updateInterval = 0.1f;
+    [SerializeField] private  float _updateInterval = 0.1f;
 
     protected virtual void Start()
     {
@@ -26,7 +26,7 @@ public abstract class ShadowController : MonoBehaviour
     {
         if (Target == null)
         {
-            Logger.Log("타겟 없음");
+            //Logger.Log("타겟 없음");
             _agent.ResetPath();
         }
 
@@ -40,7 +40,7 @@ public abstract class ShadowController : MonoBehaviour
 
     public void SetAgentMovementModifier(float modifier)
     {
-        Logger.Log("nev agent 속도 변경");
+        //Logger.Log("nev agent 속도 변경");
         _agent.speed = curShadow.MovementSpeed * modifier;
     }
 
