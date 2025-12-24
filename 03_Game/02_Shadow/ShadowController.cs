@@ -11,7 +11,21 @@ public abstract class ShadowController : MonoBehaviour
     [field: SerializeField] public Transform Target { get; private set; }
 
     private float _agentTimer;
-    [SerializeField] private  float _updateInterval = 0.1f;
+    [SerializeField] private float _updateInterval = 0.1f;
+
+    [field: Header("시간 설정")]
+    [field: SerializeField] public float HitDuration { get; protected set; } = 1f;
+    [SerializeField] private float _boundTime = 3f;
+    [SerializeField] private float _boundStopPoint = 0.1f;
+
+    public WaitForSeconds BoundDuration { get; protected set; }
+    public WaitForSeconds BoundStopPoint { get; protected set; }
+
+    protected virtual void Awake()
+    {
+        BoundDuration = new WaitForSeconds(_boundTime);
+        BoundStopPoint = new WaitForSeconds(_boundStopPoint);
+    }
 
     protected virtual void Start()
     {

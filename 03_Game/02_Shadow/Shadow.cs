@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public enum MovementType
@@ -21,7 +20,9 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [Header("애니메이션")]
     [field: SerializeField] public Animator Animator;
     [field: SerializeField] public ShadowAnimationData AnimationData { get; protected set; }
-    [field: SerializeField] public float HitDuration { get; protected set; } = 1f;
+    public float HitDuration => _controller.HitDuration;
+    public WaitForSeconds BoundStopPoint => _controller.BoundStopPoint;
+    public WaitForSeconds BoundDuration => _controller.BoundDuration;
 
     // todo: 추후 SO로 분리
     [field: Header("움직임")]
@@ -50,15 +51,6 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     // 움직임 이벤트
     public Action OnMove;
 
-    // 바인딩
-    [Header("바인딩")]
-    [SerializeField] private float _stopPoint = 0.1f;
-    [SerializeField] private float _boundTime = 3f;
-
-    private Coroutine _boundCoroutine;
-    private WaitForSeconds _stopDuration;
-    private WaitForSeconds _boundDuration;
-
     // 변형
     public event Action OnTransform;
 
@@ -66,9 +58,6 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     protected virtual void Awake()
     {
         AnimationData.Initialize();
-
-        _stopDuration = new WaitForSeconds(_stopPoint);
-        _boundDuration = new WaitForSeconds(_boundTime);
     }
 
     protected virtual void Start()
@@ -110,7 +99,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     public virtual void StopEffect()
     {
-        
+
     }
 
     public virtual void Damage(float damage)
@@ -150,22 +139,6 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public virtual void Bound()
     {
         stateMachine?.ChangeState(stateMachine.BoundState);
-
-        if (_boundCoroutine != null)
-        {
-            CustomCoroutineRunner.Instance.StopCoroutine(_boundCoroutine);
-            _boundCoroutine = null;
-        }
-        _boundCoroutine = CustomCoroutineRunner.Instance.StartCoroutine(Binding());
-    }
-
-    private IEnumerator Binding()
-    {
-        yield return _stopDuration;
-        Animator.speed = 0f;
-        yield return _boundDuration;
-        Animator.speed = 1f;
-        stateMachine.ChangeState(stateMachine.IdleState);
     }
     #endregion
 

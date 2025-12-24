@@ -22,7 +22,7 @@ public class SlimeShadowIdleState : ShadowIdleState
 
     public override void Update()
     {
-        if (_shadow.ChaseCount == 11)
+        if (_shadow.CurChaseCount == _shadow.ChaseCount + 1)
         {
             Logger.Log("확대 패턴 진입");
             StateMachine.ChangeState(this._stateMachine.ExpandState);

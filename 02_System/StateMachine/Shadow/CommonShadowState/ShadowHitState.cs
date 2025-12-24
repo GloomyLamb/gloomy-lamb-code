@@ -19,11 +19,11 @@ public class ShadowHitState : CommonShadowState
     public override void Update()
     {
         base.Update();
-        _timer = Time.deltaTime;
+
+        _timer += Time.deltaTime;
         if (_timer > shadow.HitDuration)
         {
             StateMachine.ChangeState(StateMachine.IdleState);
-            return;
         }
     }
 }
