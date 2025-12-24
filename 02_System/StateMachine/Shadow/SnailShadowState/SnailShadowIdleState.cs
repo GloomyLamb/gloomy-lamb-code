@@ -9,6 +9,7 @@ public class SnailShadowIdleState : SnailShadowGroundState        // 목표 감�
 
     public override void Enter()
     {
+        StateMachine.Shadow.MovementSpeedModitier = 0f;
         base.Enter();
         StartAnimation(StateMachine.Shadow.CommonAnimationData.IdleParameterHash);
     }

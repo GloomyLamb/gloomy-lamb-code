@@ -6,6 +6,7 @@ public class DogShadowIdleState : DogShadowGroundState
 
     public override void Enter()
     {
+        StateMachine.Shadow.MovementSpeedModitier = 0f;
         base.Enter();
         StartAnimation(StateMachine.Shadow.CommonAnimationData.IdleParameterHash);
     }
