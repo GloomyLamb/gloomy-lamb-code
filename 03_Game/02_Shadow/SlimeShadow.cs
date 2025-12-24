@@ -8,12 +8,13 @@ public class SlimeShadow : Shadow
 {
     // 추격 조건
     [field: Header("추격 조건")]
+    [field: SerializeField] public int ChaseCount { get; private set; } = 10;
     [field: SerializeField] public float SlowChasePatternTime { get; private set; } = 1f;
     [field: SerializeField] public float FastChasePatternTime { get; private set; } = 1f;
     [field: SerializeField] public float MaxScale { get; private set; } = 3f;
     [field: SerializeField] public float MinScale { get; private set; } = 1f;
     public bool IsFastMode { get; set; }
-    public int ChaseCount { get; private set; } = 0;
+    public int CurChaseCount { get; private set; } = 0;
 
     [Header("추가 설정")]
     [SerializeField] public float _scaleDownDuration = 1f;
@@ -51,8 +52,8 @@ public class SlimeShadow : Shadow
 
     public void PlusChaseCount()
     {
-        ChaseCount++;
-        Logger.Log($"추격 횟수: {ChaseCount}");
+        CurChaseCount++;
+        Logger.Log($"추격 횟수: {CurChaseCount}");
     }
 
     #region 변형
