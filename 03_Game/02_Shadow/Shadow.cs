@@ -28,8 +28,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [SerializeField] private float _boundTime = 3f;
 
     private Coroutine _boundCoroutine;
-    private WaitForSeconds _stopTimer;
-    private WaitForSeconds _boundTimer;
+    private WaitForSeconds _stopDuration;
+    private WaitForSeconds _boundDuration;
 
     // 변형
     public event Action OnTransform;
@@ -38,16 +38,12 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     {
         CommonAnimationData.Initialize();
 
-        _stopTimer = new WaitForSeconds(_stopPoint);
-        _boundTimer = new WaitForSeconds(_boundTime);
+        _stopDuration = new WaitForSeconds(_stopPoint);
+        _boundDuration = new WaitForSeconds(_boundTime);
     }
 
     protected virtual void Start()
     {
-        if (Target == null)
-        {
-            Target = FindObjectOfType<Player>().transform;
-        }
     }
 
     protected virtual void Update()
@@ -101,9 +97,9 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     private IEnumerator Binding()
     {
-        yield return _stopTimer;
+        yield return _stopDuration;
         Animator.speed = 0f;
-        yield return _boundTimer;
+        yield return _boundDuration;
         Animator.speed = 1f;
         stateMachine.ChangeState(stateMachine.IdleState);
     }

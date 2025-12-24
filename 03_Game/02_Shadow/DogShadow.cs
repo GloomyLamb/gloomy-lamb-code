@@ -23,7 +23,6 @@ public class DogShadow : Shadow
         AnimationData.Initialize();
         stateMachine = new DogShadowStateMachine(this);
     }
-
     #endregion
 
     private void OnCollisionEnter(Collision collision)
