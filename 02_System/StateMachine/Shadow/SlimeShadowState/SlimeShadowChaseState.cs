@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SlimeShadowChaseState : CommonShadowState
+public class SlimeShadowChaseState : ShadowState
 {
     protected SlimeShadow shadow;
     protected SlimeShadowStateMachine stateMachine;

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ShadowBoundState : CommonShadowState
+public class ShadowBoundState : ShadowState
 {
     public ShadowBoundState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {

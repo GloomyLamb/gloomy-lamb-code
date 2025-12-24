@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class CommonShadowState : IState
+public class ShadowState : IState
 {
     protected Shadow shadow;
     protected ShadowStateMachine StateMachine { get; private set; }
@@ -17,7 +17,7 @@ public class CommonShadowState : IState
     public event Action OnUpdate;
     public event Action OnFixedUpdate;
 
-    public CommonShadowState(Shadow shadow, ShadowStateMachine stateMachine)
+    public ShadowState(Shadow shadow, ShadowStateMachine stateMachine)
     {
         this.shadow = shadow;
         StateMachine = stateMachine;

@@ -2,12 +2,12 @@ public class ShadowStateMachine : StateMachine
 {
     public Shadow Shadow { get; private set; }
 
-    public CommonShadowState IdleState { get; protected set; }
-    public CommonShadowState ChaseState { get; protected set; }
-    public CommonShadowState TransformState { get; private set; }
+    public ShadowState IdleState { get; protected set; }
+    public ShadowState ChaseState { get; protected set; }
+    public ShadowState TransformState { get; private set; }
 
-    public CommonShadowState HitState { get; private set; }
-    public CommonShadowState BoundState { get; private set; }
+    public ShadowState HitState { get; private set; }
+    public ShadowState BoundState { get; private set; }
 
     /// <summary>
     /// 생성자 : 각종 State를 생성
@@ -17,8 +17,8 @@ public class ShadowStateMachine : StateMachine
     {
         Shadow = shadow;
 
-        IdleState = new CommonShadowState(shadow, this);
-        ChaseState = new CommonShadowState(shadow, this);
+        IdleState = new ShadowState(shadow, this);
+        ChaseState = new ShadowState(shadow, this);
         TransformState = new ShadowTransformState(shadow, this);
 
         HitState = new ShadowHitState(shadow, this);

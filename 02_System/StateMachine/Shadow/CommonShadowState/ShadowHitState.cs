@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShadowHitState : CommonShadowState
+public class ShadowHitState : ShadowState
 {
     private float _timer;
 

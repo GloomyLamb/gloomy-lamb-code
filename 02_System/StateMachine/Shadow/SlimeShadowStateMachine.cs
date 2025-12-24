@@ -6,9 +6,9 @@ public class SlimeShadowStateMachine : ShadowStateMachine
 
     #region States
     // Ground
-    public CommonShadowState WalkState { get; private set; }
-    public CommonShadowState RunState { get; private set; }
-    public CommonShadowState ExpandState { get; private set; }
+    public ShadowState WalkState { get; private set; }
+    public ShadowState RunState { get; private set; }
+    public ShadowState ExpandState { get; private set; }
     #endregion
 
     // 추적
