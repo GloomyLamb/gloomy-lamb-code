@@ -34,7 +34,7 @@ public class SlimeShadowChaseState : ShadowChaseState
     }
 
 
-    protected IEnumerator ScaleUp(float size, float duration)
+    protected IEnumerator ScaleTo(float size, float duration)
     {
         Transform target = shadow.transform;
         Vector3 startScale = target.localScale;
