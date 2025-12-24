@@ -11,11 +11,12 @@ public class ForestShadowController : ShadowController
     [SerializeField] private SnailShadow _snailShadow;
     private Shadow _curShadow;
 
-    [field: Header("Target")]
-    [field: SerializeField] public Transform Target;
-
     private void Awake()
     {
+        _slimeShadow.Init(this);
+        _dogShadow.Init(this);
+        _snailShadow.Init(this);
+
         _curShadow = _slimeShadow;
         ChangeToSlime();
     }
@@ -23,14 +24,6 @@ public class ForestShadowController : ShadowController
     private void OnEnable()
     {
         Init();
-    }
-
-    private void Start()
-    {
-        if (Target == null)
-        {
-            Target = FindObjectOfType<Player>().transform;
-        }
     }
 
     private void Init()

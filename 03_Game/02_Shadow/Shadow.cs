@@ -9,8 +9,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [field: SerializeField] public ShadowAnimationData CommonAnimationData { get; protected set; }
     protected ShadowStateMachine stateMachine;
 
-    // 타겟
-    [field: SerializeField] public Transform Target;
+    private ShadowController _controller;
+    public Transform Target => _controller.Target;
 
     // todo: 추후 SO로 분리
     [field: SerializeField] public float MovementSpeed { get; set; } = 10f;
@@ -34,6 +34,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     // 변형
     public event Action OnChange;
 
+    #region 초기화
     protected virtual void Awake()
     {
         CommonAnimationData.Initialize();
@@ -45,6 +46,12 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     protected virtual void Start()
     {
     }
+
+    public virtual void Init(ShadowController controller)
+    {
+        _controller = controller;
+    }
+    #endregion
 
     protected virtual void Update()
     {

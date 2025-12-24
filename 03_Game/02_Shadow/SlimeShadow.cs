@@ -28,13 +28,6 @@ public class SlimeShadow : Shadow
         }
     }
 
-    public void HandleMove()
-    {
-        Vector3 dir = (Target.position - transform.position).normalized;
-        dir.y = 0f;
-        transform.position += dir * MovementSpeed * MovementSpeedModitier * Time.deltaTime;
-    }
-
     #region 변형
     protected override bool CanTransform()
     {
