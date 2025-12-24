@@ -87,7 +87,7 @@ public class BeamController : MonoBehaviour
             spotLight.range = visibleLength;
          // spotLight.spotAngle = Mathf.Lerp(startSpotAngle, maxSpotAngle, t);
             spotLight.intensity = Mathf.Lerp(startIntensity, maxIntensity, t);
-            Debug.Log($"Light range={spotLight.range}, angle={spotLight.spotAngle}, intensity={spotLight.intensity}");
+            
             
         }
     }
@@ -99,6 +99,13 @@ public class BeamController : MonoBehaviour
         isExpanding = true;
         ApplyBeam(0f);
         
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.name);
+        other.GetComponent<IDamageable>()?.Damage(10f);
+        other.GetComponent<IDamageable>()?.ApplyEffect();
     }
 }
 
