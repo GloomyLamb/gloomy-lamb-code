@@ -9,6 +9,10 @@ public class ShadowStateMachine : StateMachine
     public CommonShadowState HitState { get; private set; }
     public CommonShadowState BoundState { get; private set; }
 
+    /// <summary>
+    /// 생성자 : 각종 State를 생성
+    /// </summary>
+    /// <param name="shadow"></param>
     public ShadowStateMachine(Shadow shadow)
     {
         Shadow = shadow;
@@ -22,6 +26,9 @@ public class ShadowStateMachine : StateMachine
 
     }
 
+    /// <summary>
+    /// State에 각종 정보 전달
+    /// </summary>
     public virtual void Init()
     {
         IdleState.Init(MovementType.Stop, Shadow.AnimationData.IdleParameterHash, AnimType.Bool);
@@ -34,6 +41,10 @@ public class ShadowStateMachine : StateMachine
         Publish();
     }
 
+    /// <summary>
+    /// State에 이벤트를 구독합니다.
+    /// 현재 구독할 수 있는 범위 - Update, FixedUpdate
+    /// </summary>
     protected virtual void Publish()
     {
         // Update
@@ -45,6 +56,9 @@ public class ShadowStateMachine : StateMachine
     }
 
     #region 상태 Update 내부 로직
+    /// <summary>
+    /// 기본 상태 Update
+    /// </summary>
     protected virtual void HandleUpdateIdle()
     {
         if (Shadow.Target != null)
@@ -53,6 +67,9 @@ public class ShadowStateMachine : StateMachine
         }
     }
 
+    /// <summary>
+    /// 추적 상태 Update
+    /// </summary>
     protected virtual void HandleUpdateChase()
     {
         if (Shadow.Target == null)
@@ -62,6 +79,9 @@ public class ShadowStateMachine : StateMachine
     }
     #endregion
 
+    /// <summary>
+    /// 추적 상태 FixedUpdate
+    /// </summary>
     protected virtual void HandleFixedUpdateChase()
     {
         Shadow.OnMove?.Invoke();
