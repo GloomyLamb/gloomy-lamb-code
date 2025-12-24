@@ -40,7 +40,7 @@ public class SlimeShadowChaseState : SlimeShadowGroundState
     {
         base.PhysicsUpdate();
 
-        StateMachine.Shadow.HandleMove();
+        StateMachine.Shadow.OnMove?.Invoke();
     }
 
     protected IEnumerator ScaleUp(float size, float duration)

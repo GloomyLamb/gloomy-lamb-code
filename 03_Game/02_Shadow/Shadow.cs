@@ -45,7 +45,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     private WaitForSeconds _boundDuration;
 
     // 변형
-    public event Action OnChange;
+    public event Action OnTransform;
 
     #region 초기화
     protected virtual void Awake()
@@ -71,7 +71,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         if (CanTransform())
         {
             ResetTransformFlag();
-            stateMachine.ChangeState(stateMachine.ChangeState);
+            stateMachine.ChangeState(stateMachine.TransformState);
             return;
         }
 
@@ -126,9 +126,10 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     #endregion
 
     #region 변형
-    public void Change()
+    public void Transform()
     {
-        OnChange?.Invoke();
+        OnTransform?.Invoke();
+        OnTransform?.Invoke();
     }
 
     /// <summary>

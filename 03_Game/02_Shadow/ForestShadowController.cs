@@ -18,7 +18,7 @@ public class ForestShadowController : ShadowController
         _snailShadow.Init(this);
 
         curShadow = _slimeShadow;
-        ChangeToSlime();
+        TransformToSlime();
     }
 
     private void OnEnable()
@@ -32,9 +32,9 @@ public class ForestShadowController : ShadowController
         _dogShadow.OnMove += HandleMove;
         _snailShadow.OnMove += HandleMove;
 
-        _slimeShadow.OnChange += ChangeToDog;
-        _dogShadow.OnChange += ChangeToSnail;
-        _snailShadow.OnChange += ChangeToDog;
+        _slimeShadow.OnTransform += TransformToDog;
+        _dogShadow.OnTransform += TransformToSnail;
+        _snailShadow.OnTransform += TransformToDog;
     }
     #endregion
 
@@ -44,13 +44,13 @@ public class ForestShadowController : ShadowController
         _dogShadow.OnMove -= HandleMove;
         _snailShadow.OnMove -= HandleMove;
 
-        _slimeShadow.OnChange -= ChangeToDog;
-        _dogShadow.OnChange -= ChangeToSnail;
-        _snailShadow.OnChange -= ChangeToDog;
+        _slimeShadow.OnTransform -= TransformToDog;
+        _dogShadow.OnTransform -= TransformToSnail;
+        _snailShadow.OnTransform -= TransformToDog;
     }
 
     #region 변형
-    private void ChangeToSlime()
+    private void TransformToSlime()
     {
         Logger.Log("슬라임으로 변형");
         _slimeShadow.gameObject.SetActive(true);
@@ -58,7 +58,7 @@ public class ForestShadowController : ShadowController
         _snailShadow.gameObject.SetActive(false);
     }
 
-    private void ChangeToDog()
+    private void TransformToDog()
     {
         Logger.Log("개로 변형");
         _slimeShadow.gameObject.SetActive(false);
@@ -66,7 +66,7 @@ public class ForestShadowController : ShadowController
         _snailShadow.gameObject.SetActive(false);
     }
 
-    private void ChangeToSnail()
+    private void TransformToSnail()
     {
         Logger.Log("달팽이 변형");
         _slimeShadow.gameObject.SetActive(false);
