@@ -10,12 +10,12 @@ public class SnailShadowGroundState : SnailShadowState
     public override void Enter()
     {
         base.Enter();
-        // ground idle 애니메이션 시작
+        StartAnimation(StateMachine.Shadow.AnimationData.GroundParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        // groud idle 애니메이션 종료
+        StopAnimation(StateMachine.Shadow.AnimationData.GroundParameterHash);
     }
 }

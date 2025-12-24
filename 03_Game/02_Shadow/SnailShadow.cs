@@ -5,6 +5,8 @@
 using UnityEngine;
 public class SnailShadow : Shadow
 {
+    [field: SerializeField] public SnailShadowAnimationData AnimationData { get; private set; }
+
     [Header("Snail Slime")]
     [SerializeField] private GameObject slimePrefab;
     [SerializeField] private float spawnInterval = 1f;
@@ -16,6 +18,7 @@ public class SnailShadow : Shadow
     {
         base.Awake();
 
+        AnimationData.Initialize();
         stateMachine = new SnailShadowStateMachine(this);
     }
 

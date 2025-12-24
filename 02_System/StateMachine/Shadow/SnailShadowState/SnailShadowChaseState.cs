@@ -10,6 +10,7 @@
     public override void Enter()
     {
         base.Enter();
+        StartAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
         snailSM.Shadow?.StartSlime();
     }
 
@@ -30,7 +31,7 @@
     public override void Exit()
     {
         base.Exit();
-        // idle 움직임 애니메이션 종료
+        StopAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
         snailSM.Shadow.StopSlime();
     }
 }
