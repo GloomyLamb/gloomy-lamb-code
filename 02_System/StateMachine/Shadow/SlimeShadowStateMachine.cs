@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SlimeShadowStateMachine : ShadowStateMachine
 {
-    public SlimeShadow Shadow { get; private set; }
+    public new SlimeShadow Shadow { get; private set; }
 
     #region States
     // Ground
@@ -26,9 +26,9 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     {
         base.Init();
 
-        WalkState.Init(MovementType.Default, shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
-        RunState.Init(MovementType.Run, shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
-        ExpandState.Init(MovementType.Stop, shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        WalkState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        RunState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
     }
 
     protected override void Publish()
@@ -52,7 +52,7 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         }
 
         _timer += Time.deltaTime;
-        if (shadow.Target != null)
+        if (Shadow.Target != null)
         {
             if (_timer > _patternTime && !Shadow.IsFastMode)
             {

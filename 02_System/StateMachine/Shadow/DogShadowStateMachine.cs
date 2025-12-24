@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DogShadowStateMachine : ShadowStateMachine
 {
-    public DogShadow Shadow { get; private set; }
+    public new DogShadow Shadow { get; private set; }
 
     #region States
     // Skill
@@ -22,8 +22,8 @@ public class DogShadowStateMachine : ShadowStateMachine
     {
         base.HandleUpdateChase();
 
-        Transform shadowT = shadow.transform;
-        Transform targetT = shadow.Target.transform;
+        Transform shadowT = Shadow.transform;
+        Transform targetT = Shadow.Target.transform;
 
         if ((targetT.position - shadowT.position).sqrMagnitude < Shadow.SqrBiteRange)
         {

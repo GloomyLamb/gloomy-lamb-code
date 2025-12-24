@@ -1,6 +1,6 @@
 public class ShadowStateMachine : StateMachine
 {
-    public Shadow shadow { get; private set; }
+    public Shadow Shadow { get; private set; }
 
     public CommonShadowState IdleState { get; protected set; }
     public CommonShadowState ChaseState { get; protected set; }
@@ -11,7 +11,7 @@ public class ShadowStateMachine : StateMachine
 
     public ShadowStateMachine(Shadow shadow)
     {
-        this.shadow = shadow;
+        Shadow = shadow;
 
         IdleState = new CommonShadowState(shadow, this);
         ChaseState = new CommonShadowState(shadow, this);
@@ -24,12 +24,12 @@ public class ShadowStateMachine : StateMachine
 
     public virtual void Init()
     {
-        IdleState.Init(MovementType.Stop, shadow.AnimationData.IdleParameterHash, AnimType.Bool);
-        ChaseState.Init(MovementType.Default, shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
-        TransformState.Init(MovementType.Stop, shadow.AnimationData.TransformParameterHash, AnimType.Bool, true);
+        IdleState.Init(MovementType.Stop, Shadow.AnimationData.IdleParameterHash, AnimType.Bool);
+        ChaseState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Bool, true);
 
-        HitState.Init(MovementType.Stop, shadow.AnimationData.HitParameterHash, AnimType.Trigger);
-        BoundState.Init(MovementType.Stop, shadow.AnimationData.BoundParameterHash, AnimType.Bool, true);
+        HitState.Init(MovementType.Stop, Shadow.AnimationData.HitParameterHash, AnimType.Trigger);
+        BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Bool, true);
 
         Publish();
     }
@@ -47,7 +47,7 @@ public class ShadowStateMachine : StateMachine
     #region 상태 Update 내부 로직
     protected virtual void HandleUpdateIdle()
     {
-        if (shadow.Target != null)
+        if (Shadow.Target != null)
         {
             ChangeState(ChaseState);
         }
@@ -55,7 +55,7 @@ public class ShadowStateMachine : StateMachine
 
     protected virtual void HandleUpdateChase()
     {
-        if (shadow.Target == null)
+        if (Shadow.Target == null)
         {
             ChangeState(IdleState);
         }
@@ -64,6 +64,6 @@ public class ShadowStateMachine : StateMachine
 
     protected virtual void HandleFixedUpdateChase()
     {
-        shadow.OnMove?.Invoke();
+        Shadow.OnMove?.Invoke();
     }
 }
