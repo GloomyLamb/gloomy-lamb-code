@@ -8,16 +8,10 @@ public class SlimeShadowWalkState : SlimeShadowChaseState
     {
     }
 
-    public override void Enter()
+    protected override void ResetParameter()
     {
+        base.ResetParameter();
         _timer = 0f;
-        shadow.SetMovementModifier(MovementType.Default);
-        base.Enter();
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
     }
 
     public override void Update()

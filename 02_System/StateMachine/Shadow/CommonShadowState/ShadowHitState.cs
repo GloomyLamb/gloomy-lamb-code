@@ -6,13 +6,11 @@ public class ShadowHitState : CommonShadowState
 
     public ShadowHitState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
+        Init(MovementType.Stop, shadow.AnimationData.HitParameterHash, AnimType.Trigger);
     }
 
-    public override void Enter()
+    protected override void ResetParameter()
     {
-        shadow.SetMovementModifier(MovementType.Stop);
-        base.Enter();
-        shadow.Animator.SetTrigger(shadow.AnimationData.HitParameterHash);
         _timer = 0f;
     }
 

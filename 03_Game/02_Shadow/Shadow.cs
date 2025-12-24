@@ -1,12 +1,6 @@
 using System;
 using UnityEngine;
 
-public enum MovementType
-{
-    Stop,
-    Default,
-    Run,
-}
 
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
@@ -20,9 +14,10 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [Header("애니메이션")]
     [field: SerializeField] public Animator Animator;
     [field: SerializeField] public ShadowAnimationData AnimationData { get; protected set; }
+    public float TransformDuration => _controller.TransformDuration;
     public float HitDuration => _controller.HitDuration;
-    public WaitForSeconds BoundStopPoint => _controller.BoundStopPoint;
-    public WaitForSeconds BoundDuration => _controller.BoundDuration;
+    public float BoundStopPoint => _controller.BoundStopPoint;
+    public float BoundDuration => _controller.BoundDuration;
 
     // todo: 추후 SO로 분리
     [field: Header("움직임")]
@@ -31,7 +26,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [SerializeField] private float _runSpeedModifier = 2f;
     private float _movementSpeedModifier = 1f;
 
-    public float MovementSpeedModitier
+    protected float MovementSpeedModitier
     {
         get { return _movementSpeedModifier; }
         private set

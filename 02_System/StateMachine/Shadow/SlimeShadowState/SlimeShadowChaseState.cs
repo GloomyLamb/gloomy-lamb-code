@@ -14,10 +14,9 @@ public class SlimeShadowChaseState : ShadowChaseState
         this.stateMachine = stateMachine as SlimeShadowStateMachine;
     }
 
-    public override void Enter()
+    protected override void ResetParameter()
     {
         _timer = 0f;
-        base.Enter();
     }
 
     public override void Update()
@@ -32,7 +31,6 @@ public class SlimeShadowChaseState : ShadowChaseState
             stateMachine.ChangeState(stateMachine.IdleState);
         }
     }
-
 
     protected IEnumerator ScaleTo(float size, float duration)
     {

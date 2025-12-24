@@ -2,19 +2,7 @@ public class ShadowChaseState : CommonShadowState
 {
     public ShadowChaseState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
-    }
-
-    public override void Enter()
-    {
-        shadow.SetMovementModifier(MovementType.Default);
-        base.Enter();
-        shadow.Animator.SetBool(shadow.AnimationData.ChaseParameterHash, true);
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-        shadow.Animator.SetBool(shadow.AnimationData.ChaseParameterHash, false);
+        Init(MovementType.Default, shadow.AnimationData.ChaseParameterHash);
     }
 
     public override void Update()
