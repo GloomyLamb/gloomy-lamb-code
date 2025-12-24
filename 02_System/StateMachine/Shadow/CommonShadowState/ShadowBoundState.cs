@@ -6,7 +6,7 @@ public class ShadowBoundState : CommonShadowState
 
     public override void Enter()
     {
-        shadow.MovementSpeedModitier = 0f;
+        shadow.SetMovementModifier(MovementType.Stop);
         base.Enter();
         shadow.Animator.SetTrigger(shadow.CommonAnimationData.HitParameterHash);
     }

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class SlimeShadowWalkState : SlimeShadowChaseState
 {
-    private float _patternTime;
     private float _timer;
 
     public SlimeShadowWalkState(StateMachine stateMachine) : base(stateMachine)
@@ -12,7 +11,7 @@ public class SlimeShadowWalkState : SlimeShadowChaseState
     public override void Enter()
     {
         _timer = 0f;
-        StateMachine.Shadow.MovementSpeedModitier = 1.3f;
+        StateMachine.Shadow.SetMovementModifier(MovementType.Default);
         base.Enter();
     }
 
@@ -23,12 +22,10 @@ public class SlimeShadowWalkState : SlimeShadowChaseState
 
     public override void Update()
     {
-        base.Update();
-
         _timer += Time.deltaTime;
-        if (_timer > _patternTime)
+        if (_timer > StateMachine.Shadow.SlowChasePatternTime)
         {
-            StateMachine.ChangeState(StateMachine.RunState);
+            StateMachine.ChangeState(StateMachine.IdleState);
         }
     }
 }

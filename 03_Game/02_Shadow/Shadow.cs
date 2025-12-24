@@ -2,6 +2,13 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+public enum MovementType
+{
+    Stop,
+    Default,
+    Run,
+}
+
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
     [Header("애니메이션")]
@@ -13,12 +20,16 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public Transform Target => _controller.Target;
 
     // todo: 추후 SO로 분리
+    [field: Header("움직임")]
     [field: SerializeField] public float MovementSpeed { get; set; } = 10f;
-    [SerializeField] private float _movementSpeedModifier = 1f;
+    [SerializeField] private float _defaultSpeedModifier = 1f;
+    [SerializeField] private float _runSpeedModifier = 2f;
+    private float _movementSpeedModifier = 1f;
+
     public float MovementSpeedModitier
     {
         get { return _movementSpeedModifier; }
-        set
+        private set
         {
             Logger.Log("속도 보정값 변경");
             _movementSpeedModifier = value;
@@ -106,6 +117,19 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public virtual void GiveEffect()
     {
     }
+
+    #region 움직임
+    public virtual void SetMovementModifier(MovementType type)
+    {
+        MovementSpeedModitier = (type) switch
+        {
+            MovementType.Stop => 0f,
+            MovementType.Default => _defaultSpeedModifier,
+            MovementType.Run => _runSpeedModifier,
+            _ => _defaultSpeedModifier,
+        };
+    }
+    #endregion
 
     #region 바인딩
     public virtual void Bound()

@@ -4,7 +4,6 @@ using UnityEngine;
 public class SlimeShadowChaseState : SlimeShadowGroundState
 {
     private float _timer;
-    private float _patternTime = 1f;
 
     public SlimeShadowChaseState(StateMachine stateMachine) : base(stateMachine)
     {
@@ -28,7 +27,7 @@ public class SlimeShadowChaseState : SlimeShadowGroundState
         base.Update();
 
         _timer += Time.deltaTime;
-        if (_timer > _patternTime)
+        if (_timer > StateMachine.Shadow.FastChasePatternTime)
         {
             Logger.Log("정지");
             StateMachine.PlusChaseCount();

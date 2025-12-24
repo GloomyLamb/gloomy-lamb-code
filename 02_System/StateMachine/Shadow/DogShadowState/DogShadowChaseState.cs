@@ -8,6 +8,7 @@ public class DogShadowChaseState : DogShadowGroundState
 
     public override void Enter()
     {
+        StateMachine.Shadow.SetMovementModifier(MovementType.Default);
         base.Enter();
         StartAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
     }

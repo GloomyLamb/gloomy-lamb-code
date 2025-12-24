@@ -4,7 +4,6 @@ public class SlimeShadowIdleState : SlimeShadowGroundState
 {
     private float _timer;
     private float _patternTime = 0.5f;
-    private bool _fastMode;
 
     public SlimeShadowIdleState(StateMachine stateMachine) : base(stateMachine)
     {
@@ -13,7 +12,7 @@ public class SlimeShadowIdleState : SlimeShadowGroundState
     public override void Enter()
     {
         _timer = 0f;
-        StateMachine.Shadow.MovementSpeedModitier = 0f;
+        StateMachine.Shadow.SetMovementModifier(MovementType.Stop);
         base.Enter();
         StartAnimation(StateMachine.Shadow.CommonAnimationData.IdleParameterHash);
     }
@@ -37,13 +36,13 @@ public class SlimeShadowIdleState : SlimeShadowGroundState
         _timer += Time.deltaTime;
         if (StateMachine.Shadow.Target != null)
         {
-            if (_timer > _patternTime && !_fastMode)
+            if (_timer > _patternTime && !StateMachine.Shadow.IsFastMode)
             {
                 Logger.Log("저속 이동");
-                _fastMode = true;
+                StateMachine.Shadow.IsFastMode = true;
                 StateMachine.ChangeState(StateMachine.WalkState);
             }
-            else if (_timer > _patternTime && _fastMode)
+            else if (_timer > _patternTime && StateMachine.Shadow.IsFastMode)
             {
                 Logger.Log("고속 이동");
                 StateMachine.ChangeState(StateMachine.RunState);

@@ -12,7 +12,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 
     public override void Enter()
     {
-        StateMachine.Shadow.MovementSpeedModitier = 2f;
+        StateMachine.Shadow.SetMovementModifier(MovementType.Run);
         StateMachine.Shadow.CheckExpand();
         base.Enter();
 

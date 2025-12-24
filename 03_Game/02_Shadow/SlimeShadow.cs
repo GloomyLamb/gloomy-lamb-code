@@ -7,6 +7,12 @@ public class SlimeShadow : Shadow
 {
     [field: SerializeField] public SlimeShadowAnimationData AnimationData { get; private set; }
 
+    // 추격 조건
+    [field: Header("추격 조건")]
+    [field: SerializeField] public float SlowChasePatternTime { get; private set; } = 1f;
+    [field: SerializeField] public float FastChasePatternTime { get; private set; } = 1f;
+    public bool IsFastMode { get; set; }
+
     // 변형 조건
     private bool _checkExpand;
     private bool CheckScale => transform.localScale.x == 1f;

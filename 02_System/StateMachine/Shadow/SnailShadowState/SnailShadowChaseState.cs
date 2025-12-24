@@ -9,8 +9,8 @@
 
     public override void Enter()
     {
+        StateMachine.Shadow.SetMovementModifier(MovementType.Default);
         base.Enter();
-        StateMachine.Shadow.MovementSpeedModitier = 1f;
         StartAnimation(StateMachine.Shadow.AnimationData.ChaseParameterHash);
         snailSM.Shadow?.StartSlime();
     }
