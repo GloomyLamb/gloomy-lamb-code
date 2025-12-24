@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public event Action<Vector2> OnInputMoveEndAction;
     public event Action OnInputAttackAction;
     public event Action OnInputJumpAction;
+
+    public event Action<bool> OnInputDashAction;
     
     
     private void Start()
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
         InputManager.Instance.BindInputEvent(InputType.Player, InputMapName.Default, InputActionName.Jump, OnInputJump);
         InputManager.Instance.BindInputEvent(InputType.Player, InputMapName.Default, InputActionName.Move, OnInputMove);
         InputManager.Instance.BindInputEvent(InputType.Player,InputMapName.Default,InputActionName.Attack, OnInputAttack);
+        InputManager.Instance.BindInputEvent(InputType.Player, InputMapName.Default, InputActionName.Dash, OnInputDash);
     }
     
     private void Update()
@@ -58,6 +60,18 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             OnInputAttackAction?.Invoke();
+        }
+    }
+
+    void OnInputDash(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            OnInputDashAction?.Invoke(true);
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            OnInputDashAction?.Invoke(false);
         }
     }
     

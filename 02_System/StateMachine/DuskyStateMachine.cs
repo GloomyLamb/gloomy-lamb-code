@@ -9,7 +9,7 @@ public class DuskyStateMachine : StateMachine
     public IState AttackState => _attackState;
     public IState DieState => _dieState;
     public IState MoveState => _moveState;
-
+    public IState DashState => _dashState;
 
     private IState _idleState;
     private IState _jumpState;
@@ -17,7 +17,7 @@ public class DuskyStateMachine : StateMachine
     private IState _attackState;
     private IState _dieState;
     private IState _moveState;
-    private IState _fallingState;
+    private IState _dashState;
 
     
 
@@ -33,6 +33,8 @@ public class DuskyStateMachine : StateMachine
         _attackState = new DuskyAttackState(this, player, 0.2f);
         _hitState = new DuskyHitState(this, player);
         _dieState = new DuskyDieState(this, player);
+        _dashState = new DuskyDashState(this, player);
+
 
 
         changableStates = new Dictionary<IState, HashSet<IState>>

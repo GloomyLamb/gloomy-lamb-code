@@ -5,7 +5,7 @@ using UnityEngine;
 public class DuskyPlayer : Player
 {
     [SerializeField] DamageableDetector _damageableDetector;
-    
+
     public DuskyStateMachine StateMachine => stateMachine;
     protected DuskyStateMachine stateMachine;
 
@@ -30,6 +30,7 @@ public class DuskyPlayer : Player
             controller.OnInputMoveEndAction += OnMoveEnd;
             controller.OnInputJumpAction += OnJump;
             controller.OnInputAttackAction += OnAttack;
+            controller.OnInputDashAction += OnDash;
         }
 
         rb = GetComponent<Rigidbody>();
@@ -70,17 +71,19 @@ public class DuskyPlayer : Player
         {
             return;
         }
-        
+
         // Flags 검사 추가해야함. (스턴)
         if (stateMachine.CurState is IMovableState)
         {
             if (_lastMoveInputValue.magnitude > 0.1f)
             {
                 float moveSpeed = moveStatusData.MoveSpeed;
+                
                 if (nowCondition.HasFlag(CharacterCondition.Slow))
-                    moveSpeed = moveSpeed * 0.3f; // 기획서에 3배로 되어있다... todo : 수치 빼는건 나중에
-                
-                
+                    moveSpeed = moveSpeed * 0.3f; // todo : 수치 빼는건 나중에
+                if (nowCondition.HasFlag(CharacterCondition.Dash))
+                    moveSpeed = moveSpeed * 1.5f;
+
                 Vector3 newPosition = rb.position + _lastMoveInputValue * (moveSpeed * Time.fixedDeltaTime);
                 rb.MovePosition(newPosition);
             }
@@ -94,7 +97,6 @@ public class DuskyPlayer : Player
             // 점프 중인지 체크해야함 
             _damageableDetector.CurrentTarget.Damage(status.Atk);
         }
-        
     }
 
     public override void GiveEffect()
@@ -130,11 +132,19 @@ public class DuskyPlayer : Player
         }
 
         if (stateMachine.CurState != stateMachine.MoveState &&
+            NowCondition.HasFlag(CharacterCondition.Dash) == false &&
             nowCondition.HasFlag(CharacterCondition.Stun) == false)
         {
             if (stateMachine.CanChange(stateMachine.MoveState))
             {
                 stateMachine.ChangeState(stateMachine.MoveState);
+            }
+        }
+        else if (stateMachine.CurState != stateMachine.DashState)
+        {
+            if (NowCondition.HasFlag(CharacterCondition.Dash))
+            {
+                stateMachine.ChangeState(stateMachine.DashState);
             }
         }
 

@@ -27,7 +27,6 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
     protected CharacterCondition nowCondition = CharacterCondition.None;
 
 
-
     private void Awake()
     {
         if (animator == null)
@@ -45,6 +44,19 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
     public abstract void Move();
     public abstract void OnJump();
     public abstract void OnAttack();
+
+    public virtual void OnDash(bool value)
+    {
+        if (value)
+        {
+            AddCondition(CharacterCondition.Dash, true);
+        }
+        else
+        {
+            AddCondition(CharacterCondition.Dash, false);
+        }
+    }
+
     public abstract void Attack();
     public abstract void GiveEffect();
 
@@ -52,6 +64,7 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
     {
         status.AddHp(-damage);
     }
+
     public abstract void ApplyEffect();
 
     public void AddCondition(CharacterCondition condition)
@@ -88,6 +101,18 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
         nowCondition |= condition;
         yield return new WaitForSeconds(duration);
         nowCondition &= ~condition;
+    }
+
+    public void AddCondition(CharacterCondition condition, bool value)
+    {
+        if (value)
+        {
+            nowCondition |= condition;
+        }
+        else
+        {
+            nowCondition &= ~condition;
+        }
     }
 
     #region Ground Check

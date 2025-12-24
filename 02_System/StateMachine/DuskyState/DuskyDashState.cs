@@ -1,4 +1,4 @@
-public class DuskyDashState:BaseDuskyState
+public class DuskyDashState:BaseDuskyState, IMovableState
 {
     public DuskyDashState(StateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
     {
