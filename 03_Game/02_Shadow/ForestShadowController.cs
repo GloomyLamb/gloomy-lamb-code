@@ -11,8 +11,10 @@ public class ForestShadowController : ShadowController
     [SerializeField] private SnailShadow _snailShadow;
 
     #region 초기화
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _slimeShadow.Init(this);
         _dogShadow.Init(this);
         _snailShadow.Init(this);
