@@ -17,7 +17,7 @@ public class ForestShadowController : ShadowController
     private void Awake()
     {
         _curShadow = _slimeShadow;
-        TransformToSlime();
+        ChangeToSlime();
     }
 
     private void OnEnable()
@@ -39,9 +39,9 @@ public class ForestShadowController : ShadowController
         _dogShadow.OnMove += HandleMove;
         _snailShadow.OnMove += HandleMove;
 
-        _slimeShadow.OnTransform += TransformToDog;
-        _dogShadow.OnTransform += TransformToSnail;
-        _snailShadow.OnTransform += TransformToDog;
+        _slimeShadow.OnChange += ChangeToDog;
+        _dogShadow.OnChange += ChangeToSnail;
+        _snailShadow.OnChange += ChangeToDog;
     }
 
     private void OnDisable()
@@ -50,9 +50,9 @@ public class ForestShadowController : ShadowController
         _dogShadow.OnMove -= HandleMove;
         _snailShadow.OnMove -= HandleMove;
 
-        _slimeShadow.OnTransform -= TransformToDog;
-        _dogShadow.OnTransform -= TransformToSnail;
-        _snailShadow.OnTransform -= TransformToDog;
+        _slimeShadow.OnChange -= ChangeToDog;
+        _dogShadow.OnChange -= ChangeToSnail;
+        _snailShadow.OnChange -= ChangeToDog;
     }
 
     private void HandleMove()
@@ -63,7 +63,7 @@ public class ForestShadowController : ShadowController
     }
 
     #region 변형
-    private void TransformToSlime()
+    private void ChangeToSlime()
     {
         Logger.Log("슬라임으로 변형");
         _slimeShadow.gameObject.SetActive(true);
@@ -71,7 +71,7 @@ public class ForestShadowController : ShadowController
         _snailShadow.gameObject.SetActive(false);
     }
 
-    private void TransformToDog()
+    private void ChangeToDog()
     {
         Logger.Log("개로 변형");
         _slimeShadow.gameObject.SetActive(false);
@@ -79,7 +79,7 @@ public class ForestShadowController : ShadowController
         _snailShadow.gameObject.SetActive(false);
     }
 
-    private void TransformToSnail()
+    private void ChangeToSnail()
     {
         Logger.Log("달팽이 변형");
         _slimeShadow.gameObject.SetActive(false);
