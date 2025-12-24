@@ -8,10 +8,14 @@ public class Status
     public float Hp => _hp;
     private float _hp;
 
-    public Status(float maxHp)
+    public float Atk => _atk;
+    private float _atk;
+    
+    public Status(float maxHp, float atk)
     {
         _maxHp = maxHp;
         _hp = maxHp;
+        _atk = atk;
     }
 
 
