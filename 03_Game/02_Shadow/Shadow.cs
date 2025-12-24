@@ -7,8 +7,10 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [Header("애니메이션")]
     [field: SerializeField] public Animator Animator;
     [field: SerializeField] public ShadowAnimationData CommonAnimationData { get; protected set; }
-
     protected ShadowStateMachine stateMachine;
+
+    // 타겟
+    [field: SerializeField] public Transform Target;
 
     // todo: 추후 SO로 분리
     [field: SerializeField] public float MovementSpeed { get; set; } = 10f;
@@ -38,6 +40,14 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
         _stopTimer = new WaitForSeconds(_stopPoint);
         _boundTimer = new WaitForSeconds(_boundTime);
+    }
+
+    protected virtual void Start()
+    {
+        if (Target == null)
+        {
+            Target = FindObjectOfType<Player>().transform;
+        }
     }
 
     protected virtual void Update()

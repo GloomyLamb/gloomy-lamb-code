@@ -28,8 +28,6 @@ public class SnailShadow : Shadow
 
         if (slimeRoutine != null) StopCoroutine(slimeRoutine);
         slimeRoutine = StartCoroutine(SlimeTrailCoroutine());
-
-
     }
 
     public void StopSlime()

@@ -7,8 +7,6 @@ public class SlimeShadow : Shadow
 {
     [field: SerializeField] public SlimeShadowAnimationData AnimationData { get; private set; }
 
-    [field: SerializeField] public Transform Target;
-
     // 변환 조건
     private bool _checkExpand;
     private bool CheckScale => transform.localScale.x == 1f;
@@ -20,14 +18,6 @@ public class SlimeShadow : Shadow
 
         AnimationData.Initialize();
         stateMachine = new SlimeShadowStateMachine(this);
-    }
-
-    private void Start()
-    {
-        if (Target == null)
-        {
-            Target = FindObjectOfType<Player>().transform;
-        }
     }
 
     private void OnCollisionEnter(Collision collision)

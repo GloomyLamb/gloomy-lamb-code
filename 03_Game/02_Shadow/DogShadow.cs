@@ -7,8 +7,6 @@ public class DogShadow : Shadow
 {
     [field: SerializeField] public DogShadowAnimationData AnimationData { get; private set; }
 
-    [field: SerializeField] public Transform Target;
-
     // todo: SO로 분리, 스킬 추가
     [SerializeField] private float _biteRange = 3f;
     public float SqrBiteRange => _biteRange * _biteRange;
@@ -23,13 +21,6 @@ public class DogShadow : Shadow
         stateMachine = new DogShadowStateMachine(this);
     }
 
-    private void Start()
-    {
-        if (Target == null)
-        {
-            Target = FindObjectOfType<Player>().transform;
-        }
-    }
     #endregion
 
     private void OnCollisionEnter(Collision collision)

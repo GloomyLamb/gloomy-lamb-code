@@ -6,7 +6,7 @@ using UnityEngine;
 public class ForestShadowController : ShadowController
 {
     [Header("Shadows")]
-    [SerializeField] private SlimeShadow _idleShadow;
+    [SerializeField] private SlimeShadow _slimeShadow;
     [SerializeField] private DogShadow _dogShadow;
     [SerializeField] private SnailShadow _snailShadow;
     private Shadow _curShadow;
@@ -16,7 +16,8 @@ public class ForestShadowController : ShadowController
 
     private void Awake()
     {
-        _curShadow = _idleShadow;
+        _curShadow = _slimeShadow;
+        TransformToDog();
     }
 
     private void OnEnable()
@@ -34,22 +35,22 @@ public class ForestShadowController : ShadowController
 
     private void Init()
     {
-        _idleShadow.OnMove += HandleMove;
+        _slimeShadow.OnMove += HandleMove;
         _dogShadow.OnMove += HandleMove;
         _snailShadow.OnMove += HandleMove;
 
-        _idleShadow.OnTransform += TransformToDog;
+        _slimeShadow.OnTransform += TransformToDog;
         _dogShadow.OnTransform += TransformToSnail;
         _snailShadow.OnTransform += TransformToDog;
     }
 
     private void OnDisable()
     {
-        _idleShadow.OnMove -= HandleMove;
+        _slimeShadow.OnMove -= HandleMove;
         _dogShadow.OnMove -= HandleMove;
         _snailShadow.OnMove -= HandleMove;
 
-        _idleShadow.OnTransform -= TransformToDog;
+        _slimeShadow.OnTransform -= TransformToDog;
         _dogShadow.OnTransform -= TransformToSnail;
         _snailShadow.OnTransform -= TransformToDog;
     }
@@ -64,21 +65,21 @@ public class ForestShadowController : ShadowController
     #region 변형
     private void TransformToSlime()
     {
-        _idleShadow.gameObject.SetActive(true);
+        _slimeShadow.gameObject.SetActive(true);
         _dogShadow.gameObject.SetActive(false);
         _snailShadow.gameObject.SetActive(false);
     }
 
     private void TransformToDog()
     {
-        _idleShadow.gameObject.SetActive(false);
+        _slimeShadow.gameObject.SetActive(false);
         _dogShadow.gameObject.SetActive(true);
         _snailShadow.gameObject.SetActive(false);
     }
 
     private void TransformToSnail()
     {
-        _idleShadow.gameObject.SetActive(false);
+        _slimeShadow.gameObject.SetActive(false);
         _dogShadow.gameObject.SetActive(false);
         _snailShadow.gameObject.SetActive(true);
     }
