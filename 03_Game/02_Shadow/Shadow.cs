@@ -104,6 +104,11 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     {
     }
 
+    public virtual void StopEffect()
+    {
+        
+    }
+
     public virtual void Damage(float damage)
     {
         stateMachine?.ChangeState(stateMachine.HitState);
