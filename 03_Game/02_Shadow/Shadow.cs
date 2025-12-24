@@ -129,7 +129,6 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public void Transform()
     {
         OnTransform?.Invoke();
-        OnTransform?.Invoke();
     }
 
     /// <summary>
