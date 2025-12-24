@@ -44,15 +44,11 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
             }
         }
     }
-    protected float rotatingDamping = 60f;
     [SerializeField] protected float damage = 10f;
 
-    // todo: 타겟팅, 이동 통합
-    // 움직임 이벤트
-    public Action OnMove;
-
-    // 변형
-    public event Action OnTransform;
+    // 이벤트
+    public Action OnMove;               // 이동
+    public event Action OnTransform;    // 변형
 
     #region 초기화
     protected virtual void Awake()
