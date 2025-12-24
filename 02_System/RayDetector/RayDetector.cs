@@ -105,9 +105,6 @@ public abstract class RayDetector<T> : MonoBehaviour
                 if (target != null)
                 {
                     currentTargetList.Add(target);
-                    // currentTarget = target;
-                    // return;
-                    Spot
                 }
             }
             
