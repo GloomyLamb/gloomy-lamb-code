@@ -14,7 +14,7 @@ public class ShadowTransformState : CommonShadowState
     public override void Enter()
     {
         base.Enter();
-        shadow.Animator.SetTrigger(shadow.CommonAnimationData.TransformParameterHash);
+        shadow.Animator.SetTrigger(shadow.AnimationData.TransformParameterHash);
 
         if (_coroutine != null)
         {

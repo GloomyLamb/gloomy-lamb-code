@@ -13,14 +13,14 @@ public class DogShadowBiteState : DogShadowSkillState
     {
         base.Enter();
         StateMachine.Shadow.BiteCount++;
-        StartAnimation(StateMachine.Shadow.AnimationData.BiteParameterHash);
+        StartAnimation(StateMachine.Shadow.SkillAnimationData.BiteParameterHash);
         // todo: 물기 스킬 연결
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.Shadow.AnimationData.BiteParameterHash);
+        StopAnimation(StateMachine.Shadow.SkillAnimationData.BiteParameterHash);
         Logger.Log("물기");
     }
 

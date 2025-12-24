@@ -13,7 +13,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
     [Header("애니메이션")]
     [field: SerializeField] public Animator Animator;
-    [field: SerializeField] public ShadowAnimationData CommonAnimationData { get; protected set; }
+    [field: SerializeField] public ShadowAnimationData AnimationData { get; protected set; }
     protected ShadowStateMachine stateMachine;
 
     private ShadowController _controller;
@@ -61,7 +61,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     #region 초기화
     protected virtual void Awake()
     {
-        CommonAnimationData.Initialize();
+        AnimationData.Initialize();
 
         _stopDuration = new WaitForSeconds(_stopPoint);
         _boundDuration = new WaitForSeconds(_boundTime);

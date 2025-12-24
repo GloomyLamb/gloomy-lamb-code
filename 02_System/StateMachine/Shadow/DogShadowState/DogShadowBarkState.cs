@@ -12,7 +12,7 @@ public class DogShadowBarkState : DogShadowSkillState
     public override void Enter()
     {
         base.Enter();
-        StartAnimation(StateMachine.Shadow.AnimationData.BarkParameterHash);
+        StartAnimation(StateMachine.Shadow.SkillAnimationData.BarkParameterHash);
         Logger.Log("짖기");
         // todo: 짖기 스킬 연결
     }
@@ -20,7 +20,7 @@ public class DogShadowBarkState : DogShadowSkillState
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.Shadow.AnimationData.BarkParameterHash);
+        StopAnimation(StateMachine.Shadow.SkillAnimationData.BarkParameterHash);
     }
 
     public override void Update()

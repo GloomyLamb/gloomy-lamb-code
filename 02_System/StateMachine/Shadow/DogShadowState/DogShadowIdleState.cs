@@ -8,13 +8,13 @@ public class DogShadowIdleState : DogShadowGroundState
     {
         StateMachine.Shadow.SetMovementModifier(MovementType.Stop);
         base.Enter();
-        StartAnimation(StateMachine.Shadow.CommonAnimationData.IdleParameterHash);
+        StartAnimation(StateMachine.Shadow.AnimationData.IdleParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation(StateMachine.Shadow.CommonAnimationData.IdleParameterHash);
+        StopAnimation(StateMachine.Shadow.AnimationData.IdleParameterHash);
     }
 
     public override void Update()

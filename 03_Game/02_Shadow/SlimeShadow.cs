@@ -5,8 +5,6 @@ using UnityEngine;
 /// </summary>
 public class SlimeShadow : Shadow
 {
-    [field: SerializeField] public SlimeShadowAnimationData AnimationData { get; private set; }
-
     // 추격 조건
     [field: Header("추격 조건")]
     [field: SerializeField] public float SlowChasePatternTime { get; private set; } = 1f;
@@ -24,7 +22,6 @@ public class SlimeShadow : Shadow
     {
         base.Awake();
 
-        AnimationData.Initialize();
         stateMachine = new SlimeShadowStateMachine(this);
     }
 

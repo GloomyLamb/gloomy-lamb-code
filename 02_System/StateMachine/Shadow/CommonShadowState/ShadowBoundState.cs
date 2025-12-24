@@ -8,6 +8,6 @@ public class ShadowBoundState : CommonShadowState
     {
         shadow.SetMovementModifier(MovementType.Stop);
         base.Enter();
-        shadow.Animator.SetTrigger(shadow.CommonAnimationData.HitParameterHash);
+        shadow.Animator.SetTrigger(shadow.AnimationData.HitParameterHash);
     }
 }
