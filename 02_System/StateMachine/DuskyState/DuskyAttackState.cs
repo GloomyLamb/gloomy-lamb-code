@@ -31,10 +31,9 @@ public class DuskyAttackState : BaseDuskyState
 
         if (animInfo.IsName(AnimatorParameters.AttackName) && animInfo.normalizedTime >= 1f)
         {
-            DuskyStateMachine duskySm = (DuskyStateMachine)stateMachine;
-            if (duskySm != null)
+            if (stateMachine != null)
             {
-                stateMachine.ChangeState(duskySm.IdleState);
+                stateMachine.ChangeState(stateMachine.IdleState);
             }
         }
     }
@@ -42,7 +41,6 @@ public class DuskyAttackState : BaseDuskyState
     public override void Exit()
     {
         CoroutineRunner.instance.StopCoroutine(_attackRotuine);
-        base.Exit();
     }
 
 

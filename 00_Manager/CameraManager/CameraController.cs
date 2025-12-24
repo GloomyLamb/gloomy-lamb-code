@@ -96,15 +96,17 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.BindInputEvent(InputType.Camera, InputMapName.Default, InputActionName.RightMouseButton,
-            OnClickRightMouseClick);
+        InputManager.Instance.BindInputEvent(InputType.Camera, InputMapName.Default, InputActionName.RightMouseButton, OnClickRightMouseClick);
         InputManager.Instance.UseInput(InputType.Camera);
+        SetControlOption(camControlOption);
 
         curZoomValue = maxZoom;
 
         // test
         SetControlCinemachine(virtualCamera);
-        //SwitchCameraControl(cameraViewType);
+
+        lookPivot.transform.parent = target.transform;
+        lookPivot.transform.localPosition = Vector3.zero;
     }
 
     public void SetControlCinemachine(CinemachineVirtualCamera _virtualCamera)
@@ -158,6 +160,16 @@ public class CameraController : MonoBehaviour
         if (useOption)
         {
             camControlOption |= option;
+            
+            
+            if (option.HasFlag(CameraControlOption.RotationUsingRightMouse))
+            {
+                InputManager.Instance.ShowCursor();
+            }
+            else
+            {
+                InputManager.Instance.HideCursor();
+            }
         }
         else
         {
@@ -218,7 +230,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        lookPivot.position = target != null ? target.position : Vector3.zero;
+        //lookPivot.position = target != null ? target.position : Vector3.zero;
         lookPivot.rotation = Quaternion.Euler(curRotX, curRotY, 0);
 
         float calcMaxValue = Mathf.Lerp(minVerticalLength, maxVerticalLength, curZoomValue / (maxZoom - minZoom));

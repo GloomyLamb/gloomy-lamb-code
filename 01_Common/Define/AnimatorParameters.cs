@@ -39,6 +39,8 @@ public static class AnimatorParameters
     /// 지면 위에 있지 않은 상태일때 true
     /// </summary>
     public static readonly int IsFalling = Animator.StringToHash("IsFalling");
+    
+    public static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
 
 
     // todo : enum으로 바꿔야함

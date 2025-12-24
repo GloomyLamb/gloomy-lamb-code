@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "BeamSkillData", menuName = "SO/Skill/Skill Status Data")]
-public class BeamSkillData : ScriptableObject
+public class BeamSkillData : SkillStatusData
 {
+    [Header("Beam Prefab")]
+    public BeamController BeamPrefab;
+    
     [Header("Light Gauge")]
     public float LightGauge;
     public float MaxLightGauge = 100f;

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 // todo : Player 구조 다같이 이야기 해보기
@@ -15,17 +16,16 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 
     [Header("프리팹 설정")]
     [SerializeField] protected Animator animator;
+
     public Animator Animator => animator;
 
     public Status Status => status;
     protected Status status;
 
+    // todo : 컨디션 관리하는 애 만들기
     public CharacterCondition NowCondition => nowCondition;
-    protected CharacterCondition nowCondition;
+    protected CharacterCondition nowCondition = CharacterCondition.None;
 
-    // 캐릭터 방향
-    public Vector3 Forward => forward;
-    protected Vector3 forward;
 
 
     private void Awake()
@@ -34,8 +34,6 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
             animator = GetComponentInChildren<Animator>();
 
         status = statusData?.GetNewStatus();
-        forward = transform.forward;
-
         Init();
     }
 
@@ -49,7 +47,11 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
     public abstract void OnAttack();
     public abstract void Attack();
     public abstract void GiveEffect();
-    public abstract void Damage(float damage);
+
+    public virtual void Damage(float damage)
+    {
+        status.AddHp(-damage);
+    }
     public abstract void ApplyEffect();
 
     public void AddCondition(CharacterCondition condition)
@@ -62,18 +64,33 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
         nowCondition &= ~condition;
     }
 
+
+    Coroutine slowDownRoutine;
+    Coroutine stunRoutine;
+
     // todo : 버프 디버프 받는걸로 변경해야함. 구조는 나중에! 중간발표대비 임시구현
     public virtual void TakeSlowDown()
     {
+        if (slowDownRoutine != null)
+            StopCoroutine(slowDownRoutine);
+        slowDownRoutine = StartCoroutine(AddConditionRoutine(CharacterCondition.Slow, 15f));
     }
 
     public virtual void TakeStun()
     {
-        
+        if (stunRoutine != null)
+            StopCoroutine(stunRoutine);
+        stunRoutine = StartCoroutine(AddConditionRoutine(CharacterCondition.Stun, 3f));
     }
 
+    IEnumerator AddConditionRoutine(CharacterCondition condition, float duration)
+    {
+        nowCondition |= condition;
+        yield return new WaitForSeconds(duration);
+        nowCondition &= ~condition;
+    }
 
-#region Ground Check
+    #region Ground Check
 
     protected bool IsGrounded()
     {
@@ -111,9 +128,8 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
             transform.position + (transform.right * playerScale) + (-transform.up * groundRayDistance));
         Gizmos.DrawLine(transform.position + (-transform.right * playerScale),
             transform.position + (-transform.right * playerScale) + (-transform.up * groundRayDistance));
-
     }
 #endif
 
-#endregion
+    #endregion
 }
