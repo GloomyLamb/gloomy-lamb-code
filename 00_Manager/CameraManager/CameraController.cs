@@ -96,15 +96,14 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.BindInputEvent(InputType.Camera, InputMapName.Default, InputActionName.RightMouseButton,
-            OnClickRightMouseClick);
+        InputManager.Instance.BindInputEvent(InputType.Camera, InputMapName.Default, InputActionName.RightMouseButton, OnClickRightMouseClick);
         InputManager.Instance.UseInput(InputType.Camera);
+        SetControlOption(camControlOption);
 
         curZoomValue = maxZoom;
 
         // test
         SetControlCinemachine(virtualCamera);
-        //SwitchCameraControl(cameraViewType);
 
         lookPivot.transform.parent = target.transform;
         lookPivot.transform.localPosition = Vector3.zero;
@@ -161,6 +160,16 @@ public class CameraController : MonoBehaviour
         if (useOption)
         {
             camControlOption |= option;
+            
+            
+            if (option.HasFlag(CameraControlOption.RotationUsingRightMouse))
+            {
+                InputManager.Instance.ShowCursor();
+            }
+            else
+            {
+                InputManager.Instance.HideCursor();
+            }
         }
         else
         {
