@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DuskyPlayer : Player
 {
+    [SerializeField] DamageableDetector _damageableDetector;
+    
     public DuskyStateMachine StateMachine => stateMachine;
     protected DuskyStateMachine stateMachine;
 
@@ -87,6 +89,12 @@ public class DuskyPlayer : Player
 
     public override void Attack()
     {
+        if (_damageableDetector.CurrentTarget != null)
+        {
+            // 점프 중인지 체크해야함 
+            _damageableDetector.CurrentTarget.Damage(status.Atk);
+        }
+        
     }
 
     public override void GiveEffect()
