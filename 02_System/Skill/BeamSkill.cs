@@ -75,7 +75,7 @@ public class BeamSkill : BaseSkill
         if (!isBeaming) // 빔 발사 중이 아니면 게이지 충전시작
             ChargeGauge();
         else
-            ConsumeGaugeTick();
+           ConsumeGaugeTick();
     }
 
     public override void OnUseSkill(UnityEngine.InputSystem.InputAction.CallbackContext context)

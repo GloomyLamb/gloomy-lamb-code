@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ChapterButton : MonoBehaviour
 {
@@ -21,15 +22,38 @@ public class ChapterButton : MonoBehaviour
 
     private void Check(int chapter)
     {
+        dm.Load();
         int clear = dm.Current.ClearChapterNumber;
+        int playableChapter = clear + 1;
 
-        if (chapter == clear) // 
+        if (chapter == playableChapter) // 
         {
             Debug.Log($" Chapter {chapter} 성공! )");
+
+            LoadChapterScene(chapter);
         }
         else
         {
             Debug.Log($" Chapter {chapter} 실패! )");
         }
     }
+
+    private void LoadChapterScene(int chapter)
+    {
+        switch (chapter)
+        {
+            case 1:
+                SceneManager.LoadScene("ShadowForestScene");
+                break;
+
+          //  case 2:
+                SceneManager.LoadScene("Chapter2Scene"); // 나중에 채울때 추가하면 됨
+                break;
+
+           // case 3:
+                SceneManager.LoadScene("Chapter3Scene");
+                break;
+        }
+    }
+
 }
