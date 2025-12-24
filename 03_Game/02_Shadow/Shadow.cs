@@ -11,13 +11,16 @@ public enum MovementType
 
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
+    // controller
+    private ShadowController _controller;
+    public Transform Target => _controller.Target;
+
+    // state machine
+    protected ShadowStateMachine stateMachine;
+
     [Header("애니메이션")]
     [field: SerializeField] public Animator Animator;
     [field: SerializeField] public ShadowAnimationData AnimationData { get; protected set; }
-    protected ShadowStateMachine stateMachine;
-
-    private ShadowController _controller;
-    public Transform Target => _controller.Target;
     [field: SerializeField] public float HitDuration { get; protected set; } = 1f;
 
     // todo: 추후 SO로 분리
