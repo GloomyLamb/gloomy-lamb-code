@@ -17,7 +17,7 @@ public abstract class ShadowController : MonoBehaviour
     {
         if (Target == null)
         {
-            Target = FindObjectOfType<Player>().transform;
+            Target = GameManager.Instance.Player.transform;
         }
     }
 
