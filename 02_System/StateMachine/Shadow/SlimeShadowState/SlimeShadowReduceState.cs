@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class SlimeShadowReduceState : SlimeShadowChaseState
 {
-    private float _minScale = 1f;
-
     private Coroutine _coroutine;
 
     public SlimeShadowReduceState(StateMachine stateMachine) : base(stateMachine)
@@ -18,6 +16,8 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
     public override void Exit()
     {
         base.Exit();
+        CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
+        _coroutine = null;
     }
 
     public override void Update()
@@ -34,6 +34,8 @@ public class SlimeShadowReduceState : SlimeShadowChaseState
             CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
             _coroutine = null;
         }
-        _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(ScaleUp(_minScale, 0.5f));
+        _coroutine = CustomCoroutineRunner
+            .Instance
+            .StartCoroutine(ScaleUp(StateMachine.Shadow.MinScale, 0.5f));
     }
 }

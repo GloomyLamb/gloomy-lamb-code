@@ -11,6 +11,8 @@ public class SlimeShadow : Shadow
     [field: Header("추격 조건")]
     [field: SerializeField] public float SlowChasePatternTime { get; private set; } = 1f;
     [field: SerializeField] public float FastChasePatternTime { get; private set; } = 1f;
+    [field: SerializeField] public float MaxScale { get; private set; } = 3f;
+    [field: SerializeField] public float MinScale { get; private set; } = 1f;
     public bool IsFastMode { get; set; }
 
     // 변형 조건
