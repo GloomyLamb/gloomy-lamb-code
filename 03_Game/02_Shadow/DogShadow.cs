@@ -12,6 +12,9 @@ public class DogShadow : Shadow
     public float SqrBiteRange => _biteRange * _biteRange;
     public int BiteCount { get; set; } = 0;
 
+    // 변형 조건
+    public bool DonePattern { get; set; }
+
     #region 초기화
     protected override void Awake()
     {
@@ -38,12 +41,15 @@ public class DogShadow : Shadow
         transform.position += dir * MovementSpeed * MovementSpeedModitier * Time.deltaTime;
     }
 
+    #region 변형
     protected override bool CanTransform()
     {
-        return false;
+        return DonePattern;
     }
 
     protected override void ResetTransformFlag()
     {
+        DonePattern = false;
     }
+    #endregion
 }
