@@ -7,21 +7,17 @@ public class SlimeShadow : Shadow
 {
     [field: SerializeField] public SlimeShadowAnimationData AnimationData { get; private set; }
 
-    [field: SerializeField] public Transform Target;
+    // 변형 조건
+    private bool _checkExpand;
+    private bool CheckScale => transform.localScale.x == 1f;
+    public bool IsHitting { get; set; } // 일단 맞을 때 이거 변환
 
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         AnimationData.Initialize();
         stateMachine = new SlimeShadowStateMachine(this);
-    }
-
-    private void Start()
-    {
-        if (Target == null)
-        {
-            Target = FindObjectOfType<Player>().transform;
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -32,10 +28,20 @@ public class SlimeShadow : Shadow
         }
     }
 
-    public void HandleMove()
+    #region 변형
+    protected override bool CanTransform()
     {
-        Vector3 dir = (Target.position - transform.position).normalized;
-        dir.y = 0f;
-        transform.position += dir * MovementSpeed * MovementSpeedModitier * Time.deltaTime;
+        return _checkExpand && CheckScale;
     }
+
+    protected override void ResetTransformFlag()
+    {
+        _checkExpand = false;
+    }
+
+    public void CheckExpand()
+    {
+        _checkExpand = true;
+    }
+    #endregion
 }

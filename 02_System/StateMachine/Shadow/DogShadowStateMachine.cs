@@ -1,33 +1,25 @@
-public class DogShadowStateMachine : StateMachine
+public class DogShadowStateMachine : ShadowStateMachine
 {
     public DogShadow Shadow { get; private set; }
 
+    #region States
     // Ground
-    public DogShadowChaseState ChaseState { get; private set; }
-    public DogShadowIdleState IdleState { get; private set; }
-    public DogShadowTransformState TransformState { get; private set; }
+    public IState ChaseState { get; private set; }
 
     // Skill
-    public DogShadowBiteState BiteState { get; private set; }
-    public DogShadowBarkState BarkState { get; private set; }
+    public IState BiteState { get; private set; }
+    public IState BarkState { get; private set; }
+    #endregion
 
-    // Battle
-    public DogShadowHitState HitState { get; private set; }
-    public DogShadowBoundState BoundState { get; private set; }
-
-    public DogShadowStateMachine(DogShadow shadow)
+    public DogShadowStateMachine(DogShadow shadow) : base(shadow)
     {
         Shadow = shadow;
 
         ChaseState = new DogShadowChaseState(this);
         IdleState = new DogShadowIdleState(this);
-        TransformState = new DogShadowTransformState(this);
 
         BiteState = new DogShadowBiteState(this);
         BarkState = new DogShadowBarkState(this);
-
-        HitState = new DogShadowHitState(this);
-        BoundState = new DogShadowBoundState(this);
 
         ChangeState(IdleState);
     }

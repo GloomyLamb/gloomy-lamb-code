@@ -39,6 +39,6 @@ public class DogShadowChaseState : DogShadowGroundState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        StateMachine.Shadow.HandleMove();
+        StateMachine.Shadow.OnMove?.Invoke();
     }
 }

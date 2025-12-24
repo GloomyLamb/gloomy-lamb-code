@@ -30,7 +30,7 @@ public class DuskyStateMachine : StateMachine
         _idleState = new DuskyIdleState(this, player);
         _moveState = new DuskyMoveState(this, player);
         _jumpState = new DuskyJumpState(this, player);
-        _attackState = new DuskyAttackState(this, player, 0.2f, OnAttackAction);
+        _attackState = new DuskyAttackState(this, player, 0.2f);
         _hitState = new DuskyHitState(this, player);
         _dieState = new DuskyDieState(this, player);
 
@@ -79,7 +79,6 @@ public class DuskyStateMachine : StateMachine
     
     public void ChangeState(IState state)
     {
-        Logger.Log(state.ToString());
         base.ChangeState(state);
         // curState?.Exit();    //이전상태 Exit 호출 함으로써 idle 종료처리 
         // curState = state;    //현재상태 교체 Idle -> Chase 

@@ -11,8 +11,11 @@ public class SnailShadow : Shadow
     [SerializeField] private float slimeDestroyTime = 3f;
     [SerializeField] private Vector3 spawnOffset = Vector3.zero;
     private Coroutine slimeRoutine;
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
+
         stateMachine = new SnailShadowStateMachine(this);
     }
 
@@ -25,8 +28,6 @@ public class SnailShadow : Shadow
 
         if (slimeRoutine != null) StopCoroutine(slimeRoutine);
         slimeRoutine = StartCoroutine(SlimeTrailCoroutine());
-
-
     }
 
     public void StopSlime()
@@ -61,5 +62,14 @@ public class SnailShadow : Shadow
         GameObject slime = Instantiate(slimePrefab, pos, rot);
         slime.transform.localScale = spawnOffset;
         Destroy(slime, slimeDestroyTime);
+    }
+
+    protected override bool CanTransform()
+    {
+        return false;
+    }
+
+    protected override void ResetTransformFlag()
+    {
     }
 }

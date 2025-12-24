@@ -6,17 +6,19 @@ using UnityEngine;
 public class ForestShadowController : ShadowController
 {
     [Header("Shadows")]
-    [SerializeField] private SlimeShadow _idleShadow;
+    [SerializeField] private SlimeShadow _slimeShadow;
     [SerializeField] private DogShadow _dogShadow;
     [SerializeField] private SnailShadow _snailShadow;
-    private Shadow _curShadow;
 
-    [field: Header("Target")]
-    [field: SerializeField] public Transform Target;
-
+    #region 초기화
     private void Awake()
     {
-        _curShadow = _idleShadow;
+        _slimeShadow.Init(this);
+        _dogShadow.Init(this);
+        _snailShadow.Init(this);
+
+        curShadow = _slimeShadow;
+        TransformToSlime();
     }
 
     private void OnEnable()
@@ -24,32 +26,65 @@ public class ForestShadowController : ShadowController
         Init();
     }
 
-    private void Start()
-    {
-        if (Target == null)
-        {
-            Target = FindObjectOfType<Player>().transform;
-        }
-    }
-
     private void Init()
     {
-        _idleShadow.OnMove += HandleMove;
+        _slimeShadow.OnMove += HandleMove;
         _dogShadow.OnMove += HandleMove;
         _snailShadow.OnMove += HandleMove;
+
+        _slimeShadow.OnTransform += TransformToDog;
+        _dogShadow.OnTransform += TransformToSnail;
+        _snailShadow.OnTransform += TransformToDog;
     }
+    #endregion
 
     private void OnDisable()
     {
-        _idleShadow.OnMove -= HandleMove;
+        _slimeShadow.OnMove -= HandleMove;
         _dogShadow.OnMove -= HandleMove;
         _snailShadow.OnMove -= HandleMove;
+
+        _slimeShadow.OnTransform -= TransformToDog;
+        _dogShadow.OnTransform -= TransformToSnail;
+        _snailShadow.OnTransform -= TransformToDog;
     }
 
-    private void HandleMove()
+    #region 변형
+    private void TransformToSlime()
     {
-        Vector3 dir = (Target.position - transform.position).normalized;
-        dir.y = 0f;
-        transform.position += dir * _curShadow.MovementSpeed * _curShadow.MovementSpeedModitier * Time.deltaTime;
+        Logger.Log("슬라임으로 변형");
+        _slimeShadow.gameObject.SetActive(true);
+        _dogShadow.gameObject.SetActive(false);
+        _snailShadow.gameObject.SetActive(false);
     }
+
+    private void TransformToDog()
+    {
+        Logger.Log("개로 변형");
+        _slimeShadow.gameObject.SetActive(false);
+        _dogShadow.gameObject.SetActive(true);
+        _snailShadow.gameObject.SetActive(false);
+    }
+
+    private void TransformToSnail()
+    {
+        Logger.Log("달팽이 변형");
+        _slimeShadow.gameObject.SetActive(false);
+        _dogShadow.gameObject.SetActive(false);
+        _snailShadow.gameObject.SetActive(true);
+    }
+    #endregion
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+
+        _slimeShadow = transform.FindChild<SlimeShadow>("SlimeShadow");
+        _dogShadow = transform.FindChild<DogShadow>("DogShadow");
+        _snailShadow = transform.FindChild<SnailShadow>("SnailShadow");
+    }
+#endif
+    #endregion
 }

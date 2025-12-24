@@ -1,9 +1,7 @@
-using System.Collections;
 using UnityEngine;
 
 public class SlimeShadowExpandState : SlimeShadowChaseState
 {
-    private float _maxScale = 2f;
     private bool _isExpanded = false;
 
     private Coroutine _coroutine;
@@ -15,6 +13,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
     public override void Enter()
     {
         StateMachine.Shadow.MovementSpeedModitier = 2f;
+        StateMachine.Shadow.CheckExpand();
         base.Enter();
 
         if (_coroutine != null)
@@ -25,7 +24,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 
         if (!_isExpanded)
         {
-            _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(ScaleUp(_maxScale, 0.5f));
+            _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(ScaleUp(2f, 0.5f));
             _isExpanded = true;
         }
     }
@@ -45,26 +44,5 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
             Logger.Log("축소 패턴 진입");
             StateMachine.ChangeState(StateMachine.ReduceState);
         }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ScaleUp(float size, float duration)
-    {
-        Transform target = StateMachine.Shadow.transform;
-        Vector3 startScale = target.localScale;
-        Vector3 endScale = startScale * size;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        target.localScale = endScale;
     }
 }

@@ -12,10 +12,9 @@ public class DuskyAttackState : BaseDuskyState
     private Coroutine _attackRotuine;
 
     public DuskyAttackState(StateMachine stateMachine, DuskyPlayer player,
-    float attackAnimDelay, Action attackAction) : base(stateMachine, player)
+    float attackAnimDelay) : base(stateMachine, player)
     {
         _attackAnimTiming = attackAnimDelay;
-        _attackAction = attackAction;
 
     }
 
@@ -47,6 +46,6 @@ public class DuskyAttackState : BaseDuskyState
     IEnumerator AttackRoutine()
     {
         yield return new WaitForSeconds(_attackAnimTiming);
-        _attackAction?.Invoke();
+        player.Attack();
     }
 }
