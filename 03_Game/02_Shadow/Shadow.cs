@@ -18,6 +18,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     private ShadowController _controller;
     public Transform Target => _controller.Target;
+    [field: SerializeField] public float HitDuration { get; protected set; } = 1f;
 
     // todo: 추후 SO로 분리
     [field: Header("움직임")]
@@ -111,7 +112,13 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     public virtual void Damage(float damage)
     {
-        stateMachine?.ChangeState(stateMachine.HitState);
+        Logger.Log($"데미지: {damage}");
+        if (stateMachine == null)
+        {
+            Logger.Log("state machine 없음");
+            return;
+        }
+        stateMachine.ChangeState(stateMachine.HitState);
     }
 
     // IAttackable
