@@ -56,16 +56,6 @@ public class DuskyPlayer : Player
                 stateMachine.ChangeState(stateMachine.IdleState);
             }
         }
-
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            TakeStun();
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            TakeSlowDown();
-        }
     }
 
     private void FixedUpdate()
