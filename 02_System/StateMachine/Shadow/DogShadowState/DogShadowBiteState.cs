@@ -21,6 +21,7 @@ public class DogShadowBiteState : DogShadowSkillState
     {
         base.Exit();
         StopAnimation(StateMachine.Shadow.AnimationData.BiteParameterHash);
+        Logger.Log("물기");
     }
 
     public override void Update()

@@ -22,6 +22,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         {
             if (value != _movementSpeedModifier)
             {
+                Logger.Log("그림자 속도 변경");
                 _movementSpeedModifier = value;
                 _controller.SetAgentMovementModifier(_movementSpeedModifier);
             }
