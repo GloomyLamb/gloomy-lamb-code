@@ -20,7 +20,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         WalkState = new SlimeShadowWalkState(shadow, this);
         RunState = new SlimeShadowRunState(shadow, this);
         ExpandState = new SlimeShadowExpandState(shadow, this);
-        ReduceState = new SlimeShadowReduceState(shadow, this);
     }
 
 

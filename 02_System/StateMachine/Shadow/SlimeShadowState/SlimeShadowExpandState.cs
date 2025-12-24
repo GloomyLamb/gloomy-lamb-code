@@ -30,21 +30,4 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
             _isExpanded = true;
         }
     }
-
-    public override void Exit()
-    {
-        base.Exit();
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        // todo: 빛을 맞았을 때 reduce
-        if (Input.GetKey(KeyCode.Alpha1))
-        {
-            Logger.Log("축소 패턴 진입");
-            StateMachine.ChangeState(stateMachine.ReduceState);
-        }
-    }
 }
