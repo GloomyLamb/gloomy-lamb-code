@@ -15,13 +15,13 @@ public class BeamController : MonoBehaviour
     [Tooltip("빔이 확장되어 나아가는 속도")]
     public float expandSpeed;
 
-    [Tooltip("빔의 최대 길이(Scale의 Y값)" )]
+    [Tooltip("빔의 최대 길이(Scale의 Z값)" )]
     public float maxLength;
 
-    [Tooltip("빔의 범위폭(Scale의X,Z값")]
+    [Tooltip("빔의 범위폭(Scale의X,Y값")]
     public float maxWidth;
 
-    [Tooltip("빔의 시작 폭(Scale의 X,Z값)")]
+    [Tooltip("빔의 시작 폭(Scale의 X,Y값)")]
     public float startWidth;
     [Header("Light 의 밝기")]
     public float maxIntensity;
@@ -29,6 +29,10 @@ public class BeamController : MonoBehaviour
     private bool isExpanding;
     private float currentLength;
 
+    [Header("Spot Light Settings")]
+    public float startSpotAngle;
+    public float maxSpotAngle;
+    public float startIntensity;
     private void Start()
     {
         SetEnabled(false);
@@ -50,7 +54,7 @@ public class BeamController : MonoBehaviour
             isExpanding = false;   //빛이 최대 길이에 도달하면 확장, 켜진상태 유지 
         }
 
-        ApplyBeam(currentLength);
+        ApplyBeam(currentLength); 
     }
 
     public void SetEnabled(bool on)
@@ -71,11 +75,21 @@ public class BeamController : MonoBehaviour
 
         float t = (maxLength <= 0f) ? 0f : Mathf.Clamp01(length / maxLength);  
 
-        float visibleLength = Mathf.Max(length, 0.01f);
+        float visibleLength = Mathf.Max(length, 0.5f);
         float widthXZ = Mathf.Lerp(startWidth, maxWidth, t);
-        widthXZ = Mathf.Max(widthXZ, 0.01f);
+        widthXZ = Mathf.Max(widthXZ, 0.5f);
 
-        cornTransform.localScale = new Vector3(widthXZ, visibleLength, widthXZ);
+        cornTransform.localScale = new Vector3(widthXZ, widthXZ, visibleLength);
+
+        if (spotLight != null)
+        {
+            
+            spotLight.range = visibleLength;
+         // spotLight.spotAngle = Mathf.Lerp(startSpotAngle, maxSpotAngle, t);
+            spotLight.intensity = Mathf.Lerp(startIntensity, maxIntensity, t);
+            Debug.Log($"Light range={spotLight.range}, angle={spotLight.spotAngle}, intensity={spotLight.intensity}");
+            
+        }
     }
     public void PlayBeam()
     {
