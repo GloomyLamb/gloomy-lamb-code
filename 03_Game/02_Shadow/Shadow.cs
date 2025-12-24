@@ -20,14 +20,11 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         get { return _movementSpeedModifier; }
         set
         {
-            if (value != _movementSpeedModifier)
+            Logger.Log("속도 보정값 변경");
+            _movementSpeedModifier = value;
+            if (_controller != null)
             {
-                Logger.Log("그림자 속도 변경");
-                _movementSpeedModifier = value;
-                if (_controller != null)
-                {
-                    _controller.SetAgentMovementModifier(_movementSpeedModifier);
-                }
+                _controller.SetAgentMovementModifier(_movementSpeedModifier);
             }
         }
     }
@@ -66,6 +63,11 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public virtual void Init(ShadowController controller)
     {
         _controller = controller;
+    }
+
+    protected virtual void OnEnable()
+    {
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
     #endregion
 

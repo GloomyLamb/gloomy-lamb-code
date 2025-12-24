@@ -17,7 +17,6 @@ public class ForestShadowController : ShadowController
         _dogShadow.Init(this);
         _snailShadow.Init(this);
 
-        curShadow = _slimeShadow;
         TransformToSlime();
     }
 
@@ -56,6 +55,7 @@ public class ForestShadowController : ShadowController
         _slimeShadow.gameObject.SetActive(true);
         _dogShadow.gameObject.SetActive(false);
         _snailShadow.gameObject.SetActive(false);
+        curShadow = _slimeShadow;
     }
 
     private void TransformToDog()
@@ -64,6 +64,7 @@ public class ForestShadowController : ShadowController
         _slimeShadow.gameObject.SetActive(false);
         _dogShadow.gameObject.SetActive(true);
         _snailShadow.gameObject.SetActive(false);
+        curShadow = _dogShadow;
     }
 
     private void TransformToSnail()
@@ -72,6 +73,7 @@ public class ForestShadowController : ShadowController
         _slimeShadow.gameObject.SetActive(false);
         _dogShadow.gameObject.SetActive(false);
         _snailShadow.gameObject.SetActive(true);
+        curShadow = _snailShadow;
     }
     #endregion
 

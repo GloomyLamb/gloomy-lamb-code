@@ -40,6 +40,7 @@ public abstract class ShadowController : MonoBehaviour
 
     public void SetAgentMovementModifier(float modifier)
     {
+        Logger.Log("nev agent 속도 변경");
         _agent.speed = curShadow.MovementSpeed * modifier;
     }
 

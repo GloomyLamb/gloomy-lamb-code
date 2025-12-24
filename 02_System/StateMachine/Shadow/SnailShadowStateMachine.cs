@@ -10,7 +10,5 @@
 
         IdleState = new SnailShadowIdleState(this);
         ChaseState = new SnailShadowChaseState(this);
-
-        ChangeState(IdleState);
     }
 }

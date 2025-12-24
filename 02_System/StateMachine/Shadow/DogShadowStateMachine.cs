@@ -20,7 +20,5 @@ public class DogShadowStateMachine : ShadowStateMachine
 
         BiteState = new DogShadowBiteState(this);
         BarkState = new DogShadowBarkState(this);
-
-        ChangeState(IdleState);
     }
 }

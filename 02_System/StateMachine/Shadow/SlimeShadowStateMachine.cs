@@ -23,8 +23,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         RunState = new SlimeShadowRunState(this);
         ExpandState = new SlimeShadowExpandState(this);
         ReduceState = new SlimeShadowReduceState(this);
-
-        ChangeState(IdleState);
     }
 
     public void PlusChaseCount()
