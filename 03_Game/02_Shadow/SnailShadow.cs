@@ -15,7 +15,7 @@ public class SnailShadow : Shadow
     // 변형
     [Header("변형")]
     [SerializeField] private float _cycleTime = 10f;
-    private float _timer;
+    public float CycleTime => _cycleTime;
 
     protected override void Awake()
     {
@@ -29,12 +29,7 @@ public class SnailShadow : Shadow
     {
         base.Update();
 
-        _timer += Time.deltaTime;
-        if (_timer > _cycleTime)
-        {
-            _timer = 0f;
-            stateMachine.ChangeState(stateMachine.TransformState);
-        }
+
     }
 
     public void StartSlime()
