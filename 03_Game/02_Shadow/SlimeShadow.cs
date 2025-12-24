@@ -7,7 +7,7 @@ public class SlimeShadow : Shadow
 {
     [field: SerializeField] public SlimeShadowAnimationData AnimationData { get; private set; }
 
-    // 변환 조건
+    // 변형 조건
     private bool _checkExpand;
     private bool CheckScale => transform.localScale.x == 1f;
     public bool IsHitting { get; set; } // 일단 맞을 때 이거 변환

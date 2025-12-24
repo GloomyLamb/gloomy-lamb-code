@@ -17,6 +17,8 @@ public class ShadowAnimationData
 
     public virtual void Initialize()
     {
+        Logger.Log("기본 애니메이션 데이터 초기화");
+
         IdleParameterHash = Animator.StringToHash(_idleParameterName);
         TransformParameterHash = Animator.StringToHash(_transformParameterName);
 
