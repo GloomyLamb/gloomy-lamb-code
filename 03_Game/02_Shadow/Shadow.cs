@@ -62,6 +62,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void OnEnable()
     {
+        stateMachine.Register();
         stateMachine.ChangeState(stateMachine.IdleState);
     }
     #endregion
@@ -80,7 +81,12 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void FixedUpdate()
     {
-        stateMachine?.PhysicsUpdate();
+        stateMachine.PhysicsUpdate();
+    }
+
+    protected virtual void OnDisable()
+    {
+        stateMachine.UnRegister();
     }
 
     // IDamageable

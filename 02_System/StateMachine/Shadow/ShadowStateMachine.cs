@@ -23,7 +23,6 @@ public class ShadowStateMachine : StateMachine
 
         HitState = new ShadowHitState(shadow, this);
         BoundState = new ShadowBoundState(shadow, this);
-
     }
 
     /// <summary>
@@ -37,15 +36,13 @@ public class ShadowStateMachine : StateMachine
 
         HitState.Init(MovementType.Stop, Shadow.AnimationData.HitParameterHash, AnimType.Trigger);
         BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Bool, true);
-
-        Publish();
     }
 
     /// <summary>
-    /// State에 이벤트를 구독합니다.
+    /// State에 이벤트를 등록합니다.
     /// 현재 구독할 수 있는 범위 - Update, FixedUpdate
     /// </summary>
-    protected virtual void Publish()
+    public virtual void Register()
     {
         // Update
         IdleState.OnUpdate += HandleUpdateIdle;
@@ -53,6 +50,19 @@ public class ShadowStateMachine : StateMachine
 
         // FixedUpdate
         ChaseState.OnFixedUpdate += HandleFixedUpdateChase;
+    }
+
+    /// <summary>
+    /// State의 이벤트를 해제합니다.
+    /// </summary>
+    public virtual void UnRegister()
+    {
+        // Update
+        IdleState.OnUpdate -= HandleUpdateIdle;
+        ChaseState.OnUpdate -= HandleUpdateChase;
+
+        // FixedUpdate
+        ChaseState.OnFixedUpdate -= HandleFixedUpdateChase;
     }
 
     #region 상태 Update 내부 로직

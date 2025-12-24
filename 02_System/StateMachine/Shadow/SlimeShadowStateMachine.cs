@@ -31,13 +31,22 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
     }
 
-    protected override void Publish()
+    public override void Register()
     {
-        base.Publish();
+        base.Register();
 
         WalkState.OnFixedUpdate += HandleFixedUpdateChase;
         RunState.OnFixedUpdate += HandleFixedUpdateChase;
         ExpandState.OnFixedUpdate += HandleFixedUpdateChase;
+    }
+
+    public override void UnRegister()
+    {
+        base.UnRegister();
+
+        WalkState.OnFixedUpdate -= HandleFixedUpdateChase;
+        RunState.OnFixedUpdate -= HandleFixedUpdateChase;
+        ExpandState.OnFixedUpdate -= HandleFixedUpdateChase;
     }
 
     private float _timer;
