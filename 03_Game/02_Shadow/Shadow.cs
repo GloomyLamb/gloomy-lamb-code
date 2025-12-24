@@ -138,6 +138,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     #region 바인딩
     public virtual void Bound()
     {
+        Logger.Log("바인딩");
         stateMachine?.ChangeState(stateMachine.BoundState);
     }
     #endregion
