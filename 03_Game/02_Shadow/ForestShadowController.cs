@@ -9,15 +9,15 @@ public class ForestShadowController : ShadowController
     [SerializeField] private SlimeShadow _slimeShadow;
     [SerializeField] private DogShadow _dogShadow;
     [SerializeField] private SnailShadow _snailShadow;
-    private Shadow _curShadow;
 
+    #region 초기화
     private void Awake()
     {
         _slimeShadow.Init(this);
         _dogShadow.Init(this);
         _snailShadow.Init(this);
 
-        _curShadow = _slimeShadow;
+        curShadow = _slimeShadow;
         ChangeToSlime();
     }
 
@@ -36,6 +36,7 @@ public class ForestShadowController : ShadowController
         _dogShadow.OnChange += ChangeToSnail;
         _snailShadow.OnChange += ChangeToDog;
     }
+    #endregion
 
     private void OnDisable()
     {
@@ -46,13 +47,6 @@ public class ForestShadowController : ShadowController
         _slimeShadow.OnChange -= ChangeToDog;
         _dogShadow.OnChange -= ChangeToSnail;
         _snailShadow.OnChange -= ChangeToDog;
-    }
-
-    private void HandleMove()
-    {
-        Vector3 dir = (Target.position - transform.position).normalized;
-        dir.y = 0f;
-        transform.position += dir * _curShadow.MovementSpeed * _curShadow.MovementSpeedModitier * Time.deltaTime;
     }
 
     #region 변형
@@ -79,5 +73,18 @@ public class ForestShadowController : ShadowController
         _dogShadow.gameObject.SetActive(false);
         _snailShadow.gameObject.SetActive(true);
     }
+    #endregion
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+
+        _slimeShadow = transform.FindChild<SlimeShadow>("SlimeShadow");
+        _dogShadow = transform.FindChild<DogShadow>("DogShadow");
+        _snailShadow = transform.FindChild<SnailShadow>("SnailShadow");
+    }
+#endif
     #endregion
 }
