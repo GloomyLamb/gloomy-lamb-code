@@ -41,7 +41,7 @@ public class BeamSkill : BaseSkill
         BeamSkillData beamData = (BeamSkillData)data;
         if (beamData == null) return;
 
-        beamSkillData = beamData;
+        BeamSkillData beamSkillData = beamData;
         maxLightGauge = beamSkillData.MaxLightGauge;
         chargeTimeGauge = beamSkillData.ChargeTimeGauge;
         consumeTickGauge = beamSkillData.ConsumeTickGauge;

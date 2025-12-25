@@ -11,7 +11,6 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     #region 필드
     // 스킬 데이터
     protected SkillStatusData skillStatusData;
-    protected BeamSkillData beamSkillData;
     // 스킬 사용 조건
     protected float cooldownTimer = 0f;                 // 쿨타임 타이머
     public bool IsUsable => IsCooldownReady() && HasEnoughResource();
@@ -55,6 +54,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
 
     /// <summary>
     /// 스킬 내부 로직
+    /// 스킬 내부 로직
     /// </summary>
     protected virtual void UseSkill()
     {
@@ -63,7 +63,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
             bool canStart = OnStartSkill == null || OnStartSkill.Invoke(this);
             if (!canStart)
             {
-                Logger.LogWarning("스킬 사용 불가");
+                //Logger.LogWarning("스킬 사용 불가");
                 return;
             }
 
@@ -78,7 +78,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
         }
         else
         {
-            Logger.Log($"{skillStatusData.Type} 스킬 사용 불가");
+            //Logger.Log($"{skillStatusData.Type} 스킬 사용 불가");
         }
     }
 
@@ -95,19 +95,19 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     #region IAttackable 구현
     public virtual void Attack()
     {
-        Logger.Log("공격");
+        ResetCooldownTimer();
+        //Logger.Log("공격");
         if (target == null)
         {
-            Logger.Log("타겟 없음");
+            //Logger.Log("타겟 없음");
             return;
         }
-        target.Damage(skillStatusData.AttackDamage);
-        ResetCooldownTimer();
+        target?.Damage(skillStatusData.AttackDamage);
     }
 
     public virtual void GiveEffect()
     {
-        target.ApplyEffect();
+        target?.ApplyEffect();
     }
     #endregion
 
@@ -119,7 +119,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     protected bool IsCooldownReady()
     {
         bool coolReady = cooldownTimer > skillStatusData.Cooldown;
-        Logger.Log($"쿨타임 체크: {coolReady}");
+        //Logger.Log($"쿨타임 체크: {coolReady}");
         return coolReady;
     }
 
