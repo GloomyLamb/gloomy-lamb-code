@@ -46,6 +46,20 @@ public abstract class ShadowController : MonoBehaviour
     
     
     #region 추격
+    public void StopNevMeshAgent()
+    {
+        _agent.isStopped = true;
+        _agent.updatePosition = false;
+        _agent.updateRotation = false;
+    }
+
+    public void StartNevMeshAgent()
+    {
+        _agent.updatePosition = true;
+        _agent.updateRotation = true;
+        _agent.isStopped = false;
+    }
+
     protected void HandleMove()
     {
         if (Target == null)
