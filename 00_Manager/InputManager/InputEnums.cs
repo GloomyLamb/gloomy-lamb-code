@@ -26,6 +26,7 @@ public enum InputActionName
     Skill_Test,
     Skill_Laser,
     Skill_Beam,
+    Skill_CryBinding,
     
     RightMouseButton,
     Zoom,
