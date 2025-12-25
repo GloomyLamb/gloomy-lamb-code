@@ -78,12 +78,12 @@ public class DogShadow : Shadow
         // 타겟 존재
         if (target != null)
         {
-            target.Damage(_biteDamage); // 대미지
-            controller.Status.AddHp(_healValue); // 흡혈
-            target.TakeStun();
+            target.Damage(_biteDamage);             // 대미지
+            controller.Status.AddHp(_healValue);    // 흡혈
+            target.TakeStun();                      // 플레이어 효과 주기
             BiteCount++;
 
-            if (_biteCoroutine != null) // 뒤로 가기
+            if (_biteCoroutine != null)             // 뒤로 가기
             {
                 StopCoroutine(_biteCoroutine);
                 _biteCoroutine = null;
@@ -99,16 +99,20 @@ public class DogShadow : Shadow
         }
     }
 
+    /// <summary>
+    /// 물기 공격 이후 넉백 동작하기
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator KnockbackCoroutine()
     {
         controller.StopNevMeshAgent();
 
-        Vector3 dir = -transform.forward;
+        Vector3 dir = -controller.transform.forward;
         float timer = 0f;
 
         while (timer < _biteKnockbackDuration)
         {
-            transform.position += dir * _biteKnockbackSpeed * Time.deltaTime;
+            controller.transform.position += _biteKnockbackSpeed * Time.deltaTime * dir;
             timer += Time.deltaTime;
             yield return null;
         }
