@@ -4,8 +4,9 @@
 public enum CharacterCondition
 {
     None = 0,
-    Invincible= 1 << 2, // 무적
+    Invincible= 1 << 2, // 무적   
     Stun = 1 << 3,      // 스턴
     Slow =  1 << 4,
     Dash = 1 << 5,      // 대시
+    Beam = 1 << 6,      // 빔
 }

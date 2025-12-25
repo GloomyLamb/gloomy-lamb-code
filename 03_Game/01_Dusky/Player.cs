@@ -71,7 +71,7 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 
     public void AddCondition(CharacterCondition condition)
     {
-        nowCondition |= condition;
+        nowCondition |= condition;   
     }
 
     public void RemoveCondition(CharacterCondition condition)
