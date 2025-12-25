@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
+    [Header("스탯 SO")]
+    [SerializeField] protected StatusData statusData;
     // controller
     private ShadowController _controller;
     public Transform Target => _controller.Target;
@@ -25,6 +27,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [SerializeField] private float _defaultSpeedModifier = 1f;
     [SerializeField] private float _runSpeedModifier = 2f;
     private float _movementSpeedModifier = 1f;
+    public Status Status => status;
+    protected Status status;
 
     protected float MovementSpeedModitier
     {
@@ -49,6 +53,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     protected virtual void Awake()
     {
         AnimationData.Initialize();
+        
+        status = statusData?.GetNewStatus();
     }
 
     protected virtual void Start()
