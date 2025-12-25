@@ -5,7 +5,7 @@ public class DogShadowBiteState : DogShadowSkillState
 {
     Coroutine _coroutine;
 
-    public DogShadowBiteState(StateMachine stateMachine) : base(stateMachine)
+    public DogShadowBiteState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow,  stateMachine)
     {
     }
 
