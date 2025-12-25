@@ -11,11 +11,14 @@ public class DogShadow : Shadow
     // todo: SO로 분리, 스킬 추가
     [Header("물기")]
     [SerializeField] private DamageableDetector _biteDetector;
-    [SerializeField] private float _biteRange = 1.2f;
-    [SerializeField] private float _biteDamage = 20f;
-    [SerializeField] private float _healValue = 10f;
-    [SerializeField] private int _biteSuccessThreshold = 3;
-    public float SqrBiteRange => _biteRange * _biteRange;
+    [SerializeField] private float _biteDetectRange = 1.2f;         // 탐지 범위
+    [SerializeField] private float _biteDamage = 20f;               // 대미지
+    [SerializeField] private float _biteKnockbackDuration = 1f;     // 넉백 시간
+    [SerializeField] private float _biteKnockbackSpeed = 3f;        // 넉백 속도
+    [SerializeField] private float _healValue = 10f;                // 흡혈
+    [SerializeField] private int _biteSuccessThreshold = 3;         // 물기 패턴 최대 횟수
+    [field: SerializeField] public float BiteDuration = 0.5f;
+    public float SqrBiteRange => _biteDetectRange * _biteDetectRange;
     public int BiteCount { get; private set; } = 0;
 
     [Header("짖기")]
@@ -101,13 +104,11 @@ public class DogShadow : Shadow
         controller.StopNevMeshAgent();
 
         Vector3 dir = -transform.forward;
-        float duration = 2f;
-        float speed = 5f;
         float timer = 0f;
 
-        while (timer < duration)
+        while (timer < _biteKnockbackDuration)
         {
-            transform.position += dir * speed * Time.deltaTime;
+            transform.position += dir * _biteKnockbackSpeed * Time.deltaTime;
             timer += Time.deltaTime;
             yield return null;
         }

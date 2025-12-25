@@ -42,12 +42,11 @@ public class DogShadowBiteState : DogShadowSkillState
         Vector3 start = shadow.transform.position;
         Vector3 end = shadow.Target.position;       // 플레이어 위치 고정
 
-        float duration = 0.5f;
         float elapsed = 0f;
 
-        while (elapsed < duration)
+        while (elapsed < shadow.BiteDuration)
         {
-            shadow.transform.position = Vector3.Lerp(start, end, elapsed / duration);
+            shadow.transform.position = Vector3.Lerp(start, end, elapsed / shadow.BiteDuration);
             elapsed += Time.deltaTime;
             yield return null;
         }

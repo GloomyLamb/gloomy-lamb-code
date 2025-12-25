@@ -25,7 +25,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
         {
             _coroutine = CustomCoroutineRunner
                 .Instance
-                .StartCoroutine(ScaleTo(shadow.MaxScale, 3f));
+                .StartCoroutine(ScaleTo(shadow.MaxScale, shadow.ScaleUpDuration));
             _isExpanded = true;
         }
     }

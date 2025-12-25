@@ -16,8 +16,8 @@ public class SlimeShadow : Shadow
     public bool IsFastMode { get; set; }
     public int CurChaseCount { get; private set; } = 0;
 
-    [Header("추가 설정")]
-    [field: SerializeField] public float ScaleUpDuration = 1f;
+    [field: Header("추가 설정")]
+    [field: SerializeField] public float ScaleUpDuration { get; private set; } = 1f;
     [SerializeField] public float scaleDownDuration = 1f;
     // 변형 조건
     private bool _checkExpand;
