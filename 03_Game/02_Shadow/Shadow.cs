@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
     // controller
@@ -108,6 +107,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
             return;
         }
         stateMachine.ChangeState(stateMachine.HitState);
+        _controller.Damage(damage);
     }
 
     // IAttackable

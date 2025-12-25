@@ -4,6 +4,11 @@ using UnityEngine.AI;
 public abstract class ShadowController : MonoBehaviour
 {
     // todo: 각종 스텟
+    [Header("스탯 SO")]
+    [SerializeField] protected StatusData statusData;
+    public Status Status => status;
+    protected Status status;
+
     protected Shadow curShadow;
 
     [field: Header("추격")]
@@ -19,8 +24,11 @@ public abstract class ShadowController : MonoBehaviour
     [field: SerializeField] public float BoundDuration;
     [field: SerializeField] public float BoundStopPoint;
 
+    private Shadow shadow;
+    
     protected virtual void Awake()
     {
+        status = statusData?.GetNewStatus();
     }
 
     protected virtual void Start()
@@ -31,6 +39,12 @@ public abstract class ShadowController : MonoBehaviour
         }
     }
 
+    public void Damage(float damage)
+    {
+        Status.AddHp(-damage);
+    }
+    
+    
     #region 추격
     protected void HandleMove()
     {
