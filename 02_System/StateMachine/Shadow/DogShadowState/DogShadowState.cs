@@ -1,4 +1,4 @@
-public class DogShadowState : ShadowState, IState
+public class DogShadowState : ShadowState
 {
     protected DogShadowStateMachine StateMachine { get; private set; }
 
@@ -27,29 +27,4 @@ public class DogShadowState : ShadowState, IState
     }
     #endregion
 
-    #region IState 구현
-    public virtual void Enter()
-    {
-
-    }
-
-    public virtual void Exit()
-    {
-
-    }
-
-    public virtual void HandleInput()
-    {
-    }
-
-    public virtual void PhysicsUpdate()
-    {
-
-    }
-
-    public virtual void Update()
-    {
-
-    }
-    #endregion
 }
