@@ -4,11 +4,13 @@ using UnityEngine;
 public class DogShadowBarkState : DogShadowSkillState
 {
     private float _timer;
-    private float _patternTime = 1f;
+    
+    //private float _patternTime = 1f;
+    private float _spawnTime = 1f;
     private int _spawnCount = 3;
 
     private Coroutine spawnRoutine;
-    public DogShadowBarkState(StateMachine stateMachine) : base(stateMachine)
+    public DogShadowBarkState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow,  stateMachine)
     {
     }
 
@@ -18,7 +20,9 @@ public class DogShadowBarkState : DogShadowSkillState
         base.Enter();
         StartAnimation(StateMachine.Shadow.SkillAnimationData.BarkParameterHash);
         Logger.Log("짖기");
+        
         // todo: 짖기 스킬 연결
+        
         
         if(spawnRoutine != null) CustomCoroutineRunner.Instance.StopCoroutine(spawnRoutine);
         spawnRoutine = CustomCoroutineRunner.Instance.StartCoroutine(SpawnHowlWindRoutine());
@@ -32,31 +36,18 @@ public class DogShadowBarkState : DogShadowSkillState
         if(spawnRoutine != null) CustomCoroutineRunner.Instance.StopCoroutine(spawnRoutine);
     }
 
-    public override void Update()
-    {
-        base.Update();
-
-        _timer += Time.deltaTime;
-        if (_timer > _patternTime)
-        {
-            _timer = 0f;
-            StateMachine.Shadow.DonePattern = true;
-            StateMachine.ChangeState(StateMachine.IdleState);
-        }
-    }
 
     IEnumerator SpawnHowlWindRoutine()
     {
-        int step = _spawnCount <= 1 ? 1 : _spawnCount - 1;
-        float spawnTime = _patternTime / step;
-        WaitForSeconds spawnTimeSec = new WaitForSeconds(spawnTime);
-
-        for (int i = 0; i < step; ++i)
+        WaitForSeconds spawnTimeSec = new WaitForSeconds(_spawnTime);
+        
+        for (int i = 0; i < _spawnCount; ++i)
         {
             StateMachine.Shadow.SpawnHowlWind();
             yield return spawnTimeSec;
         }
-
+        
         spawnRoutine = null;
+        StateMachine.ChangeState(StateMachine.IdleState);
     }
 }

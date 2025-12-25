@@ -6,16 +6,22 @@ public class DogShadowStateMachine : ShadowStateMachine
 
     #region States
     // Skill
-    public IState BiteState { get; private set; }
-    public IState BarkState { get; private set; }
+    public ShadowState BiteState { get; private set; }
+    public ShadowState BarkState { get; private set; }
     #endregion
 
     public DogShadowStateMachine(DogShadow shadow) : base(shadow)
     {
         Shadow = shadow;
 
-        BiteState = new DogShadowBiteState(this);
-        BarkState = new DogShadowBarkState(this);
+        BiteState = new DogShadowBiteState(Shadow, this);
+        BarkState = new DogShadowBarkState(Shadow, this);
+    }
+
+    public override void Init()
+    {
+        base.Init();
+        BarkState.Init(MovementType.Stop, Shadow.AnimationData.IdleParameterHash, AnimType.Bool);
     }
 
     protected override void HandleUpdateChase()

@@ -1,8 +1,8 @@
-public class DogShadowState : IState
+public class DogShadowState : ShadowState, IState
 {
     protected DogShadowStateMachine StateMachine { get; private set; }
 
-    public DogShadowState(StateMachine stateMachine)
+    public DogShadowState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow,  stateMachine)
     {
         StateMachine = stateMachine as DogShadowStateMachine;
     }
