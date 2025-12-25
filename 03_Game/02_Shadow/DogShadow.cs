@@ -112,7 +112,7 @@ public class DogShadow : Shadow
 
         while (timer < _biteKnockbackDuration)
         {
-            controller.transform.position += _biteKnockbackSpeed * Time.deltaTime * dir;
+            controller.Rigidbody.MovePosition(controller.transform.position + _biteKnockbackSpeed * Time.deltaTime * dir);
             timer += Time.deltaTime;
             yield return null;
         }
