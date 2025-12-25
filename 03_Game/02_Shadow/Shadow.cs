@@ -4,8 +4,8 @@ using UnityEngine;
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
     // controller
-    private ShadowController _controller;
-    public Transform Target => _controller.Target;
+    protected ShadowController controller;
+    public Transform Target => controller.Target;
 
     // state machine
     protected ShadowStateMachine stateMachine;
@@ -13,10 +13,10 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [Header("애니메이션")]
     [field: SerializeField] public Animator Animator;
     [field: SerializeField] public ShadowAnimationData AnimationData { get; protected set; }
-    public float TransformDuration => _controller.TransformDuration;
-    public float HitDuration => _controller.HitDuration;
-    public float BoundStopPoint => _controller.BoundStopPoint;
-    public float BoundDuration => _controller.BoundDuration;
+    public float TransformDuration => controller.TransformDuration;
+    public float HitDuration => controller.HitDuration;
+    public float BoundStopPoint => controller.BoundStopPoint;
+    public float BoundDuration => controller.BoundDuration;
 
     // todo: 추후 SO로 분리
     [field: Header("움직임")]
@@ -31,9 +31,9 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         private set
         {
             _movementSpeedModifier = value;
-            if (_controller != null)
+            if (controller != null)
             {
-                _controller.SetAgentMovementModifier(_movementSpeedModifier);
+                controller.SetAgentMovementModifier(_movementSpeedModifier);
             }
         }
     }
@@ -55,7 +55,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     public virtual void Init(ShadowController controller)
     {
-        _controller = controller;
+        this.controller = controller;
     }
 
     protected virtual void OnEnable()
@@ -106,7 +106,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
             return;
         }
         stateMachine.ChangeState(stateMachine.HitState);
-        _controller.Damage(damage);
+        controller.Damage(damage);
     }
 
     // IAttackable
