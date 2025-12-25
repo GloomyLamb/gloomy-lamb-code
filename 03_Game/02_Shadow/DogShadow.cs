@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +5,7 @@ using UnityEngine;
 /// </summary>
 public class DogShadow : Shadow
 {
+    public ShadowController Controller => controller;
     [field: SerializeField] public DogShadowAnimationData SkillAnimationData { get; private set; }
 
     // todo: SO로 분리, 스킬 추가
@@ -13,11 +13,11 @@ public class DogShadow : Shadow
     [SerializeField] private DamageableDetector _biteDetector;
     [SerializeField] private float _biteDetectRange = 1.2f;         // 탐지 범위
     [SerializeField] private float _biteDamage = 20f;               // 대미지
-    [SerializeField] private float _biteKnockbackDuration = 1f;     // 넉백 시간
-    [SerializeField] private float _biteKnockbackSpeed = 3f;        // 넉백 속도
     [SerializeField] private float _healValue = 10f;                // 흡혈
-    [SerializeField] private int _biteSuccessThreshold = 3;         // 물기 패턴 최대 횟수
-    [field: SerializeField] public float BiteDuration = 0.5f;
+    [SerializeField] private float _biteBackwardLength = 1f;        // 넉백 거리
+    [field: SerializeField] public float BiteBackwardDuration { get; private set; } = 1f;   // 넉백 시간
+    [field: SerializeField] public int BiteSuccessThreshold { get; private set; } = 3;      // 물기 패턴 최대 횟수
+    [field: SerializeField] public float BiteDuration { get; private set; } = 0.5f;
     public float SqrBiteRange => _biteDetectRange * _biteDetectRange;
     public int BiteCount { get; private set; } = 0;
 
@@ -63,9 +63,6 @@ public class DogShadow : Shadow
     #endregion
 
     #region 스킬
-
-    Coroutine _biteCoroutine;
-
     public void SpawnHowlWind()
     {
         Instantiate(_howlWindPrefab, transform.position, Quaternion.identity);
@@ -78,18 +75,13 @@ public class DogShadow : Shadow
         // 타겟 존재
         if (target != null)
         {
+            Logger.Log("타겟 물기 성공");
             target.Damage(_biteDamage);             // 대미지
             controller.Status.AddHp(_healValue);    // 흡혈
             target.TakeStun();                      // 플레이어 효과 주기
             BiteCount++;
 
-            if (_biteCoroutine != null)             // 뒤로 가기
-            {
-                StopCoroutine(_biteCoroutine);
-                _biteCoroutine = null;
-            }
-
-            _biteCoroutine = StartCoroutine(KnockbackCoroutine());
+            stateMachine.ChangeState(((DogShadowStateMachine)stateMachine).BackwardState);
         }
         else
         {

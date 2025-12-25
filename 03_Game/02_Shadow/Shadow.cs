@@ -6,6 +6,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     // controller
     protected ShadowController controller;
     public Transform Target => controller.Target;
+    public Vector3 Forward => controller.transform.forward;
 
     // state machine
     protected ShadowStateMachine stateMachine;

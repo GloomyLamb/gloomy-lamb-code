@@ -6,8 +6,8 @@ public abstract class ShadowController : MonoBehaviour
 {
     #region 필드
     // 컴포넌트
-
     private NavMeshAgent _agent;
+    public NavMeshAgent Agent => _agent;
 
     // todo: 각종 스텟
     [Header("스탯 SO")]
@@ -50,19 +50,17 @@ public abstract class ShadowController : MonoBehaviour
         Status.AddHp(-damage);
     }
 
-    #region 추격
-    public void StopNevMeshAgent()
+    #region Nev Mesh Agent 관리
+    public void SetActiveAgent(bool active)
     {
-        _agent.isStopped = true;
-        _agent.updatePosition = false;
-        _agent.updateRotation = false;
+        _agent.isStopped = !active;
+        _agent.updatePosition = active;
+        _agent.updateRotation = active;
     }
 
-    public void StartNevMeshAgent()
+    public void SetActiveAgentRotation(bool active)
     {
-        _agent.updatePosition = true;
-        _agent.updateRotation = true;
-        _agent.isStopped = false;
+        _agent.updatePosition = active;
     }
 
     protected void HandleMove()
