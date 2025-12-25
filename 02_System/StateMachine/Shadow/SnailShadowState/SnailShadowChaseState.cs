@@ -1,4 +1,4 @@
-﻿public class SnailShadowChaseState : ShadowChaseState
+﻿public class SnailShadowChaseState : ShadowState
 {
     private readonly SnailShadowStateMachine snailSM;
 

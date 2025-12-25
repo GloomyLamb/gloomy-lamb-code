@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShadowHitState : CommonShadowState
+public class ShadowHitState : ShadowState
 {
     private float _timer;
 
@@ -8,11 +8,8 @@ public class ShadowHitState : CommonShadowState
     {
     }
 
-    public override void Enter()
+    protected override void ResetParameter()
     {
-        shadow.SetMovementModifier(MovementType.Stop);
-        base.Enter();
-        shadow.Animator.SetTrigger(shadow.AnimationData.HitParameterHash);
         _timer = 0f;
     }
 

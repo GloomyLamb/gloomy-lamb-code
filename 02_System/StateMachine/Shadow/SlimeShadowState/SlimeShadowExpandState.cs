@@ -12,7 +12,6 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 
     public override void Enter()
     {
-        shadow.SetMovementModifier(MovementType.Run);
         shadow.CheckExpand();
         base.Enter();
 
@@ -26,7 +25,7 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
         {
             _coroutine = CustomCoroutineRunner
                 .Instance
-                .StartCoroutine(ScaleUp(shadow.MaxScale, 0.5f));
+                .StartCoroutine(ScaleTo(shadow.MaxScale, 0.5f));
             _isExpanded = true;
         }
     }

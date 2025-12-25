@@ -22,6 +22,7 @@ public class DogShadow : Shadow
 
         SkillAnimationData.Initialize();
         stateMachine = new DogShadowStateMachine(this);
+        stateMachine.Init();
     }
     #endregion
 

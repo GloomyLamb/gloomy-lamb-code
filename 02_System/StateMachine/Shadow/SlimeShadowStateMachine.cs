@@ -1,13 +1,14 @@
+using UnityEngine;
+
 public class SlimeShadowStateMachine : ShadowStateMachine
 {
-    public SlimeShadow Shadow { get; private set; }
+    public new SlimeShadow Shadow { get; private set; }
 
     #region States
     // Ground
-    public IState WalkState { get; private set; }
-    public IState RunState { get; private set; }
-    public IState ExpandState { get; private set; }
-    public IState ReduceState { get; private set; }
+    public ShadowState WalkState { get; private set; }
+    public ShadowState RunState { get; private set; }
+    public ShadowState ExpandState { get; private set; }
     #endregion
 
     // 추적
@@ -15,21 +16,57 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     public SlimeShadowStateMachine(SlimeShadow shadow) : base(shadow)
     {
         Shadow = shadow;
-        IdleState = new SlimeShadowIdleState(shadow, this);
 
         WalkState = new SlimeShadowWalkState(shadow, this);
-        RunState = new SlimeShadowRunState(shadow, this);
+        RunState = new SlimeShadowChaseState(shadow, this);
         ExpandState = new SlimeShadowExpandState(shadow, this);
     }
 
-
-    public void StopAnimator()
+    public override void Init()
     {
-        Shadow.Animator.speed = 0f;
+        base.Init();
+
+        WalkState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        RunState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
     }
 
-    public void StartAnimator()
+    protected override void Publish()
     {
-        Shadow.Animator.speed = 1f;
+        base.Publish();
+
+        WalkState.OnFixedUpdate += HandleFixedUpdateChase;
+        RunState.OnFixedUpdate += HandleFixedUpdateChase;
+        ExpandState.OnFixedUpdate += HandleFixedUpdateChase;
+    }
+
+    private float _timer;
+    private float _patternTime = 0.5f;
+
+    protected override void HandleUpdateIdle()
+    {
+        if (Shadow.CurChaseCount == Shadow.ChaseCount + 1)
+        {
+            Logger.Log("확대 패턴 진입");
+            ChangeState(ExpandState);
+        }
+
+        _timer += Time.deltaTime;
+        if (Shadow.Target != null)
+        {
+            if (_timer > _patternTime && !Shadow.IsFastMode)
+            {
+                Logger.Log("저속 이동");
+                Shadow.IsFastMode = true;
+                ChangeState(WalkState);
+                _timer = 0f;
+            }
+            else if (_timer > _patternTime && Shadow.IsFastMode)
+            {
+                Logger.Log("고속 이동");
+                ChangeState(RunState);
+                _timer = 0f;
+            }
+        }
     }
 }

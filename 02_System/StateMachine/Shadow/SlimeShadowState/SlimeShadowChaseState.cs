@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SlimeShadowChaseState : ShadowChaseState
+public class SlimeShadowChaseState : ShadowState
 {
     protected SlimeShadow shadow;
     protected SlimeShadowStateMachine stateMachine;
@@ -14,27 +14,19 @@ public class SlimeShadowChaseState : ShadowChaseState
         this.stateMachine = stateMachine as SlimeShadowStateMachine;
     }
 
-    public override void Enter()
-    {
-        _timer = 0f;
-        base.Enter();
-    }
-
     public override void Update()
     {
-        base.Update();
-
         _timer += Time.deltaTime;
         if (_timer > shadow.FastChasePatternTime)
         {
             Logger.Log("정지");
             shadow.PlusChaseCount();
             stateMachine.ChangeState(stateMachine.IdleState);
+            _timer = 0f;
         }
     }
 
-
-    protected IEnumerator ScaleUp(float size, float duration)
+    protected IEnumerator ScaleTo(float size, float duration)
     {
         Transform target = shadow.transform;
         Vector3 startScale = target.localScale;

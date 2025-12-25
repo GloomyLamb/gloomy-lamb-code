@@ -1,32 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class ShadowTransformState : CommonShadowState
+public class ShadowTransformState : ShadowState
 {
-    private Coroutine _coroutine;
-    private WaitForSeconds _delay;
-
     public ShadowTransformState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
-        _delay = new WaitForSeconds(1f);
     }
 
-    public override void Enter()
+    protected override IEnumerator StateCoroutine()
     {
-        base.Enter();
-        shadow.Animator.SetTrigger(shadow.AnimationData.TransformParameterHash);
-
-        if (_coroutine != null)
-        {
-            CustomCoroutineRunner.Instance.StopCoroutine(TransformCoroutine());
-            _coroutine = null;
-        }
-        _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(TransformCoroutine());
-    }
-
-    private IEnumerator TransformCoroutine()
-    {
-        yield return _delay;
+        yield return new WaitForSeconds(shadow.TransformDuration);
         shadow.Transform();
     }
 }
