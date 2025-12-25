@@ -45,24 +45,29 @@ public class DuskyPlayer : Player
     {
         stateMachine.Update();
 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            TakeStun();
+        }
+
         if (NowCondition.HasFlag(CharacterCondition.Beam))
         {
             transform.rotation = beamFixedRotation;
         }
-        else
+        else if (_lastMoveInputValue != Vector3.zero)
         {
-            if (_lastMoveInputValue != Vector3.zero)
+            if(stateMachine.CurState is IMovableState)
                 this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(_lastMoveInputValue), Time.deltaTime * 10);
+        }
 
-
-            if (stateMachine.CurState == stateMachine.JumpState && _jumpDelay == false)
+        if (stateMachine.CurState == stateMachine.JumpState && _jumpDelay == false)
+        {
+            if (IsGrounded())
             {
-                if (IsGrounded())
-                {
-                    stateMachine.ChangeState(stateMachine.IdleState);
-                }
+                stateMachine.ChangeState(stateMachine.IdleState);
             }
         }
+        
     }
 
     private void FixedUpdate()
@@ -77,8 +82,7 @@ public class DuskyPlayer : Player
         {
             return;
         }
-
-        // Flags 검사 추가해야함. (스턴)
+        
         if (stateMachine.CurState is IMovableState)
         {
             if (_lastMoveInputValue.magnitude > 0.1f)
@@ -207,7 +211,7 @@ public class DuskyPlayer : Player
     public override void TakeStun()
     {
         base.TakeStun();
-        stateMachine.ChangeState(stateMachine.IdleState);
+        stateMachine.ChangeState(stateMachine.LieState);
     }
     public void SetBeamRotation()
     {
