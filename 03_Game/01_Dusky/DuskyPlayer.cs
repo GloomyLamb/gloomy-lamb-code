@@ -185,8 +185,10 @@ public class DuskyPlayer : Player
 
     public override void Damage(float damage)
     {
-        base.Damage(damage);
+        if (nowCondition.HasFlag(CharacterCondition.Invincible)) return;
+        
         stateMachine.ChangeState(stateMachine.HitState);
+        base.Damage(damage);
     }
 
     IEnumerator JumpDelaRotuine()

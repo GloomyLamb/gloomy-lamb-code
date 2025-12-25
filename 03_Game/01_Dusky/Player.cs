@@ -64,6 +64,7 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
     public virtual void Damage(float damage)
     {
         status.AddHp(-damage);
+        StartCoroutine(AddConditionRoutine(CharacterCondition.Invincible,status.InvincibleTime));
     }
 
     public abstract void ApplyEffect();

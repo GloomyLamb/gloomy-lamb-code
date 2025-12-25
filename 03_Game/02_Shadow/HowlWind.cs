@@ -96,7 +96,7 @@ public class HowlWind : MonoBehaviour
         Vector3 center = transform.position;
 
         Gizmos.color = Color.red;
-        DrawCircle(center, (_radius) + (_width / 2));
+        DrawCircle(center, (_maxRadius) + (_width / 2));
     }
 
     void DrawCircle(Vector3 center, float radius)
