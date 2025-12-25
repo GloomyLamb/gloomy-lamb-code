@@ -52,7 +52,7 @@ public class HowlWind : MonoBehaviour
                     hitY <= this.transform.position.y + (checkHeight))
                 {
                     Player player = hit.transform.GetComponent<Player>();
-                    player.Damage(_damage);
+                    player?.Damage(_damage);
                     // Debug.Log(
                     //     $"{hit.name} : {hitY}, {this.transform.position.y - (checkHeight / 2)}, {this.transform.position.y + (checkHeight / 2)}");
                 }
