@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SlimeShadowExpandState : SlimeShadowChaseState
@@ -12,7 +13,6 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
 
     public override void Enter()
     {
-        shadow.CheckExpand();
         base.Enter();
 
         if (_coroutine != null)
@@ -28,5 +28,23 @@ public class SlimeShadowExpandState : SlimeShadowChaseState
                 .StartCoroutine(ScaleTo(shadow.MaxScale, 0.5f));
             _isExpanded = true;
         }
+    }
+
+    protected IEnumerator ScaleTo(float size, float duration)
+    {
+        Transform target = shadow.transform;
+        Vector3 startScale = target.localScale;
+        Vector3 endScale = startScale * size;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.localScale = endScale;
+        shadow.CheckExpand();
     }
 }
