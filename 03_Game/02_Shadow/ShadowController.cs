@@ -1,14 +1,11 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
 public abstract class ShadowController : MonoBehaviour
 {
     #region 필드
     // 컴포넌트
-    private Rigidbody _rigidbody;
-    public Rigidbody Rigidbody => _rigidbody;
 
     private NavMeshAgent _agent;
 
@@ -35,7 +32,6 @@ public abstract class ShadowController : MonoBehaviour
 
     protected virtual void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
         _agent = GetComponent<NavMeshAgent>();
 
         status = statusData?.GetNewStatus();

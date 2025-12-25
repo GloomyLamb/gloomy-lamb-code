@@ -99,36 +99,12 @@ public class DogShadow : Shadow
         }
     }
 
-    /// <summary>
-    /// 물기 공격 이후 넉백 동작하기
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator KnockbackCoroutine()
+    public void Backward()
     {
-        controller.StopNevMeshAgent();
-
-        Vector3 dir = -controller.transform.forward;
-        float timer = 0f;
-
-        while (timer < _biteKnockbackDuration)
-        {
-            controller.Rigidbody.MovePosition(controller.transform.position + _biteKnockbackSpeed * Time.deltaTime * dir);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        controller.StartNevMeshAgent();
-
-        // 상태 전이
-        if (BiteCount < _biteSuccessThreshold)
-        {
-            stateMachine.ChangeState(stateMachine.ChaseState);
-        }
-        else
-        {
-            stateMachine.ChangeState(((DogShadowStateMachine)stateMachine).BarkState);
-        }
+        controller.SetActiveAgentRotation(false);
+        Vector3 dir = -Forward;
+        Vector3 targetPos = controller.transform.position + dir * _biteBackwardLength;
+        controller.Agent.SetDestination(targetPos);
     }
-
     #endregion
 }
