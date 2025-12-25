@@ -31,13 +31,22 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
     }
 
-    protected override void Publish()
+    public override void Register()
     {
-        base.Publish();
+        base.Register();
 
         WalkState.OnFixedUpdate += HandleFixedUpdateChase;
         RunState.OnFixedUpdate += HandleFixedUpdateChase;
         ExpandState.OnFixedUpdate += HandleFixedUpdateChase;
+    }
+
+    public override void UnRegister()
+    {
+        base.UnRegister();
+
+        WalkState.OnFixedUpdate -= HandleFixedUpdateChase;
+        RunState.OnFixedUpdate -= HandleFixedUpdateChase;
+        ExpandState.OnFixedUpdate -= HandleFixedUpdateChase;
     }
 
     private float _timer;
@@ -56,14 +65,12 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         {
             if (_timer > _patternTime && !Shadow.IsFastMode)
             {
-                Logger.Log("저속 이동");
                 Shadow.IsFastMode = true;
                 ChangeState(WalkState);
                 _timer = 0f;
             }
             else if (_timer > _patternTime && Shadow.IsFastMode)
             {
-                Logger.Log("고속 이동");
                 ChangeState(RunState);
                 _timer = 0f;
             }

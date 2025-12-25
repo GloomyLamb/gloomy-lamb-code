@@ -54,7 +54,7 @@ public class SlimeShadow : Shadow
     public void PlusChaseCount()
     {
         CurChaseCount++;
-        Logger.Log($"추격 횟수: {CurChaseCount}");
+        //Logger.Log($"추격 횟수: {CurChaseCount}");
     }
 
     #region 변형
