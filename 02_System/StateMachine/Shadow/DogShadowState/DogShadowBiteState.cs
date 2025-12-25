@@ -37,6 +37,7 @@ public class DogShadowBiteState : DogShadowSkillState
         Vector3 dir = shadow.Target.position - target.position;
         dir.y = 0f; // 수평 회전만 필요하다면
 
+        yield return null;
         //Quaternion targetRot = Quaternion.LookRotation(dir);
 
         //float elapsed = 0f;
