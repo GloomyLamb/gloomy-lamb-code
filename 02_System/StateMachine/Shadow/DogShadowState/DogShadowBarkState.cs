@@ -48,6 +48,8 @@ public class DogShadowBarkState : DogShadowSkillState
         }
         
         spawnRoutine = null;
+        
+        StateMachine.Shadow.DonePattern = true;
         StateMachine.ChangeState(StateMachine.IdleState);
     }
 }
