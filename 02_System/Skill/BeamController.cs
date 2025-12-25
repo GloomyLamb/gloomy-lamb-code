@@ -106,6 +106,14 @@ public class BeamController : MonoBehaviour
         Debug.Log(other.name);
         other.GetComponent<IDamageable>()?.Damage(10f);
         other.GetComponent<IDamageable>()?.ApplyEffect();
+       
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        other.GetComponent<IDamageable>()?.StopEffect();
+
     }
 }
 
