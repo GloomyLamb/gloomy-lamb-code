@@ -1,9 +1,11 @@
-public class DogShadowState : ShadowState, IState
+public class DogShadowState : ShadowState
 {
-    protected DogShadowStateMachine StateMachine { get; private set; }
+    protected new DogShadow shadow;
+    protected new DogShadowStateMachine StateMachine { get; private set; }
 
-    public DogShadowState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow,  stateMachine)
+    public DogShadowState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
+        this.shadow = shadow as DogShadow;
         StateMachine = stateMachine as DogShadowStateMachine;
     }
 
@@ -24,32 +26,6 @@ public class DogShadowState : ShadowState, IState
     protected void StopAnimation(int animationHash)
     {
         StateMachine.Shadow.Animator.SetBool(animationHash, false);
-    }
-    #endregion
-
-    #region IState 구현
-    public virtual void Enter()
-    {
-
-    }
-
-    public virtual void Exit()
-    {
-
-    }
-
-    public virtual void HandleInput()
-    {
-    }
-
-    public virtual void PhysicsUpdate()
-    {
-
-    }
-
-    public virtual void Update()
-    {
-
     }
     #endregion
 }

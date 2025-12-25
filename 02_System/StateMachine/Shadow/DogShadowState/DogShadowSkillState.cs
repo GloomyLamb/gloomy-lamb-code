@@ -1,6 +1,6 @@
 public class DogShadowSkillState : DogShadowState
 {
-    public DogShadowSkillState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow,  stateMachine)
+    public DogShadowSkillState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 

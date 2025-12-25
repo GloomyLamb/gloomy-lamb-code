@@ -3,55 +3,33 @@ using UnityEngine;
 
 public class DogShadowBarkState : DogShadowSkillState
 {
-    private float _timer;
-    
     //private float _patternTime = 1f;
     private float _spawnTime = 1f;
     private int _spawnCount = 3;
 
-    private Coroutine spawnRoutine;
-    public DogShadowBarkState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow,  stateMachine)
+    public DogShadowBarkState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 
-    
     public override void Enter()
     {
-        base.Enter();
-        StartAnimation(StateMachine.Shadow.SkillAnimationData.BarkParameterHash);
         Logger.Log("짖기");
-        
-        // todo: 짖기 스킬 연결
-        
-        
-        if(spawnRoutine != null) CustomCoroutineRunner.Instance.StopCoroutine(spawnRoutine);
-        spawnRoutine = CustomCoroutineRunner.Instance.StartCoroutine(SpawnHowlWindRoutine());
+        base.Enter();
     }
 
-    public override void Exit()
-    {
-        base.Exit();
-        StopAnimation(StateMachine.Shadow.SkillAnimationData.BarkParameterHash);
-        
-        if(spawnRoutine != null) CustomCoroutineRunner.Instance.StopCoroutine(spawnRoutine);
-    }
-
-
-    IEnumerator SpawnHowlWindRoutine()
+    protected override IEnumerator StateCoroutine()
     {
         WaitForSeconds spawnTimeSec = new WaitForSeconds(_spawnTime);
 
         // 멈출 때까지 딜레이 주기
         yield return new WaitForSeconds(0.5f);
-        
+
         for (int i = 0; i < _spawnCount; ++i)
         {
             StateMachine.Shadow.SpawnHowlWind();
             yield return spawnTimeSec;
         }
-        
-        spawnRoutine = null;
-        
+
         StateMachine.Shadow.DonePattern = true;
         StateMachine.ChangeState(StateMachine.IdleState);
     }
