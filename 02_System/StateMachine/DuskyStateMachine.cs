@@ -10,6 +10,7 @@ public class DuskyStateMachine : StateMachine
     public IState DieState => _dieState;
     public IState MoveState => _moveState;
     public IState DashState => _dashState;
+    public IState LieState => _lieState;
 
     private IState _idleState;
     private IState _jumpState;
@@ -18,8 +19,8 @@ public class DuskyStateMachine : StateMachine
     private IState _dieState;
     private IState _moveState;
     private IState _dashState;
+    private IState _lieState;
 
-    
 
     private Dictionary<IState, HashSet<IState>> changableStates = new Dictionary<IState, HashSet<IState>>();
 
@@ -34,13 +35,13 @@ public class DuskyStateMachine : StateMachine
         _hitState = new DuskyHitState(this, player);
         _dieState = new DuskyDieState(this, player);
         _dashState = new DuskyDashState(this, player);
-
+        _lieState = new DuskyLieState(this, player);
 
 
         changableStates = new Dictionary<IState, HashSet<IState>>
         {
             {
-                _idleState, 
+                _idleState,
                 new HashSet<IState> { _moveState, _jumpState, _attackState, _hitState, _dieState }
             },
             {
@@ -53,7 +54,7 @@ public class DuskyStateMachine : StateMachine
             },
             {
                 _attackState,
-                new HashSet<IState> { _idleState,  _hitState, _dieState }
+                new HashSet<IState> { _idleState, _hitState, _dieState }
             },
             {
                 _hitState,
@@ -61,16 +62,19 @@ public class DuskyStateMachine : StateMachine
             },
             {
                 _dieState,
-                new HashSet<IState> { _idleState }  // 부활같은거 하면 일어나야해
+                new HashSet<IState> { _idleState } // 부활같은거 하면 일어나야해
             },
-            
+            {
+                _lieState,
+                new HashSet<IState> { _idleState }
+            }
         };
     }
 
     public override bool CanChange(IState nextState)
     {
         if (curState == null) return false;
-        
+
         if (changableStates.ContainsKey(curState))
         {
             return changableStates[curState].Contains(nextState);
@@ -78,7 +82,7 @@ public class DuskyStateMachine : StateMachine
 
         return true;
     }
-    
+
     public void ChangeState(IState state)
     {
         base.ChangeState(state);
