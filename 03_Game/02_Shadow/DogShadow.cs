@@ -18,10 +18,14 @@ public class DogShadow : Shadow
     public float SqrBiteRange => _biteRange * _biteRange;
     public int BiteCount { get; private set; } = 0;
 
+    [Header("짖기")]
+    [SerializeField] private HowlWind _howlWindPrefab;
+
     // 변형 조건
     public bool DonePattern { get; set; }
 
     #region 초기화
+
     protected override void Awake()
     {
         base.Awake();
@@ -30,6 +34,7 @@ public class DogShadow : Shadow
         stateMachine = new DogShadowStateMachine(this);
         stateMachine.Init();
     }
+
     #endregion
 
     private void OnCollisionEnter(Collision collision)
@@ -41,6 +46,7 @@ public class DogShadow : Shadow
     }
 
     #region 변형
+
     protected override bool CanTransform()
     {
         return DonePattern;
@@ -50,10 +56,18 @@ public class DogShadow : Shadow
     {
         DonePattern = false;
     }
+
     #endregion
 
     #region 스킬
+
     Coroutine _biteCoroutine;
+
+    public void SpawnHowlWind()
+    {
+        Instantiate(_howlWindPrefab, transform.position, Quaternion.identity);
+    }
+
     public void Bite()
     {
         Player target = _biteDetector.CurrentTarget as Player;
@@ -61,16 +75,17 @@ public class DogShadow : Shadow
         // 타겟 존재
         if (target != null)
         {
-            target.Damage(_biteDamage);             // 대미지
-            controller.Status.AddHp(_healValue);    // 흡혈
+            target.Damage(_biteDamage); // 대미지
+            controller.Status.AddHp(_healValue); // 흡혈
             target.TakeStun();
             BiteCount++;
 
-            if (_biteCoroutine != null)             // 뒤로 가기
+            if (_biteCoroutine != null) // 뒤로 가기
             {
                 StopCoroutine(_biteCoroutine);
                 _biteCoroutine = null;
             }
+
             _biteCoroutine = StartCoroutine(KnockbackCoroutine());
         }
         else
@@ -108,5 +123,6 @@ public class DogShadow : Shadow
             stateMachine.ChangeState(((DogShadowStateMachine)stateMachine).BarkState);
         }
     }
+
     #endregion
 }
