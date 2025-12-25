@@ -18,7 +18,6 @@ public class SlimeShadowChaseState : ShadowState
         _timer += Time.deltaTime;
         if (_timer > shadow.FastChasePatternTime)
         {
-            Logger.Log("정지");
             shadow.PlusChaseCount();
             stateMachine.ChangeState(stateMachine.IdleState);
             _timer = 0f;

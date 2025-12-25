@@ -65,14 +65,12 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         {
             if (_timer > _patternTime && !Shadow.IsFastMode)
             {
-                Logger.Log("저속 이동");
                 Shadow.IsFastMode = true;
                 ChangeState(WalkState);
                 _timer = 0f;
             }
             else if (_timer > _patternTime && Shadow.IsFastMode)
             {
-                Logger.Log("고속 이동");
                 ChangeState(RunState);
                 _timer = 0f;
             }
