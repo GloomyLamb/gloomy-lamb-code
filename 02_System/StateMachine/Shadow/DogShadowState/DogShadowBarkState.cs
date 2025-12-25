@@ -40,6 +40,9 @@ public class DogShadowBarkState : DogShadowSkillState
     IEnumerator SpawnHowlWindRoutine()
     {
         WaitForSeconds spawnTimeSec = new WaitForSeconds(_spawnTime);
+
+        // 멈출 때까지 딜레이 주기
+        yield return new WaitForSeconds(0.5f);
         
         for (int i = 0; i < _spawnCount; ++i)
         {
