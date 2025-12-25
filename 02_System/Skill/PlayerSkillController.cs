@@ -11,11 +11,18 @@ public class PlayerSkillController : SkillController
     {
         InputManager.Instance.UseInput(InputType.Skill);
         
+        // todo : 나중에 챕터 내 맵에서 스킬 얻을 때 달아줘야 함.
+        
         BeamSkill beamSkill = this.gameObject.AddComponent<BeamSkill>();
         if (TryAcquireSkill(SkillType.Beam, beamSkill))
         {
             BindInput(SkillType.Beam,InputType.Skill,InputMapName.Default,InputActionName.Skill_Beam);
-            //beamSkill.SetBeamData(beamSkillDataSO);
+        }
+        
+        CryBindingSkill cryBindingSkill = this.gameObject.AddComponent<CryBindingSkill>();
+        if (TryAcquireSkill(SkillType.CryBinding, cryBindingSkill))
+        {
+            BindInput(SkillType.CryBinding,InputType.Skill,InputMapName.Default,InputActionName.Skill_CryBinding);
         }
     }
 
