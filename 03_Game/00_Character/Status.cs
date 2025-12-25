@@ -10,12 +10,17 @@ public class Status
 
     public float Atk => _atk;
     private float _atk;
+
+    public float InvincibleTime => _invincibleTime;
+    private float _invincibleTime;
     
-    public Status(float maxHp, float atk)
+    public Status(float maxHp, float atk, float invincibleTime)
     {
         _maxHp = maxHp;
         _hp = maxHp;
         _atk = atk;
+        _invincibleTime = invincibleTime;
+        
     }
 
 
