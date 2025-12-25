@@ -75,6 +75,7 @@ public class DogShadow : Shadow
         }
         else
         {
+            Logger.Log("물기 공격 실패 -> 추적 모드");
             stateMachine.ChangeState(stateMachine.ChaseState);
             return;
         }

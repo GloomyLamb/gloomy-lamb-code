@@ -17,7 +17,8 @@ public class SlimeShadow : Shadow
     public int CurChaseCount { get; private set; } = 0;
 
     [Header("추가 설정")]
-    [SerializeField] public float _scaleDownDuration = 1f;
+    [field: SerializeField] public float ScaleUpDuration = 1f;
+    [SerializeField] public float scaleDownDuration = 1f;
     // 변형 조건
     private bool _checkExpand;
     private bool CheckScale => transform.localScale.x == MinScale;
@@ -82,7 +83,7 @@ public class SlimeShadow : Shadow
     {
         if (scaleDownRoutine != null)
             StopCoroutine(scaleDownRoutine);
-        scaleDownRoutine = StartCoroutine(ScaleDownRoutine(MinScale, _scaleDownDuration));
+        scaleDownRoutine = StartCoroutine(ScaleDownRoutine(MinScale, scaleDownDuration));
     }
 
     protected IEnumerator ScaleDownRoutine(float size, float duration)

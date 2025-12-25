@@ -11,6 +11,7 @@ public class DogShadowBiteState : DogShadowSkillState
 
     public override void Enter()
     {
+        Logger.Log("물기 상태");
         base.Enter();
         if (StateMachine.Shadow.Target == null)
         {
@@ -29,9 +30,12 @@ public class DogShadowBiteState : DogShadowSkillState
     {
         base.Exit();
         StopAnimation(StateMachine.Shadow.SkillAnimationData.BiteParameterHash);
-        Logger.Log("물기");
     }
 
+    /// <summary>
+    /// 물기 패턴 전 플레이어 방향으로 회전
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator BiteCoroutine()
     {
         DogShadow shadow = StateMachine.Shadow;

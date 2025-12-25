@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SlimeShadowChaseState : ShadowState
 {
-    protected SlimeShadow shadow;
+    protected new SlimeShadow shadow;
     protected SlimeShadowStateMachine stateMachine;
 
     private float _timer;
