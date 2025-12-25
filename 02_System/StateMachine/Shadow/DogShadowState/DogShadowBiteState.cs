@@ -1,9 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class DogShadowBiteState : DogShadowSkillState
 {
-    private float _timer;
-    private float _patternTime = 1f;
+    Coroutine _coroutine;
 
     public DogShadowBiteState(StateMachine stateMachine) : base(stateMachine)
     {
@@ -12,9 +12,17 @@ public class DogShadowBiteState : DogShadowSkillState
     public override void Enter()
     {
         base.Enter();
-        StateMachine.Shadow.BiteCount++;
-        StartAnimation(StateMachine.Shadow.SkillAnimationData.BiteParameterHash);
-        // todo: 물기 스킬 연결
+        if (StateMachine.Shadow.Target == null)
+        {
+            Logger.Log("타겟 없음");
+        }
+
+        if (_coroutine != null)
+        {
+            CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+        _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(BiteCoroutine());
     }
 
     public override void Exit()
@@ -24,22 +32,26 @@ public class DogShadowBiteState : DogShadowSkillState
         Logger.Log("물기");
     }
 
-    public override void Update()
+    private IEnumerator BiteCoroutine()
     {
-        base.Update();
+        DogShadow shadow = StateMachine.Shadow;
+        Vector3 start = shadow.transform.position;
+        Vector3 end = shadow.Target.position;       // 플레이어 위치 고정
 
-        _timer += Time.deltaTime;
-        if (_timer > _patternTime)
+        float duration = 0.5f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
         {
-            _timer = 0f;
-            StateMachine.Shadow.DonePattern = true;
-            StateMachine.ChangeState(StateMachine.IdleState);
+            shadow.transform.position = Vector3.Lerp(start, end, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
-        if (StateMachine.Shadow.BiteCount > 3)
-        {
-            Logger.Log("짖기 3회 넘음");
-            StateMachine.ChangeState(StateMachine.IdleState);
-        }
+        shadow.transform.position = end;
+
+        StartAnimation(shadow.SkillAnimationData.BiteParameterHash);
+
+        shadow.Bite();
     }
 }
