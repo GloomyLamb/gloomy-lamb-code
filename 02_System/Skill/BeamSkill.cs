@@ -23,12 +23,13 @@ public class BeamSkill : BaseSkill
     private bool hasUsedOnce = false; // 빔 스킬이 한 번이라도 사용되었는지 여부 
     // 첫사용에만 시작조건이 100이기때문에 변수명 선언
     //false면 시작조건 = 100 , true면 시작조건 = 10 이상 
-
+    private Player owner;
 
     private void Awake()
     {
         // if (beamController == null)
         //     beamController = GetComponentInChildren<BeamController>(true);
+        owner = GetComponentInParent<Player>();
     }
 
     public override void Init(SkillStatusData data)
@@ -97,6 +98,13 @@ public class BeamSkill : BaseSkill
         isBeaming = true;
         tickTimer = 0f;
         hasUsedOnce = true;
+        owner?.AddCondition(CharacterCondition.Beam, true);
+
+        
+        if (owner is DuskyPlayer dusky)
+        {
+            dusky.SetBeamRotation();
+        }
 
         if (beamController != null)
             beamController.PlayBeam();
@@ -119,6 +127,8 @@ public class BeamSkill : BaseSkill
 
         if (beamController != null)
             beamController.SetEnabled(false);
+
+        owner?.AddCondition(CharacterCondition.Beam, false);
     }
 
     private void ChargeGauge()
@@ -156,4 +166,6 @@ public class BeamSkill : BaseSkill
         UseSkill();
         Logger.Log("스킬 사용 테스트");
     }
+
+
 }

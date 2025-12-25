@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ public class DuskyPlayer : Player
 
     public DuskyStateMachine StateMachine => stateMachine;
     protected DuskyStateMachine stateMachine;
-
+    private Quaternion beamFixedRotation;
     // 필요 컴포넌트
     Rigidbody rb;
 
@@ -45,16 +45,22 @@ public class DuskyPlayer : Player
     {
         stateMachine.Update();
 
-        // 현재 Flag 에 따라 방향 바뀌는게 달라야 함. (빔쏘는 상태일 때 체크 필요)
-        if (_lastMoveInputValue != Vector3.zero)
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(_lastMoveInputValue), Time.deltaTime * 10);
-
-        // 바닥일 때 Idle 로 바꿔주기
-        if (stateMachine.CurState == stateMachine.JumpState && _jumpDelay == false)
+        if (NowCondition.HasFlag(CharacterCondition.Beam))
         {
-            if (IsGrounded())
+            transform.rotation = beamFixedRotation;
+        }
+        else
+        {
+            if (_lastMoveInputValue != Vector3.zero)
+                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(_lastMoveInputValue), Time.deltaTime * 10);
+
+
+            if (stateMachine.CurState == stateMachine.JumpState && _jumpDelay == false)
             {
-                stateMachine.ChangeState(stateMachine.IdleState);
+                if (IsGrounded())
+                {
+                    stateMachine.ChangeState(stateMachine.IdleState);
+                }
             }
         }
     }
@@ -202,5 +208,9 @@ public class DuskyPlayer : Player
     {
         base.TakeStun();
         stateMachine.ChangeState(stateMachine.IdleState);
+    }
+    public void SetBeamRotation()
+    {
+        beamFixedRotation = transform.rotation;
     }
 }
