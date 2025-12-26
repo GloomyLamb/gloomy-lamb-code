@@ -32,10 +32,10 @@ public class ShadowStateMachine : StateMachine
     {
         IdleState.Init(MovementType.Stop, Shadow.AnimationData.IdleParameterHash, AnimType.Bool);
         ChaseState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
-        TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Bool, true);
+        TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Trigger, true);
 
         HitState.Init(MovementType.Stop, Shadow.AnimationData.HitParameterHash, AnimType.Trigger);
-        BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Bool, true);
+        BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Trigger, true);
     }
 
     /// <summary>
