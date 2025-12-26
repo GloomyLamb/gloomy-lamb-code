@@ -10,10 +10,22 @@ public class PoolObject : MonoBehaviour
     private void OnEnable()
     {
         OnEnableAction?.Invoke(this);
+        OnEnableInternal();
+    }
+
+    protected virtual void OnEnableInternal()
+    {
+        
     }
 
     private void OnDisable()
     {
+        OnDisableInternal();
         OnDisableAction?.Invoke(this);
+    }
+
+    protected virtual void OnDisableInternal()
+    {
+        
     }
 }
