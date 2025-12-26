@@ -7,6 +7,7 @@ public class HowlWind : MonoBehaviour
     [SerializeField] float _width = 2f;
     [SerializeField] private float _maxRadius = 3f;
     [SerializeField] float _expandSpeed = 5f;
+    [SerializeField] private float heightOffset = 0f;
     
     [Header("판정 높이")]
     [SerializeField] float checkHeight = 0.5f;
@@ -35,7 +36,7 @@ public class HowlWind : MonoBehaviour
 
         _radius += _expandSpeed * Time.deltaTime;
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, _radius + (_width / 2));
+        Collider[] hits = Physics.OverlapSphere(transform.position + (Vector3.up * heightOffset), _radius + (_width / 2));
 
 
         foreach (var hit in hits)
@@ -43,7 +44,7 @@ public class HowlWind : MonoBehaviour
             if (hit is MeshCollider) continue;  // closestPoint가 MeshCollider 몬쓴다고 워닝 떠서 넘김!
             
             Vector3 pos = hit.transform.position;
-            float dist = Vector3.Distance(this.transform.position, hit.transform.position);
+            float dist = Vector3.Distance(this.transform.position + (Vector3.up * heightOffset), hit.transform.position);
 
             if (dist >= (_radius - _width / 2) && dist <= (_radius + _width / 2))
             {
@@ -72,7 +73,7 @@ public class HowlWind : MonoBehaviour
         line.widthMultiplier = _width;
 
         float angleStep = 360f / lineSegment;
-        Vector3 center = transform.position;
+        Vector3 center = transform.position + (Vector3.up * heightOffset);
 
         for (int i = 0; i < lineSegment; i++)
         {
