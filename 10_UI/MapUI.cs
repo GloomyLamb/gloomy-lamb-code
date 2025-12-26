@@ -45,7 +45,6 @@ public class MapUI : MonoBehaviour
         int clear = dm.Current.ClearChapterNumber;
         int playableChapter = clear + 1;
 
-        Debug.Log(chapter +", " + playableChapter + "???????????????");
         if (chapter <= playableChapter) // 
         {
             Debug.Log($" Chapter {chapter} 성공! )");
@@ -65,8 +64,9 @@ public class MapUI : MonoBehaviour
         switch (chapter)
         {
             case 1:
-                Debug.Log("??");
-                GameManager.Instance.Scene?.LoadSceneWithCoroutine(SceneType.ShadowForestScene);
+                //Debug.Log("??");
+                //GameManager.Instance.Scene?.LoadSceneWithCoroutine(SceneType.ShadowForestScene);
+                GameManager.Instance.Scene?.LoadSceneWithCoroutine("Test_Battle_forest");
                 break;
 
           //  case 2:
