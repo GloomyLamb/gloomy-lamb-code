@@ -50,7 +50,7 @@ public class DogShadowBiteState : DogShadowSkillState
 
         //target.rotation = targetRot;
 
-        shadow.Animator.SetTrigger(shadow.SkillAnimationData.BiteParameterHash);
+        shadow.Animator.SetBool(shadow.SkillAnimationData.BiteParameterHash, true);
         shadow.Bite();
     }
 }

@@ -23,7 +23,7 @@ public class DogShadowStateMachine : ShadowStateMachine
         base.Init();
         BiteState.Init(MovementType.Stop, Shadow.SkillAnimationData.BiteParameterHash, AnimType.Bool, true);
         BackwardState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
-        BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Trigger, true);
+        BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool, true);
     }
 
     protected override void HandleUpdateChase()
@@ -39,7 +39,6 @@ public class DogShadowStateMachine : ShadowStateMachine
         }
         else
         {
-            // todo - bark 조건 보완
             ChangeState(BarkState);
         }
     }
