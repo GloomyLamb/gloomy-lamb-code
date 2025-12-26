@@ -12,7 +12,6 @@ public class SkillController : MonoBehaviour
     protected readonly Dictionary<SkillType, BaseSkill> skillDict = new();
     private BaseSkill _curSkill = null;
 
-
     /// <summary>
     /// [public] 스킬 획득
     /// </summary>
@@ -41,7 +40,6 @@ public class SkillController : MonoBehaviour
 
         return true;
     }
-
 
     #region curSkill 관리
     /// <summary>
