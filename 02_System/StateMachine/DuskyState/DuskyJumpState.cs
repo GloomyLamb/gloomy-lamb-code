@@ -6,6 +6,7 @@
 
     public override void Enter()
     {
+        SoundManager.Instance.PlaySfxOnce(SfxName.Jump,0.3f);
         player.Animator.SetTrigger(AnimatorParameters.Jump);
         player.Animator.SetBool(AnimatorParameters.IsFalling, true);
     }
