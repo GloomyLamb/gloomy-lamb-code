@@ -7,7 +7,7 @@ public class CryBindingSkill : BaseSkill
     
     
     
-    public override void Init(SkillStatusData data)
+    public override void Init(SkillData data)
     {
         base.Init(data);
         cryBindingSkillData = data as CryBindingSkillData;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.SocialPlatforms;
+﻿using UnityEngine;
 
 public class BeamSkill : BaseSkill
 {
@@ -35,10 +30,7 @@ public class BeamSkill : BaseSkill
         owner = GetComponentInParent<Player>();
     }
 
-
-
-
-    public override void Init(SkillStatusData data)
+    public override void Init(SkillData data)
     {
         base.Init(data);
 
@@ -71,9 +63,9 @@ public class BeamSkill : BaseSkill
                 if (skillController._skillPivot == null || skillController._skillPivot.Count <= 0) return;
                 beamController.transform.parent = skillController._skillPivot[0];
                 beamController.transform.localPosition = Vector3.zero;
-                beamController.SetEnabled(false);    
+                beamController.SetEnabled(false);
             }
-            
+
         }
     }
     private void Start()
@@ -89,7 +81,7 @@ public class BeamSkill : BaseSkill
         if (!isBeaming) // 빔 발사 중이 아니면 게이지 충전시작
             ChargeGauge();
         else
-           ConsumeGaugeTick();
+            ConsumeGaugeTick();
     }
 
     public override void OnUseSkill(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -113,7 +105,7 @@ public class BeamSkill : BaseSkill
         hasUsedOnce = true;
         owner?.AddCondition(CharacterCondition.Beam, true);
 
-        
+
         if (owner is DuskyPlayer dusky)
         {
             dusky.SetBeamRotation();

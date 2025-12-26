@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BeamSkillData", menuName = "SO/Skill/Skill Status Data")]
-public class BeamSkillData : SkillStatusData
+public class BeamSkillData : SkillData
 {
     [field: Header("Beam Prefab")]
     [field: SerializeField] public BeamController BeamPrefab;

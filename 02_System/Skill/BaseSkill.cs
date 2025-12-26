@@ -10,7 +10,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
 {
     #region 필드
     // 스킬 데이터
-    protected SkillStatusData skillStatusData;
+    protected SkillData skillData;
     // 스킬 사용 조건
     protected float cooldownTimer = 0f;                 // 쿨타임 타이머
     public bool IsUsable => IsCooldownReady() && HasEnoughResource();
@@ -28,9 +28,9 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     #endregion
 
     #region 초기화
-    public virtual void Init(SkillStatusData data)
+    public virtual void Init(SkillData data)
     {
-        skillStatusData = data;
+        skillData = data;
         _delay = new WaitForSeconds(data.Duration.TotalTime);
     }
     #endregion
@@ -102,7 +102,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
             //Logger.Log("타겟 없음");
             return;
         }
-        target?.Damage(skillStatusData.AttackDamage);
+        target?.Damage(skillData.AttackDamage);
     }
 
     public virtual void GiveEffect()
@@ -118,7 +118,7 @@ public abstract class BaseSkill : MonoBehaviour, IAttackable
     /// <returns></returns>
     protected bool IsCooldownReady()
     {
-        bool coolReady = cooldownTimer > skillStatusData.Cooldown;
+        bool coolReady = cooldownTimer > skillData.Cooldown;
         //Logger.Log($"쿨타임 체크: {coolReady}");
         return coolReady;
     }

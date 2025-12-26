@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new SkillStatusData", menuName = "SO/Skill/Skill Status Data")]
-public class SkillStatusData : ScriptableObject
+[CreateAssetMenu(fileName = "new SkillData", menuName = "SO/Skill/Skill Data")]
+public class SkillData : ScriptableObject
 {
     [field: SerializeField] public SkillType Type { get; private set; }
     [field: SerializeField] public float Cooldown { get; private set; }
