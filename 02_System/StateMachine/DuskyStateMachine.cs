@@ -42,15 +42,15 @@ public class DuskyStateMachine : StateMachine
         {
             {
                 _idleState,
-                new HashSet<IState> { _moveState, _jumpState, _attackState, _hitState, _dieState }
+                new HashSet<IState> { _moveState, _jumpState, _attackState, _hitState, _dieState, _dashState }
             },
             {
                 _moveState,
-                new HashSet<IState> { _idleState, _jumpState, _attackState, _hitState, _dieState }
+                new HashSet<IState> { _idleState, _jumpState, _attackState, _hitState, _dieState, _dashState }
             },
             {
                 _jumpState,
-                new HashSet<IState> { _idleState, _attackState, _hitState, _dieState }
+                new HashSet<IState> { _idleState, _attackState, _hitState, _dieState, _dashState }
             },
             {
                 _attackState,
@@ -67,6 +67,10 @@ public class DuskyStateMachine : StateMachine
             {
                 _lieState,
                 new HashSet<IState> { _idleState }
+            },
+            {
+                _dashState,
+                new HashSet<IState> { _idleState, _moveState, _attackState, _hitState, _dieState }
             }
         };
     }
@@ -80,7 +84,7 @@ public class DuskyStateMachine : StateMachine
             return changableStates[curState].Contains(nextState);
         }
 
-        return true;
+        return false;
     }
 
     public void ChangeState(IState state)
