@@ -10,18 +10,12 @@ public class DogShadowBiteState : DogShadowSkillState
     public override void Enter()
     {
         Logger.Log("물기");
-        StartAnimation(StateMachine.Shadow.SkillAnimationData.SkillParameterHash);
+        shadow.Animator.SetTrigger(shadow.SkillAnimationData.SkillParameterHash);
 
         if (useCoroutine)
         {
             StartCoroutine();
         }
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-        StopAnimation(StateMachine.Shadow.SkillAnimationData.SkillParameterHash);
     }
 
     /// <summary>
@@ -56,7 +50,7 @@ public class DogShadowBiteState : DogShadowSkillState
 
         //target.rotation = targetRot;
 
-        StartAnimation(shadow.SkillAnimationData.BiteParameterHash);
+        shadow.Animator.SetTrigger(shadow.SkillAnimationData.BiteParameterHash);
         shadow.Bite();
     }
 }
