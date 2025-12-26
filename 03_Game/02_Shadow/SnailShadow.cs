@@ -10,6 +10,7 @@ public class SnailShadow : Shadow
     [SerializeField] private float spawnInterval = 1f;
     [SerializeField] private float slimeDestroyTime = 3f;
     [SerializeField] private Vector3 spawnOffset = Vector3.zero;
+    [SerializeField] private Vector3 spawnScale = Vector3.one * 0.5f;
     private Coroutine slimeRoutine;
 
     // 변형
@@ -73,7 +74,7 @@ public class SnailShadow : Shadow
         Quaternion rot = Quaternion.identity;
 
         GameObject slime = Instantiate(slimePrefab, pos, rot);
-        slime.transform.localScale = spawnOffset;
+        slime.transform.localScale = spawnScale;
         Destroy(slime, slimeDestroyTime);
     }
 
