@@ -7,8 +7,8 @@ using UnityEngine.SocialPlatforms;
 
 public class BeamSkill : BaseSkill
 {
-    [SerializeField] private float lightGauge; // 현재 빛 게이지
-    [SerializeField] private float maxLightGauge; // 최대 빛 게이지
+    [SerializeField] public float lightGauge; // 현재 빛 게이지
+    [SerializeField] public float maxLightGauge; // 최대 빛 게이지
     [SerializeField] private float chargeTimeGauge; // 빛 게이지 충전 시간
     [SerializeField] private float consumeTickGauge; // 빔 사용시 틱당 소모되는 빛 게이지
     [SerializeField] private float consumeTickSec; // 빔 사용시 틱당 시간
@@ -34,6 +34,9 @@ public class BeamSkill : BaseSkill
         //     beamController = GetComponentInChildren<BeamController>(true);
         owner = GetComponentInParent<Player>();
     }
+
+
+
 
     public override void Init(SkillStatusData data)
     {
@@ -73,7 +76,12 @@ public class BeamSkill : BaseSkill
             
         }
     }
-
+    private void Start()
+    {
+        LightGaugeUI ui = FindObjectOfType<LightGaugeUI>();
+        if (ui != null)
+            ui.ConnectBeamSkill(this);
+    }
     protected override void Update()
     {
         base.Update();
