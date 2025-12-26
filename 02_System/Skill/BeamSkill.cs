@@ -12,6 +12,9 @@ public class BeamSkill : BaseSkill
     [SerializeField] private float chargeTimeGauge; // 빛 게이지 충전 시간
     [SerializeField] private float consumeTickGauge; // 빔 사용시 틱당 소모되는 빛 게이지
     [SerializeField] private float consumeTickSec; // 빔 사용시 틱당 시간
+    public float LightGauge => lightGauge;
+    public float MaxLightGauge => maxLightGauge;
+
 
     [Header("References")] //실제 빔연출 컨트롤러 불러오기
     [SerializeField] private BeamController beamController;
