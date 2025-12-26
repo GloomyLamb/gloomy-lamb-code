@@ -81,6 +81,8 @@ public class DogShadow : Shadow
             target.TakeStun();                      // 플레이어 효과 주기
             BiteCount++;
 
+            // ai 끄기
+            //controller.SetActiveAgentRotation(false);
             stateMachine.ChangeState(((DogShadowStateMachine)stateMachine).BackwardState);
         }
         else
@@ -93,7 +95,6 @@ public class DogShadow : Shadow
 
     public void Backward()
     {
-        controller.SetActiveAgentRotation(false);
         Vector3 dir = -Forward;
         Vector3 targetPos = controller.transform.position + dir * _biteBackwardLength;
         controller.Agent.SetDestination(targetPos);
