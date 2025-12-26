@@ -1,17 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// UI 기본 클래스
+/// </summary>
 public abstract class BaseUI : MonoBehaviour
 {
     private void Awake()
     {
         Init();
     }
+
     protected virtual void Init()
     {
-        
+
     }
 
     /// <summary>
@@ -19,9 +20,9 @@ public abstract class BaseUI : MonoBehaviour
     /// </summary>
     public virtual void Setup()
     {
-        
+
     }
-    
+
     // 현재 불필요
     // void RegisterUI()
     // {
