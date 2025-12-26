@@ -20,7 +20,10 @@ public class DuskyAttackState : BaseDuskyState
 
     public override void Enter()
     {
-        player.Animator.SetTrigger(AnimatorParameters.Attack);
+        // todo : 후에 동작 플래그를 따로 만들어서 Enter 가 두 번 들어오는거 자체를 막기
+        AnimatorStateInfo animInfo = player.Animator.GetCurrentAnimatorStateInfo(0);
+        if(animInfo.IsName(AnimatorParameters.AttackName) == false)
+            player.Animator.SetTrigger(AnimatorParameters.Attack);
         _attackRotuine = CoroutineRunner.instance.StartCoroutine(AttackRoutine());
     }
 
@@ -28,6 +31,7 @@ public class DuskyAttackState : BaseDuskyState
     {
         AnimatorStateInfo animInfo = player.Animator.GetCurrentAnimatorStateInfo(0);
 
+        //Debug.Log(animInfo.normalizedTime);
         if (animInfo.IsName(AnimatorParameters.AttackName) && animInfo.normalizedTime >= 1f)
         {
             if (stateMachine != null)

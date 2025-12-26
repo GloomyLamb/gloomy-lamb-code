@@ -152,7 +152,8 @@ public class DuskyPlayer : Player
         }
         else if (stateMachine.CurState != stateMachine.DashState)
         {
-            if (NowCondition.HasFlag(CharacterCondition.Dash))
+            if (NowCondition.HasFlag(CharacterCondition.Dash) &&
+                stateMachine.CanChange(stateMachine.DashState))
             {
                 stateMachine.ChangeState(stateMachine.DashState);
             }
@@ -189,6 +190,7 @@ public class DuskyPlayer : Player
     {
         if (stateMachine.CanChange(stateMachine.AttackState))
         {
+            Debug.Log("어택클릭클릭");
             stateMachine.ChangeState(stateMachine.AttackState);
         }
     }
