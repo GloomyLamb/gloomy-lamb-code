@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class HowlWind : MonoBehaviour
+public class HowlWind : PoolObject
 {
     [Header("설정")]
     [SerializeField] float _width = 2f;
@@ -60,10 +60,10 @@ public class HowlWind : MonoBehaviour
             }
         }
 
-        // todo : 나중에 풀로 넣어서 쓰기
         if (_radius >= _maxRadius)
         {
-            Destroy(gameObject);
+            this.gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
 

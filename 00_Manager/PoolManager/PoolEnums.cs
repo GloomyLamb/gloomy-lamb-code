@@ -9,5 +9,6 @@ public enum PoolType
     TestObjectPool,
     MonsterPool,
     BulletPool,
+    HowlWindPool,
     
 }
