@@ -74,7 +74,8 @@ public abstract class ShadowController : MonoBehaviour
         _agentTimer += Time.deltaTime;
         if (_agentTimer > _updateInterval)
         {
-            _agent.SetDestination(Target.position);
+            Vector3 targetPosition = Target.position + (new Vector3(1f,0,1f) * Random.Range(0.5f,0.75f));
+            _agent.SetDestination(targetPosition);
             _agentTimer = 0f;
         }
     }

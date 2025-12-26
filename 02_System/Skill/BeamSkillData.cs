@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "BeamSkillData", menuName = "SO/Skill/Skill Status Data")]
 public class BeamSkillData : SkillData
 {
-    [Header("Beam Prefab")]
-    public BeamController BeamPrefab;
-    
-    [Header("Light Gauge")]
-    public float LightGauge;
-    public float MaxLightGauge = 100f;
-    public float ChargeTimeGauge = 60f;
+    [field: Header("Beam Prefab")]
+    [field: SerializeField] public BeamController BeamPrefab;
 
-    [Header("Consume")]
-    public float ConsumeTickGauge = 10f;
-    public float ConsumeTickSec = 0.1f;
+    [field: Header("Light Gauge")]
+    [field: SerializeField] public float LightGauge { get; private set; }
+    [field: SerializeField] public float MaxLightGauge { get; private set; } = 100f;
+    [field: SerializeField] public float ChargeTimeGauge { get; private set; } = 60f;
+
+    [field: Header("Consume")]
+    [field: SerializeField] public float ConsumeTickGauge { get; private set; } = 10f;
+    [field: SerializeField] public float ConsumeTickSec { get; private set; } = 0.1f;
+
+    [field: Header("Damage Tick")]
+    [field: SerializeField] public float DamageTickSec { get; private set; } = 1.0f;
 }

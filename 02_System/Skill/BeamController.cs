@@ -6,11 +6,9 @@ using System;
 public class BeamController : MonoBehaviour
 {
     [Header("References")]
-        public Transform cornTransform;
-        public Light spotLight;
-     
-  
-
+    public Transform cornTransform;
+    public Light spotLight;
+    
     [Header("Beam parmeters (Tune in Inspector)")]
     [Tooltip("빔이 확장되어 나아가는 속도")]
     public float expandSpeed;
@@ -33,16 +31,30 @@ public class BeamController : MonoBehaviour
     public float startSpotAngle;
     public float maxSpotAngle;
     public float startIntensity;
+    
+    
+    List<IDamageable> _damageables = new List<IDamageable>();
+    Coroutine _damageRoutine = null;
+    BeamSkillData _beamData;
+
+    public void Init(BeamSkillData beamData)
+    {
+        _beamData = beamData;        
+    }
+    
     private void Start()
     {
         SetEnabled(false);
         ApplyBeam(0f);
     }
 
+    private void OnEnable()
+    {
+
+    }
 
     private void Update()
     {
-        
       
         if (!isExpanding) return;
 
@@ -59,15 +71,31 @@ public class BeamController : MonoBehaviour
 
     public void SetEnabled(bool on)
     {
-      
         if (cornTransform != null)
             cornTransform.gameObject.SetActive(on);
 
-        if(spotLight != null)
+        if (spotLight != null)
             spotLight.enabled = on;
-      
-    
-}
+
+        if (on)
+        {
+            if(_damageRoutine != null)
+                StopCoroutine(_damageRoutine);
+            _damageRoutine = StartCoroutine(LightDamageRoutine());
+            _damageables.Clear();
+        }
+        else
+        {
+            foreach (IDamageable damageable in _damageables)
+            {
+                damageable.StopEffect(); 
+            }
+            _damageables.Clear();
+        
+            if(_damageRoutine != null)
+                StopCoroutine(_damageRoutine);
+        }
+    }
 
     void ApplyBeam(float length) 
     {
@@ -103,17 +131,48 @@ public class BeamController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
-        other.GetComponent<IDamageable>()?.Damage(10f);
-        other.GetComponent<IDamageable>()?.ApplyEffect();
-       
+        IDamageable hit = other.GetComponent<IDamageable>();
         
+        if (hit != null)
+        {
+            if (_damageables.Contains(hit) == false)
+            {
+                _damageables.Add(hit);
+                hit.ApplyEffect();
+            }
+        }
     }
-
+    
     private void OnTriggerExit(Collider other)
     {
-        other.GetComponent<IDamageable>()?.StopEffect();
+        IDamageable hit = other.GetComponent<IDamageable>();
+        if (hit != null)
+        {
+            if (_damageables.Contains(hit) == true)
+            {
+                hit.StopEffect();
+                _damageables.Remove(hit);
+            }
+        }
+    }
 
+    private void OnDisable()
+    {
+    
+    }
+
+    IEnumerator LightDamageRoutine()
+    {
+        WaitForSeconds tick = new  WaitForSeconds(_beamData.DamageTickSec);
+        while (true)
+        {
+            yield return tick;
+                Debug.Log("안녕ㅇㅇㅇ");
+            foreach (IDamageable damageable in _damageables)
+            {
+                damageable.Damage(_beamData.AttackDamage);
+            }
+        }
     }
 }
 

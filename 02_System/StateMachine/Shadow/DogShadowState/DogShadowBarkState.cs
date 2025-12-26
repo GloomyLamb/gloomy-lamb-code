@@ -4,7 +4,7 @@ using UnityEngine;
 public class DogShadowBarkState : DogShadowSkillState
 {
     //private float _patternTime = 1f;
-    private float _spawnTime = 1f;
+    private float _spawnTime = 2f;
     private int _spawnCount = 3;
 
     public DogShadowBarkState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
