@@ -45,11 +45,6 @@ public class DuskyPlayer : Player
     {
         stateMachine.Update();
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            TakeStun();
-        }
-
         if (NowCondition.HasFlag(CharacterCondition.Beam))
         {
             transform.rotation = beamFixedRotation;
@@ -92,7 +87,7 @@ public class DuskyPlayer : Player
                 if (nowCondition.HasFlag(CharacterCondition.Slow))
                     moveSpeed = moveSpeed * 0.3f; // todo : 수치 빼는건 나중에
                 if (nowCondition.HasFlag(CharacterCondition.Dash))
-                    moveSpeed = moveSpeed * 1.5f;
+                    moveSpeed = moveSpeed * moveStatusData.DashMultiplier;
 
                 Vector3 newPosition = rb.position + _lastMoveInputValue * (moveSpeed * Time.fixedDeltaTime);
                 rb.MovePosition(newPosition);
@@ -190,7 +185,6 @@ public class DuskyPlayer : Player
     {
         if (stateMachine.CanChange(stateMachine.AttackState))
         {
-            Debug.Log("어택클릭클릭");
             stateMachine.ChangeState(stateMachine.AttackState);
         }
     }

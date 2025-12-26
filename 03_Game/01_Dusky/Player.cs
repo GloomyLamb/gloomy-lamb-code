@@ -8,7 +8,7 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 {
     [Header("스탯 SO")]
     [SerializeField] protected StatusData statusData;
-    [SerializeField] protected MoveStatusData moveStatusData;
+    [SerializeField] public MoveStatusData moveStatusData;
 
     [Header("Ground 설정")]
     [SerializeField] private float playerScale = 0.02f;

@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+
 /// <summary>
 /// 더스키 상태 베이스 클래스
 /// </summary>
@@ -31,6 +34,20 @@ public abstract class BaseDuskyState : IState
         player.Animator.SetBool(animationHash, false);
     }
     #endregion
+
+
+    protected Coroutine StartCoroutine(IEnumerator routine)
+    {
+        return CustomCoroutineRunner.Instance.StartCoroutine(routine);
+    }
+
+    protected void StopCoroutine(Coroutine routine)
+    {
+        if (routine != null)
+            CustomCoroutineRunner.Instance.StopCoroutine(routine);
+        routine = null;
+    }
+    
 
     #region IState 구현
 
