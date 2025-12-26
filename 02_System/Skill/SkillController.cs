@@ -72,7 +72,10 @@ public class SkillController : MonoBehaviour
 #if UNITY_EDITOR
     private void Reset()
     {
-        _skillDatabase = AssetLoader.FindAndLoadByName<SkillDatabase>("TestSkillStatusDatabase");
+        if (_skillDatabase == null)
+        {
+            _skillDatabase = AssetLoader.FindAndLoadByName<SkillDatabase>("SkillDatabase");
+        }
     }
 #endif
     #endregion
