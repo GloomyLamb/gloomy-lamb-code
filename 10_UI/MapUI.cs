@@ -64,18 +64,17 @@ public class MapUI : MonoBehaviour
         switch (chapter)
         {
             case 1:
-                //Debug.Log("??");
                 //GameManager.Instance.Scene?.LoadSceneWithCoroutine(SceneType.ShadowForestScene);
                 GameManager.Instance.Scene?.LoadSceneWithCoroutine("Test_Battle_forest");
                 break;
 
           //  case 2:
-                SceneManager.LoadScene("Chapter2Scene"); // 나중에 채울때 추가하면 됨
-                break;
+                // SceneManager.LoadScene("Chapter2Scene"); // 나중에 채울때 추가하면 됨
+                // break;
 
            // case 3:
-                SceneManager.LoadScene("Chapter3Scene");
-                break;
+                // SceneManager.LoadScene("Chapter3Scene");
+                // break;
         }
     }
 

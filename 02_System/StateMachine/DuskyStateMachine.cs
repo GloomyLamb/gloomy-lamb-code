@@ -24,7 +24,6 @@ public class DuskyStateMachine : StateMachine
 
     private Dictionary<IState, HashSet<IState>> changableStates = new Dictionary<IState, HashSet<IState>>();
 
-    public event Action OnAttackAction;
 
     public DuskyStateMachine(DuskyPlayer player)
     {
@@ -87,11 +86,4 @@ public class DuskyStateMachine : StateMachine
         return false;
     }
 
-    public void ChangeState(IState state)
-    {
-        base.ChangeState(state);
-        // curState?.Exit();    //이전상태 Exit 호출 함으로써 idle 종료처리 
-        // curState = state;    //현재상태 교체 Idle -> Chase 
-        // curState?.Enter();   //Chase 상태 Enter 호출 함으로써 Chase 시작처리
-    }
 }

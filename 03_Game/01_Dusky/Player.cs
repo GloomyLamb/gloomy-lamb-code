@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections;
 using UnityEngine;
 
 // todo : Player 구조 다같이 이야기 해보기
