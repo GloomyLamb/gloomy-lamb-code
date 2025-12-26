@@ -9,10 +9,10 @@ public class DogShadowBackwardState : DogShadowState
 
     protected override IEnumerator StateCoroutine()
     {
-        Logger.Log("물기 후 뒷걸음질");
         shadow.Controller.SetActiveAgentRotation(false);
-        yield return null;
         Logger.Log("회전 false 상태");
+        yield return new WaitForSeconds(shadow.BiteDuration);
+        Logger.Log("물기 대기 후 뒷걸음질");
         shadow.Backward();
         yield return new WaitForSeconds(shadow.BiteBackwardDuration);
         Logger.Log("뒷걸음질 시간동안 대기 완료");
