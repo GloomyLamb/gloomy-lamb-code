@@ -65,7 +65,7 @@ public class DogShadow : Shadow
     #region 스킬
     public void SpawnHowlWind()
     {
-        Instantiate(_howlWindPrefab, transform.position, Quaternion.identity);
+        PoolManager.Instance?.Spawn(PoolType.HowlWindPool,transform.position,Quaternion.identity);
     }
 
     public void Bite()
