@@ -6,8 +6,8 @@ using UnityEngine;
 /// </summary>
 public class SkillController : MonoBehaviour
 {
-    [SerializeField] private SkillStatusDatabase _skillStatusDatabase;
-    
+    [SerializeField] private SkillDatabase _skillDatabase;
+
     // 스킬 상태 관리
     protected readonly Dictionary<SkillType, BaseSkill> skillDict = new();
     private BaseSkill _curSkill = null;
@@ -20,7 +20,7 @@ public class SkillController : MonoBehaviour
     /// <param name="baseSkill"></param>
     public bool TryAcquireSkill(SkillType type, BaseSkill baseSkill)
     {
-        if (!_skillStatusDatabase.TryGetSkillStatusData(type, out SkillStatusData data))
+        if (!_skillDatabase.TryGetSkillStatusData(type, out SkillData data))
         {
             Destroy(baseSkill);
             Logger.LogWarning($"얻을 수 없는 스킬 데이터: {type}");
@@ -41,7 +41,7 @@ public class SkillController : MonoBehaviour
 
         return true;
     }
-    
+
 
     #region curSkill 관리
     /// <summary>
@@ -72,7 +72,7 @@ public class SkillController : MonoBehaviour
 #if UNITY_EDITOR
     private void Reset()
     {
-        _skillStatusDatabase = AssetLoader.FindAndLoadByName<SkillStatusDatabase>("TestSkillStatusDatabase");
+        _skillDatabase = AssetLoader.FindAndLoadByName<SkillDatabase>("TestSkillStatusDatabase");
     }
 #endif
     #endregion
