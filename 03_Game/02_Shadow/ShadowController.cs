@@ -60,7 +60,7 @@ public abstract class ShadowController : MonoBehaviour
 
     public void SetActiveAgentRotation(bool active)
     {
-        _agent.updatePosition = active;
+        _agent.updateRotation = active;
     }
 
     protected void HandleMove()
