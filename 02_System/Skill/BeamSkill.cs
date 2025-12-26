@@ -55,6 +55,8 @@ public class BeamSkill : BaseSkill
         tickTimer = 0f;
 
         beamController = Instantiate(beamData.BeamPrefab);
+        beamController.Init(beamData);
+        
         if (beamController != null)
         {
             PlayerSkillController skillController = GetComponent<PlayerSkillController>();
