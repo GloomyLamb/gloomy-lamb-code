@@ -16,7 +16,7 @@
 
     void PlayFallDownSound()
     {
-        SoundManager.Instance?.PlaySfxOnce(SfxName.FallDown, _soundVolume);
+      //  SoundManager.Instance?.PlaySfxOnce(SfxName.FallDown, _soundVolume);
     }
 
     public override void Update()
