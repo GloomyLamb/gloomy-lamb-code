@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SlimeShadowChaseState : ShadowState
@@ -5,22 +6,16 @@ public class SlimeShadowChaseState : ShadowState
     protected new SlimeShadow shadow;
     protected SlimeShadowStateMachine stateMachine;
 
-    private float _timer;
-
     public SlimeShadowChaseState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
         this.shadow = shadow as SlimeShadow;
         this.stateMachine = stateMachine as SlimeShadowStateMachine;
     }
 
-    public override void Update()
+    protected override IEnumerator StateCoroutine()
     {
-        _timer += Time.deltaTime;
-        if (_timer > shadow.FastChasePatternTime)
-        {
-            shadow.PlusChaseCount();
-            stateMachine.ChangeState(stateMachine.IdleState);
-            _timer = 0f;
-        }
+        yield return new WaitForSeconds(shadow.FastChasePatternTime);
+        shadow.PlusChaseCount();
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
 }
