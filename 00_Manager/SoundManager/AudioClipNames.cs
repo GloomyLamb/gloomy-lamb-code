@@ -12,6 +12,7 @@ public enum SfxName
     DuskyCry,
 
     // Shadow
+    Slime,
     Bark,
     Bite,
     ShadowExpand,
