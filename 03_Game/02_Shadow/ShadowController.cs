@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,6 +18,11 @@ public abstract class ShadowController : MonoBehaviour
     public Status Status => status;
     protected Status status;
 
+    [field: Header("효과")]
+    [field: SerializeField] public Transform ShadowFog { get; private set; }
+    protected float scaleDuration = 0.5f;
+    private Vector3 _defaultFogScale;
+    private Coroutine _scaleCoroutine;
 
     [field: Header("추격")]
     [field: SerializeField] public Transform Target { get; private set; }
@@ -36,6 +42,8 @@ public abstract class ShadowController : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
 
         status = statusData?.GetNewStatus();
+
+        _defaultFogScale = ShadowFog.localScale;
     }
 
     protected virtual void Start()
@@ -49,6 +57,49 @@ public abstract class ShadowController : MonoBehaviour
     public void Damage(float damage)
     {
         Status.AddHp(-damage);
+    }
+
+    protected void TransformFogScaleTo()
+    {
+        if (_scaleCoroutine != null)
+        {
+            StopCoroutine(_scaleCoroutine);
+            _scaleCoroutine = null;
+        }
+        _scaleCoroutine = StartCoroutine(ScaleToCoroutine(
+            ShadowFog,
+            _defaultFogScale,
+            curShadow.FogScaleModifier,
+            scaleDuration));
+    }
+
+    public void TransformFogScaleTo(float modifier)
+    {
+        if (_scaleCoroutine != null)
+        {
+            StopCoroutine(_scaleCoroutine);
+            _scaleCoroutine = null;
+        }
+        _scaleCoroutine = StartCoroutine(ScaleToCoroutine(
+            ShadowFog,
+            _defaultFogScale,
+            modifier,
+            scaleDuration));
+    }
+
+    protected IEnumerator ScaleToCoroutine(Transform target, Vector3 startScale, float scaleModifier, float duration)
+    {
+        Vector3 endScale = startScale * scaleModifier;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.localScale = endScale;
     }
 
     #region Nev Mesh Agent 관리
@@ -101,6 +152,7 @@ public abstract class ShadowController : MonoBehaviour
 #if UNITY_EDITOR
     protected virtual void Reset()
     {
+        ShadowFog = transform.FindChild<Transform>("Particle_Fog");
     }
 #endif
     #endregion

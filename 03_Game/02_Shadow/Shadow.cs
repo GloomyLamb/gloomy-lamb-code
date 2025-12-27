@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
+    #region 필드
     // controller
     protected ShadowController controller;
     public Transform Target => controller.Target;
@@ -25,7 +26,6 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     [SerializeField] private float _defaultSpeedModifier = 1f;
     [SerializeField] private float _runSpeedModifier = 2f;
     private float _movementSpeedModifier = 1f;
-
     protected float MovementSpeedModitier
     {
         get { return _movementSpeedModifier; }
@@ -40,9 +40,13 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     }
     [SerializeField] protected float damage = 10f;
 
+    [field: Header("효과")]
+    [field: SerializeField] public float FogScaleModifier { get; private set; } = 2f;
+
     // 이벤트
     public Action OnMove;               // 이동
     public event Action OnTransform;    // 변형
+    #endregion
 
     #region 초기화
     protected virtual void Awake()

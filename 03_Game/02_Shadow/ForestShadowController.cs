@@ -58,6 +58,7 @@ public class ForestShadowController : ShadowController
         _dogShadow.gameObject.SetActive(false);
         _snailShadow.gameObject.SetActive(false);
         curShadow = _slimeShadow;
+        TransformFogScaleTo();
     }
 
     private void TransformToDog()
@@ -67,6 +68,7 @@ public class ForestShadowController : ShadowController
         _dogShadow.gameObject.SetActive(true);
         _snailShadow.gameObject.SetActive(false);
         curShadow = _dogShadow;
+        TransformFogScaleTo();
     }
 
     private void TransformToSnail()
@@ -76,6 +78,7 @@ public class ForestShadowController : ShadowController
         _dogShadow.gameObject.SetActive(false);
         _snailShadow.gameObject.SetActive(true);
         curShadow = _snailShadow;
+        TransformFogScaleTo();
     }
     #endregion
 
