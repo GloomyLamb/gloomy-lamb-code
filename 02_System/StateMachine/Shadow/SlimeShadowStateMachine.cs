@@ -26,7 +26,7 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     {
         base.Init();
 
-        WalkState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
+        WalkState.Init(MovementType.Walk, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
         RunState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
         ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
     }

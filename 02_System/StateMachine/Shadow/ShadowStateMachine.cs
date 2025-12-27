@@ -31,7 +31,7 @@ public class ShadowStateMachine : StateMachine
     public virtual void Init()
     {
         IdleState.Init(MovementType.Stop, Shadow.AnimationData.IdleParameterHash, AnimType.Bool);
-        ChaseState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        ChaseState.Init(MovementType.Walk, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
         TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Trigger, true);
 
         HitState.Init(MovementType.Stop, Shadow.AnimationData.HitParameterHash, AnimType.Trigger);

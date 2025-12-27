@@ -1,7 +1,7 @@
 public enum MovementType
 {
     Stop,
-    Default,
+    Walk,
     Run,
 }
 

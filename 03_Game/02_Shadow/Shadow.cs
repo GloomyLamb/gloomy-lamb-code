@@ -23,7 +23,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     // todo: 추후 SO로 분리
     [field: Header("움직임")]
     [field: SerializeField] public float MovementSpeed { get; private set; } = 10f;
-    [SerializeField] private float _defaultSpeedModifier = 1f;
+    [SerializeField] private float _walkSpeedModifier = 1f;
     [SerializeField] private float _runSpeedModifier = 2f;
     private float _movementSpeedModifier = 1f;
     protected float MovementSpeedModitier
@@ -129,9 +129,9 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         MovementSpeedModitier = (type) switch
         {
             MovementType.Stop => 0f,
-            MovementType.Default => _defaultSpeedModifier,
+            MovementType.Walk => _walkSpeedModifier,
             MovementType.Run => _runSpeedModifier,
-            _ => _defaultSpeedModifier,
+            _ => _walkSpeedModifier,
         };
     }
     #endregion
