@@ -78,7 +78,7 @@ public class ShadowState : IState
     public virtual void Enter()
     {
         // 그림자 움직임 보정값 설정
-        shadow.SetMovementModifier(movementType);
+        shadow.SetMovementMultiplier(movementType);
 
         // 애니메이션 처리
         switch (animType)

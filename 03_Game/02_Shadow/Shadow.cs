@@ -20,21 +20,19 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public float BoundStopPoint => controller.BoundStopPoint;
     public float BoundDuration => controller.BoundDuration;
 
-    // todo: 추후 SO로 분리
     [field: Header("움직임")]
-    [field: SerializeField] public float MovementSpeed { get; private set; } = 10f;
-    [SerializeField] private float _walkSpeedModifier = 1f;
-    [SerializeField] private float _runSpeedModifier = 2f;
-    private float _movementSpeedModifier = 1f;
-    protected float MovementSpeedModitier
+    [field: SerializeField] public MoveStatusData MoveStatusData { get; protected set; }
+    public float MovementSpeed => MoveStatusData.MoveSpeed;
+    private float _movementSpeedMultiplier = 1f;
+    protected float MovementSpeedMultiplier
     {
-        get { return _movementSpeedModifier; }
+        get { return _movementSpeedMultiplier; }
         private set
         {
-            _movementSpeedModifier = value;
+            _movementSpeedMultiplier = value;
             if (controller != null)
             {
-                controller.SetAgentMovementModifier(_movementSpeedModifier);
+                controller.SetAgentMovementModifier(_movementSpeedMultiplier);
             }
         }
     }
@@ -124,14 +122,14 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     }
 
     #region 움직임
-    public virtual void SetMovementModifier(MovementType type)
+    public virtual void SetMovementMultiplier(MovementType type)
     {
-        MovementSpeedModitier = (type) switch
+        MovementSpeedMultiplier = (type) switch
         {
             MovementType.Stop => 0f,
-            MovementType.Walk => _walkSpeedModifier,
-            MovementType.Run => _runSpeedModifier,
-            _ => _walkSpeedModifier,
+            MovementType.Walk => 1f,
+            MovementType.Run => MoveStatusData.DashMultiplier,
+            _ => 1f,
         };
     }
     #endregion

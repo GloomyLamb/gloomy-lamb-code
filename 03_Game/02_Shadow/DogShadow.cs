@@ -108,6 +108,7 @@ public class DogShadow : Shadow
     protected override void Reset()
     {
         base.Reset();
+        MoveStatusData = AssetLoader.FindAndLoadByName<MoveStatusData>("DogMoveStatusData");
         _biteDetector = transform.FindChild<DamageableDetector>("Pivot_AttackRange_Bite");
         HowlEffectPrefab = transform.FindChild<ParticleSystem>("Particle_BarkEffect").gameObject;
     }

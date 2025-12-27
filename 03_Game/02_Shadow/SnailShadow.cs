@@ -86,4 +86,14 @@ public class SnailShadow : Shadow
     protected override void ResetTransformFlag()
     {
     }
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+        MoveStatusData = AssetLoader.FindAndLoadByName<MoveStatusData>("SnailMoveStatusData");
+    }
+#endif
+    #endregion
 }

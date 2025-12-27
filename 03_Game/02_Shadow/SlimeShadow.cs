@@ -101,4 +101,14 @@ public class SlimeShadow : Shadow
 
         transform.localScale = endScale;
     }
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+        MoveStatusData = AssetLoader.FindAndLoadByName<MoveStatusData>("SlimeMoveStatusData");
+    }
+#endif
+    #endregion
 }
