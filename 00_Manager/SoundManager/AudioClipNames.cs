@@ -6,6 +6,7 @@ public enum SfxName
     FootStep,
     Jump,
     Landing,
+    FallDown,
     
     // Skill
     Bean,
