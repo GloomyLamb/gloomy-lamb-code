@@ -51,11 +51,11 @@ public abstract class BaseDuskyState : IState
             LoopSoundRoutine(playAction, interval, animationSpeedMultiplier, immediateStart));
     }
 
-    protected void PlayDelaySound(SfxName sfxName, float volume, float delay)
+    protected void PlayDelaySound(Action playAction, float delay)
     {
         StopDelaySound();
         _soundDelayRoutine = CustomCoroutineRunner.Instance.StartCoroutine(
-            PlaySoundOnceDelayRoutine(sfxName, volume, delay));
+            PlaySoundOnceDelayRoutine(playAction, delay));
     }
 
     protected void StopLoopSound()
@@ -73,19 +73,22 @@ public abstract class BaseDuskyState : IState
     
     protected IEnumerator LoopSoundRoutine(Action playAction, float interval, float animationSpeedMultiplier, bool immediateStart = false)
     {
-        WaitForSeconds wait = new WaitForSeconds(interval/ (player.moveStatusData.MoveSpeed * animationSpeedMultiplier));
+        WaitForSeconds wait = new WaitForSeconds(interval / (player.moveStatusData.MoveSpeed * animationSpeedMultiplier));
+        
+        if(immediateStart)
+            playAction?.Invoke();
+        
         while (true)
         {
             yield return wait;
             playAction?.Invoke();
-            //SoundManager.Instance?.PlaySfxRandom(sfxName, volume);
         }
     }
 
-    protected IEnumerator PlaySoundOnceDelayRoutine(SfxName sfxName, float volume, float delay)
+    protected IEnumerator PlaySoundOnceDelayRoutine(Action playAction, float delay)
     {
         yield return new WaitForSeconds(delay);
-        SoundManager.Instance?.PlaySfxOnce(sfxName, volume);
+        playAction?.Invoke();
     }
 
     #endregion
