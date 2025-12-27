@@ -47,7 +47,7 @@ public class BeamSkill : BaseSkill
         consumeTickSec = beamSkillData.ConsumeTickSec;
 
         // 테스트용: 시작 시 풀게이지
-        lightGauge = maxLightGauge;
+        lightGauge = 0f;
         hasUsedOnce = false;
         isBeaming = false;
         tickTimer = 0f;
