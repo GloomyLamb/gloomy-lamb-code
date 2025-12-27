@@ -27,9 +27,16 @@ public class HowlWind : PoolObject
     {
         if (line != null)
             line.positionCount = lineSegment;
+
+        
     }
-    
-    
+
+    protected override void OnEnableInternal()
+    {
+        _radius = 0;
+    }
+
+
     void Update()
     {
         DrawRing();

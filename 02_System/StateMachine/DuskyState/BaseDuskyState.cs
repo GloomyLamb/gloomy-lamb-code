@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -36,18 +37,62 @@ public abstract class BaseDuskyState : IState
     #endregion
 
 
-    protected Coroutine StartCoroutine(IEnumerator routine)
+
+    #region 애니메이션 사운드 타이밍
+
+    
+    private Coroutine _soundLoopRoutine = null;
+    private Coroutine _soundDelayRoutine = null;
+
+    protected void PlayLoopSound(Action playAction, float interval, float animationSpeedMultiplier, bool immediateStart = false)
     {
-        return CustomCoroutineRunner.Instance.StartCoroutine(routine);
+        StopLoopSound();
+        _soundLoopRoutine = CustomCoroutineRunner.Instance.StartCoroutine(
+            LoopSoundRoutine(playAction, interval, animationSpeedMultiplier, immediateStart));
     }
 
-    protected void StopCoroutine(Coroutine routine)
+    protected void PlayDelaySound(Action playAction, float delay)
     {
-        if (routine != null)
-            CustomCoroutineRunner.Instance.StopCoroutine(routine);
-        routine = null;
+        StopDelaySound();
+        _soundDelayRoutine = CustomCoroutineRunner.Instance.StartCoroutine(
+            PlaySoundOnceDelayRoutine(playAction, delay));
+    }
+
+    protected void StopLoopSound()
+    {
+        if (_soundLoopRoutine != null)
+            CustomCoroutineRunner.Instance.StopCoroutine(_soundLoopRoutine);
+        _soundLoopRoutine = null;
+    }
+
+    protected void StopDelaySound()
+    {
+        if (_soundDelayRoutine != null)
+            CustomCoroutineRunner.Instance.StopCoroutine(_soundDelayRoutine);
     }
     
+    protected IEnumerator LoopSoundRoutine(Action playAction, float interval, float animationSpeedMultiplier, bool immediateStart = false)
+    {
+        WaitForSeconds wait = new WaitForSeconds(interval / (player.moveStatusData.MoveSpeed * animationSpeedMultiplier));
+        
+        if(immediateStart)
+            playAction?.Invoke();
+        
+        while (true)
+        {
+            yield return wait;
+            playAction?.Invoke();
+        }
+    }
+
+    protected IEnumerator PlaySoundOnceDelayRoutine(Action playAction, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        playAction?.Invoke();
+    }
+
+    #endregion
+   
 
     #region IState 구현
 
@@ -68,5 +113,6 @@ public abstract class BaseDuskyState : IState
     {
 
     }
+
     #endregion
 }

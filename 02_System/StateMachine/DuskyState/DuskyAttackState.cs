@@ -10,6 +10,8 @@ public class DuskyAttackState : BaseDuskyState
     private float _attackAnimTiming;
     private Action _attackAction;
     private Coroutine _attackRotuine;
+    
+    private readonly float _soundVolume = 0.3f;
 
     public DuskyAttackState(StateMachine stateMachine, DuskyPlayer player,
     float attackAnimDelay) : base(stateMachine, player)
@@ -25,6 +27,8 @@ public class DuskyAttackState : BaseDuskyState
         if(animInfo.IsName(AnimatorParameters.AttackName) == false)
             player.Animator.SetTrigger(AnimatorParameters.Attack);
         _attackRotuine = CoroutineRunner.instance.StartCoroutine(AttackRoutine());
+        
+        SoundManager.Instance?.PlaySfxOnce(SfxName.Attack, _soundVolume);
     }
 
     public override void Update()
