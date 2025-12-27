@@ -20,16 +20,19 @@ public class DogShadowBarkState : DogShadowSkillState
     protected override IEnumerator StateCoroutine()
     {
         WaitForSeconds spawnTimeSec = new WaitForSeconds(_spawnTime);
+        //shadow.HowlEffectPrefab.SetActive(true);
 
         // 멈출 때까지 딜레이 주기
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < _spawnCount; ++i)
         {
+            SoundManager.Instance.PlaySfxOnce(SfxName.Bark, idx: 2);
             StateMachine.Shadow.SpawnHowlWind();
             yield return spawnTimeSec;
         }
 
+        //shadow.HowlEffectPrefab.SetActive(false);
         StateMachine.Shadow.DonePattern = true;
         StateMachine.ChangeState(StateMachine.IdleState);
     }

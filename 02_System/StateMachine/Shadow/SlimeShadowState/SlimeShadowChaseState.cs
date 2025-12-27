@@ -14,6 +14,7 @@ public class SlimeShadowChaseState : ShadowState
 
     protected override IEnumerator StateCoroutine()
     {
+        SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
         yield return new WaitForSeconds(shadow.FastChasePatternTime);
         shadow.PlusChaseCount();
         stateMachine.ChangeState(stateMachine.IdleState);
