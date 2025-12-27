@@ -9,13 +9,14 @@ public abstract class ShadowController : MonoBehaviour
     private NavMeshAgent _agent;
     public NavMeshAgent Agent => _agent;
 
-    // todo: 각종 스텟
+    // 현재 그림자
+    protected Shadow curShadow;
+
     [Header("스탯 SO")]
     [SerializeField] protected StatusData statusData;
     public Status Status => status;
     protected Status status;
 
-    protected Shadow curShadow;
 
     [field: Header("추격")]
     [field: SerializeField] public Transform Target { get; private set; }
@@ -74,7 +75,7 @@ public abstract class ShadowController : MonoBehaviour
         _agentTimer += Time.deltaTime;
         if (_agentTimer > _updateInterval)
         {
-            Vector3 targetPosition = Target.position + (new Vector3(1f,0,1f) * Random.Range(0.5f,0.75f));
+            Vector3 targetPosition = Target.position + (new Vector3(1f, 0, 1f) * Random.Range(0.5f, 0.75f));
             _agent.SetDestination(targetPosition);
             _agentTimer = 0f;
         }

@@ -21,7 +21,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     // todo: 추후 SO로 분리
     [field: Header("움직임")]
-    [field: SerializeField] public float MovementSpeed { get; set; } = 10f;
+    [field: SerializeField] public float MovementSpeed { get; private set; } = 10f;
     [SerializeField] private float _defaultSpeedModifier = 1f;
     [SerializeField] private float _runSpeedModifier = 2f;
     private float _movementSpeedModifier = 1f;
