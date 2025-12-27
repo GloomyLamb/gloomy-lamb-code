@@ -21,8 +21,8 @@ public class DogShadow : Shadow
     public float SqrBiteRange => _biteDetectRange * _biteDetectRange;
     public int BiteCount { get; private set; } = 0;
 
-    [Header("짖기")]
-    [SerializeField] private HowlWind _howlWindPrefab;
+    [field: Header("짖기")]
+    [field: SerializeField] public GameObject HowlEffectPrefab { get; private set; }
 
     // 변형 조건
     public bool DonePattern { get; set; }
@@ -36,6 +36,8 @@ public class DogShadow : Shadow
         SkillAnimationData.Initialize();
         stateMachine = new DogShadowStateMachine(this);
         stateMachine.Init();
+
+        HowlEffectPrefab.SetActive(false);
     }
 
     #endregion
@@ -65,7 +67,7 @@ public class DogShadow : Shadow
     #region 스킬
     public void SpawnHowlWind()
     {
-        PoolManager.Instance?.Spawn(PoolType.HowlWindPool,transform.position,Quaternion.identity);
+        PoolManager.Instance?.Spawn(PoolType.HowlWindPool, transform.position, Quaternion.identity);
     }
 
     public void Bite()
@@ -99,5 +101,16 @@ public class DogShadow : Shadow
         Vector3 targetPos = controller.transform.position + dir * _biteBackwardLength;
         controller.Agent.SetDestination(targetPos);
     }
+    #endregion
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+        _biteDetector = transform.FindChild<DamageableDetector>("Pivot_AttackRange_Bite");
+        HowlEffectPrefab = transform.FindChild<ParticleSystem>("Particle_BarkEffect").gameObject;
+    }
+#endif
     #endregion
 }

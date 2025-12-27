@@ -160,9 +160,9 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     #region 에디터 전용
 #if UNITY_EDITOR
-    private void Reset()
+    protected virtual void Reset()
     {
-        Animator = transform.FindChild<Animator>("Model");
+        Animator = GetComponentInChildren<Animator>();
     }
 #endif
     #endregion
