@@ -44,14 +44,6 @@ public class DogShadow : Shadow
 
     #endregion
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
-        {
-            damageable.Damage(damage);
-        }
-    }
-
     #region 변형
 
     protected override bool CanTransform()

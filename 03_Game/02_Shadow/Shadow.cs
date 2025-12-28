@@ -111,6 +111,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         controller.Damage(damage);
     }
 
+    #region 공격
     // IAttackable
     public virtual void Attack()
     {
@@ -119,6 +120,15 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public virtual void GiveEffect()
     {
     }
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            damageable.Damage(damage);
+        }
+    }
+    #endregion
 
     #region 움직임
     public virtual void SetMovementMultiplier(MovementType type)

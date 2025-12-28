@@ -33,15 +33,6 @@ public class SlimeShadow : Shadow
         stateMachine.Init();
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
-        {
-            //todo : 
-            damageable.Damage(damage);
-        }
-    }
-
     public override void ApplyEffect()
     {
         StartScaleDownRoutine();
@@ -74,6 +65,7 @@ public class SlimeShadow : Shadow
     public void CheckExpand()
     {
         DoneExpand = true;
+        damage = 20f;
     }
 
     #endregion
