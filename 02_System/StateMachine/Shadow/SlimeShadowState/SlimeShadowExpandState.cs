@@ -1,50 +1,25 @@
-using System.Collections;
-using UnityEngine;
-
-public class SlimeShadowExpandState : SlimeShadowChaseState
+public class SlimeShadowExpandState : SlimeShadowState
 {
-    private bool _isExpanded = false;
-
-    private Coroutine _coroutine;
-
     public SlimeShadowExpandState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
     }
 
-    public override void Enter()
-    {
-        base.Enter();
+    //protected override IEnumerator StateCoroutine()
+    //{
+    //    Transform target = shadow.transform;
+    //    Vector3 startScale = target.localScale;
+    //    Vector3 endScale = startScale * SlimeShadow.MaxScale;
+    //    float elapsed = 0f;
 
-        if (_coroutine != null)
-        {
-            CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
-            _coroutine = null;
-        }
+    //    while (elapsed < SlimeShadow.ScaleUpDuration)
+    //    {
+    //        target.localScale = Vector3.Lerp(startScale, endScale, elapsed / SlimeShadow.ScaleUpDuration);
+    //        elapsed += Time.deltaTime;
+    //        yield return null;
+    //    }
 
-        if (!_isExpanded)
-        {
-            _coroutine = CustomCoroutineRunner
-                .Instance
-                .StartCoroutine(ScaleTo(shadow.MaxScale, shadow.ScaleUpDuration));
-            _isExpanded = true;
-        }
-    }
-
-    protected IEnumerator ScaleTo(float size, float duration)
-    {
-        Transform target = shadow.transform;
-        Vector3 startScale = target.localScale;
-        Vector3 endScale = startScale * size;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        target.localScale = endScale;
-        shadow.CheckExpand();
-    }
+    //    target.localScale = endScale;
+    //    SlimeShadow.CheckExpand();
+    //    stateMachine.ChangeState(stateMachine.ChaseState);
+    //}
 }

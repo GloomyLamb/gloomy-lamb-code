@@ -1,22 +1,25 @@
-using System.Collections;
-using UnityEngine;
-
-public class SlimeShadowChaseState : ShadowState
+public class SlimeShadowChaseState : SlimeShadowState
 {
-    protected new SlimeShadow shadow;
-    protected SlimeShadowStateMachine stateMachine;
-
     public SlimeShadowChaseState(Shadow shadow, ShadowStateMachine stateMachine) : base(shadow, stateMachine)
     {
-        this.shadow = shadow as SlimeShadow;
-        this.stateMachine = stateMachine as SlimeShadowStateMachine;
     }
 
-    protected override IEnumerator StateCoroutine()
-    {
-        SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
-        yield return new WaitForSeconds(shadow.FastChasePatternTime);
-        shadow.PlusChaseCount();
-        stateMachine.ChangeState(stateMachine.IdleState);
-    }
+    //    protected override IEnumerator StateCoroutine()
+    //    {
+    //        SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
+
+    //        if (!SlimeShadow.IsFastMode)
+    //        {
+    //            SlimeShadow.SetMovementMultiplier(MovementType.Walk);
+    //            yield return new WaitForSeconds(SlimeShadow.SlowChasePatternTime);
+    //            SlimeShadow.IsFastMode = true;
+    //        }
+    //        else
+    //        {
+    //            yield return new WaitForSeconds(SlimeShadow.FastChasePatternTime);
+    //        }
+
+    //        SlimeShadow.PlusChaseCount();
+    //        stateMachine.ChangeState(stateMachine.IdleState);
+    //    }
 }

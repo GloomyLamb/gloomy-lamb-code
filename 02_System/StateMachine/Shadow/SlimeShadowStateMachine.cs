@@ -1,33 +1,26 @@
+using System.Collections;
 using UnityEngine;
 
 public class SlimeShadowStateMachine : ShadowStateMachine
 {
     public new SlimeShadow Shadow { get; private set; }
 
-    #region States
-    // Ground
-    public ShadowState WalkState { get; private set; }
-    public ShadowState RunState { get; private set; }
     public ShadowState ExpandState { get; private set; }
-    #endregion
-
-    // 추적
 
     public SlimeShadowStateMachine(SlimeShadow shadow) : base(shadow)
     {
         Shadow = shadow;
 
-        WalkState = new SlimeShadowWalkState(shadow, this);
-        RunState = new SlimeShadowChaseState(shadow, this);
-        ExpandState = new SlimeShadowExpandState(shadow, this);
+        ChaseState = null;
+        ChaseState = new ShadowState(shadow, this);
+        ExpandState = new ShadowState(shadow, this);
     }
 
     public override void Init()
     {
         base.Init();
 
-        WalkState.Init(MovementType.Walk, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
-        RunState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
+        ChaseState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
         ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
     }
 
@@ -35,45 +28,70 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     {
         base.Register();
 
-        WalkState.OnFixedUpdate += HandleFixedUpdateChase;
-        RunState.OnFixedUpdate += HandleFixedUpdateChase;
-        ExpandState.OnFixedUpdate += HandleFixedUpdateChase;
-    }
+        StateFixedUpdateActions[ExpandState] = HandleChaseStateFixedUpdate;
 
-    public override void UnRegister()
-    {
-        base.UnRegister();
-
-        WalkState.OnFixedUpdate -= HandleFixedUpdateChase;
-        RunState.OnFixedUpdate -= HandleFixedUpdateChase;
-        ExpandState.OnFixedUpdate -= HandleFixedUpdateChase;
+        // Coroutine
+        StateCoroutineActions[ChaseState] = HandleChaseStateCoroutine;
+        StateCoroutineActions[ExpandState] = HandleExpandStateCoroutine;
     }
 
     private float _timer;
-    private float _patternTime = 0.5f;
 
-    protected override void HandleUpdateIdle()
+    protected override void HandleIdleStateUpdate()
     {
         if (Shadow.CurChaseCount == Shadow.ChaseCount + 1)
         {
-            Logger.Log("확대 패턴 진입");
+            Logger.Log($"추적 횟수: {Shadow.CurChaseCount} => 확대 패턴 진입");
             ChangeState(ExpandState);
         }
 
         _timer += Time.deltaTime;
-        if (Shadow.Target != null)
+        if (_timer > Shadow.StopPatternTime)
         {
-            if (_timer > _patternTime && !Shadow.IsFastMode)
+            if (!Shadow.IsFastMode)
             {
                 Shadow.IsFastMode = true;
-                ChangeState(WalkState);
-                _timer = 0f;
             }
-            else if (_timer > _patternTime && Shadow.IsFastMode)
-            {
-                ChangeState(RunState);
-                _timer = 0f;
-            }
+            ChangeState(ChaseState);
+            _timer = 0f;
         }
+    }
+
+    protected IEnumerator HandleChaseStateCoroutine()
+    {
+        Shadow.PlusChaseCount();
+        SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
+
+        if (!Shadow.IsFastMode)
+        {
+            Shadow.SetMovementMultiplier(MovementType.Walk);
+            yield return new WaitForSeconds(Shadow.SlowChasePatternTime);
+            Shadow.IsFastMode = true;
+        }
+        else
+        {
+            yield return new WaitForSeconds(Shadow.FastChasePatternTime);
+        }
+
+        ChangeState(IdleState);
+    }
+
+    protected IEnumerator HandleExpandStateCoroutine()
+    {
+        Transform target = Shadow.transform;
+        Vector3 startScale = target.localScale;
+        Vector3 endScale = startScale * Shadow.MaxScale;
+        float elapsed = 0f;
+
+        while (elapsed < Shadow.ScaleUpDuration)
+        {
+            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / Shadow.ScaleUpDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.localScale = endScale;
+        Shadow.CheckExpand();
+        ChangeState(ChaseState);
     }
 }
