@@ -106,10 +106,10 @@ public class BeamSkill : BaseSkill
         owner?.AddCondition(CharacterCondition.Beam, true);
 
 
-        if (owner is DuskyPlayer dusky)
-        {
-            dusky.SetBeamRotation();
-        }
+        // if (owner is DuskyPlayer dusky)
+        // {
+        //     dusky.SetBeamRotation();
+        // }
 
         if (beamController != null)
             beamController.PlayBeam();
