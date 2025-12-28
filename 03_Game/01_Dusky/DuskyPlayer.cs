@@ -72,6 +72,7 @@
         {
             stateMachine.PhysicsUpdate();
             Move();
+            CustomGravity();
         }
 
         public override void Move()
@@ -96,6 +97,12 @@
                     rb.MovePosition(newPosition);
                 }
             }
+        }
+
+        void CustomGravity()
+        {
+            if(rb.velocity.y < 0f)
+                rb.velocity += Vector3.up * Physics.gravity.y * (moveStatusData.GravityMultiflier - 1) * Time.deltaTime;
         }
 
         public override void Attack()
@@ -188,7 +195,9 @@
             if (stateMachine.CanChange(stateMachine.JumpState))
             {
                 stateMachine.ChangeState(stateMachine.JumpState);
-                rb.AddForce(Vector3.up * moveStatusData.JumpForce, ForceMode.Impulse);
+                
+                rb.velocity = new Vector3(rb.velocity.x, moveStatusData.JumpForce, rb.velocity.z);
+                //rb.AddForce(Vector3.up * moveStatusData.JumpForce, ForceMode.Impulse);
 
                 StartCoroutine(JumpDelaRotuine());
             }
