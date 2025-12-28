@@ -36,7 +36,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
             }
         }
     }
-    [SerializeField] protected float damage = 10f;
+    [field: SerializeField] public float CollisionDamage { get; private set; } = 10f;
 
     [field: Header("효과")]
     [field: SerializeField] public float FogScaleModifier { get; private set; } = 2f;
@@ -122,11 +122,18 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     {
     }
 
-    protected virtual void OnCollisionEnter(Collision collision)
+    public void SetCollisionDamage(float damage)
     {
-        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        if (CollisionDamage == damage) return;
+        Logger.Log($"대미지 변경: {CollisionDamage} -> {damage}");
+        CollisionDamage = damage;
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
-            damageable.Damage(damage);
+            damageable.Damage(CollisionDamage);
         }
     }
     #endregion
