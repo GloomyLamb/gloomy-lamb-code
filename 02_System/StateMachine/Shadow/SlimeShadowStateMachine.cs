@@ -60,13 +60,13 @@ public class SlimeShadowStateMachine : ShadowStateMachine
 
         if (Shadow.CurChaseCount <= Shadow.SlowChaseCount)
         {
-            Logger.Log("저속 이동");
+            //Logger.Log("저속 이동");
             Shadow.SetMovementMultiplier(MovementType.Walk);
             yield return new WaitForSeconds(Shadow.SlowChasePatternTime);
         }
         else
         {
-            Logger.Log("고속 이동");
+            //Logger.Log("고속 이동");
             yield return new WaitForSeconds(Shadow.FastChasePatternTime);
         }
 
