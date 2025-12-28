@@ -39,7 +39,7 @@ public class SlimeShadowStateMachine : ShadowStateMachine
 
     protected override void HandleIdleStateUpdate()
     {
-        if (Shadow.CurChaseCount == Shadow.ChaseCount + 1)
+        if (Shadow.CurChaseCount == Shadow.TotalChaseCount)
         {
             Logger.Log($"추적 횟수: {Shadow.CurChaseCount} => 확대 패턴 진입");
             ChangeState(ExpandState);
@@ -48,10 +48,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         _timer += Time.deltaTime;
         if (_timer > Shadow.StopPatternTime)
         {
-            if (!Shadow.IsFastMode)
-            {
-                Shadow.IsFastMode = true;
-            }
             ChangeState(ChaseState);
             _timer = 0f;
         }
@@ -62,14 +58,15 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         Shadow.PlusChaseCount();
         SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
 
-        if (!Shadow.IsFastMode)
+        if (Shadow.CurChaseCount <= Shadow.SlowChaseCount)
         {
+            Logger.Log("저속 이동");
             Shadow.SetMovementMultiplier(MovementType.Walk);
             yield return new WaitForSeconds(Shadow.SlowChasePatternTime);
-            Shadow.IsFastMode = true;
         }
         else
         {
+            Logger.Log("고속 이동");
             yield return new WaitForSeconds(Shadow.FastChasePatternTime);
         }
 
