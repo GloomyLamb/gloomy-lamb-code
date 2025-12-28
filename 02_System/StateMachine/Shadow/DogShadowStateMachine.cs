@@ -133,8 +133,7 @@ public class DogShadowStateMachine : ShadowStateMachine
     {
         Shadow.Controller.SetActiveAgentRotation(false);
         Logger.Log("회전 false 상태");
-        yield return new WaitForSeconds(Shadow.BiteDuration);
-        Logger.Log("물기 대기 후 뒷걸음질");
+        Shadow.SetMovementMultiplier(MovementType.Walk);
         Shadow.Backward();
         yield return new WaitForSeconds(Shadow.BiteBackwardDuration);
         Logger.Log("뒷걸음질 시간동안 대기 완료");
