@@ -107,7 +107,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
             Logger.Log("state machine 없음");
             return;
         }
-        stateMachine.ChangeState(stateMachine.HitState);
+        //stateMachine.ChangeState(stateMachine.HitState);
+        Animator.SetTrigger(AnimationData.HitParameterHash);
         controller.Damage(damage);
     }
 

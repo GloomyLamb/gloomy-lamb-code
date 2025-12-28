@@ -31,7 +31,7 @@ public class ShadowStateMachine : StateMachine
         ChaseState = new ShadowState(shadow, this);
         TransformState = new ShadowState(shadow, this);
 
-        HitState = new ShadowState(shadow, this);
+        //HitState = new ShadowState(shadow, this);
         BoundState = new ShadowState(shadow, this);
     }
 
@@ -44,7 +44,7 @@ public class ShadowStateMachine : StateMachine
         ChaseState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
         TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Trigger, true);
 
-        HitState.Init(MovementType.Stop, Shadow.AnimationData.HitParameterHash, AnimType.Trigger, true);
+        //HitState.Init(MovementType.Stop, Shadow.AnimationData.HitParameterHash, AnimType.Trigger, true);
         BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Trigger, true);
     }
 
@@ -62,7 +62,7 @@ public class ShadowStateMachine : StateMachine
 
         // Coroutine
         StateCoroutineActions[TransformState] = HandleTransformStateCoroutine;
-        StateCoroutineActions[HitState] = HandleHitStateCoroutine;
+        //StateCoroutineActions[HitState] = HandleHitStateCoroutine;
         StateCoroutineActions[BoundState] = HandleBoundStateCoroutine;
     }
 
