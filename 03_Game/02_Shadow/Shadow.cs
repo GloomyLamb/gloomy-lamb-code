@@ -12,9 +12,10 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     // state machine
     protected ShadowStateMachine stateMachine;
 
-    [Header("애니메이션")]
-    [field: SerializeField] public Animator Animator;
+    [field: Header("애니메이션")]
+    [field: SerializeField] public Animator Animator { get; private set; }
     [field: SerializeField] public ShadowAnimationData AnimationData { get; protected set; }
+
     public float TransformDuration => controller.TransformDuration;
     public float HitDuration => controller.HitDuration;
     public float BoundStopPoint => controller.BoundStopPoint;
