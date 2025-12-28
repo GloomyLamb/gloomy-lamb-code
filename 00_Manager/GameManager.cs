@@ -10,11 +10,11 @@ public class GameManager : GlobalSingletonManager<GameManager>
     {
         get
         {
-            DuskyPlayer dusky = player as DuskyPlayer;
+            DuskyPlayer dusky = _player as DuskyPlayer;
             return dusky;
         }
     }
-    private Player player;
+    private Player _player;
 
     // 비디오
     public VideoFlowContext VideoFlow { get; private set; } = new();
@@ -40,10 +40,16 @@ public class GameManager : GlobalSingletonManager<GameManager>
 
     protected override void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        player = FindObjectOfType<Player>();
+        _player = FindObjectOfType<Player>();
     }
 
     protected override void OnSceneUnloaded(Scene scene)
     {
+    }
+
+
+    public void SetPlayer(Player player)
+    {
+        _player = player;
     }
 }
