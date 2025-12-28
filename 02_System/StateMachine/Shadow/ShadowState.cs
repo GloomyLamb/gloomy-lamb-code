@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,9 +12,6 @@ public class ShadowState : IState
 
     protected bool useCoroutine;
     protected Coroutine coroutine;
-
-    public event Action OnUpdate;
-    public event Action OnFixedUpdate;
 
     public ShadowState(Shadow shadow, ShadowStateMachine stateMachine)
     {
@@ -54,18 +50,21 @@ public class ShadowState : IState
     /// </summary>
     protected virtual void StartCoroutine()
     {
-        if (coroutine != null)
-        {
-            CustomCoroutineRunner.Instance.StopCoroutine(StateCoroutine());
-            coroutine = null;
-        }
-        coroutine = CustomCoroutineRunner.Instance.StartCoroutine(StateCoroutine());
+        StopCoroutine();
+        coroutine = CustomCoroutineRunner
+            .Instance
+            .StartCoroutine(StateMachine.StateCoroutineActions[this]?.Invoke());
     }
 
-    /// <summary>
-    /// 코루틴 내부 로직으로, 필요할 경우 override 합니다.
-    /// </summary>
-    /// <returns></returns>
+    private void StopCoroutine()
+    {
+        if (coroutine != null)
+        {
+            CustomCoroutineRunner.Instance.StopCoroutine(coroutine);
+            coroutine = null;
+        }
+    }
+
     protected virtual IEnumerator StateCoroutine()
     {
         yield return null;
@@ -117,20 +116,28 @@ public class ShadowState : IState
             default:
                 break;
         }
+
+        StopCoroutine();
     }
 
     public virtual void HandleInput()
     {
     }
 
-    public virtual void PhysicsUpdate()
-    {
-        OnFixedUpdate?.Invoke();
-    }
-
     public virtual void Update()
     {
-        OnUpdate?.Invoke();
+        if (StateMachine.StateUpdateActions.TryGetValue(this, out var action))
+        {
+            action?.Invoke();
+        }
+    }
+
+    public virtual void PhysicsUpdate()
+    {
+        if (StateMachine.StateFixedUpdateActions.TryGetValue(this, out var action))
+        {
+            action?.Invoke();
+        }
     }
     #endregion
 }

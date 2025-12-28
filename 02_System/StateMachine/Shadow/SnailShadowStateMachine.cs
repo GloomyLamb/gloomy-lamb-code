@@ -13,9 +13,9 @@ public class SnailShadowStateMachine : ShadowStateMachine      // StateMachineì
 
     private float _timer;
 
-    protected override void HandleUpdateChase()
+    protected override void HandleChaseStateUpdate()
     {
-        base.HandleUpdateChase();
+        base.HandleChaseStateUpdate();
 
         _timer += Time.deltaTime;
         if (_timer > Shadow.CycleTime)

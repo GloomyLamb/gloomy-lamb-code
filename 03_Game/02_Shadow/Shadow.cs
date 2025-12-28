@@ -54,6 +54,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void Start()
     {
+        stateMachine.Register();
     }
 
     public virtual void Init(ShadowController controller)
@@ -63,7 +64,6 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void OnEnable()
     {
-        stateMachine.Register();
         stateMachine.ChangeState(stateMachine.IdleState);
     }
     #endregion
@@ -87,7 +87,6 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void OnDisable()
     {
-        stateMachine.UnRegister();
     }
 
     // IDamageable
