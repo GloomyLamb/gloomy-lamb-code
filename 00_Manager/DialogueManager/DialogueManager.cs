@@ -41,6 +41,7 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
 
     public void StartDialogue(DialogueAsset dialogueAsset)
     {
+        if (nowPlayingDialogue != null) return;
         if (dialogueAsset == null) return;
 
         prevInputState = InputManager.Instance.SoloInput(InputType.DialogueBox);
@@ -58,6 +59,7 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
 
     public void StartDialogue(DialogueType dialogueType, string dialogueString)
     {
+        if (nowPlayingDialogue != null) return;
         prevInputState = InputManager.Instance.SoloInput(InputType.DialogueBox);
 
         nowDialogueIndex = 0;
@@ -76,6 +78,7 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
 
     public void StartDialogue(DialogueType dialogueType, List<string> dialogueList)
     {
+        if (nowPlayingDialogue != null) return;
         prevInputState = InputManager.Instance.SoloInput(InputType.DialogueBox);
 
         nowDialogueIndex = 0;
@@ -108,6 +111,7 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
         switch (dialogueType)
         {
             case DialogueType.Default:
+                InputManager.Instance?.ShowCursor();
                 nowDialogueUI = talkDialogueUI;
                 break;
             case DialogueType.Story:
@@ -157,6 +161,7 @@ public class DialogueManager : GlobalSingletonManager<DialogueManager>
 
     public void EndDialogue()
     {
+        InputManager.Instance?.HideCursor(); // todo : 이전 커서상태를 확인해야함
         InputManager.Instance.RestoreInput(prevInputState);
 
         talkDialogueUI.gameObject.SetActive(false);
