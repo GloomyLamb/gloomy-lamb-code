@@ -102,7 +102,17 @@ public class DogShadowStateMachine : ShadowStateMachine
         //target.rotation = targetRot;
 
         Shadow.Animator.SetBool(Shadow.SkillAnimationData.BiteParameterHash, true);
-        Shadow.Bite();
+
+        if (Shadow.TryBite())
+        {
+            yield return new WaitForSeconds(Shadow.BiteDuration);
+            ChangeState(BackwardState);
+        }
+        else
+        {
+            Logger.Log("물기 공격 실패 -> 추적 모드");
+            ChangeState(BoundState);
+        }
     }
 
     private IEnumerator HandleBackwardStateCoroutine()

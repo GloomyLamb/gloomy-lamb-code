@@ -64,7 +64,7 @@ public class DogShadow : Shadow
         PoolManager.Instance?.Spawn(PoolType.HowlWindPool, transform.position, Quaternion.identity);
     }
 
-    public void Bite()
+    public bool TryBite()
     {
         Player target = _biteDetector.CurrentTarget as Player;
 
@@ -79,14 +79,9 @@ public class DogShadow : Shadow
 
             // ai 끄기
             //controller.SetActiveAgentRotation(false);
-            stateMachine.ChangeState(((DogShadowStateMachine)stateMachine).BackwardState);
+            return true;
         }
-        else
-        {
-            Logger.Log("물기 공격 실패 -> 추적 모드");
-            stateMachine.ChangeState(stateMachine.BoundState);
-            return;
-        }
+        return false;
     }
 
     public void Backward()
