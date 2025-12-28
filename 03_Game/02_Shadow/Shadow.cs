@@ -70,9 +70,8 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void Update()
     {
-        if (CanTransform())
+        if (CanTransform() && stateMachine.CanChange(stateMachine.TransformState))
         {
-            ResetTransformFlag();
             stateMachine.ChangeState(stateMachine.TransformState);
             return;
         }
@@ -169,6 +168,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     #region 변형
     public void Transform()
     {
+        ResetTransformFlag();
         OnTransform?.Invoke();
     }
 
