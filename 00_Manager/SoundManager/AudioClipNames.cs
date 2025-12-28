@@ -22,6 +22,7 @@ public enum SfxName
     
     Test,
 }
+
 public enum BgmName
 {
     Title,
@@ -29,4 +30,6 @@ public enum BgmName
     ShadowForest,
     
     TestBgm,
+    
+    Ambient_GrassWind
 }
