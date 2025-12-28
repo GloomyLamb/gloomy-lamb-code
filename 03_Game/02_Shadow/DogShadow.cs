@@ -23,6 +23,8 @@ public class DogShadow : Shadow
 
     [field: Header("짖기")]
     [field: SerializeField] public GameObject HowlEffectPrefab { get; private set; }
+    [field: SerializeField] public int BarkCount { get; private set; } = 3;
+    [field: SerializeField] public float BarkPrefabSpawnTime { get; private set; } = 2f;
 
     // 변형 조건
     public bool DonePattern { get; set; }

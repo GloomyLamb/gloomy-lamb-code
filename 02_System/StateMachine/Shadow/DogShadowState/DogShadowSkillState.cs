@@ -6,7 +6,7 @@ public class DogShadowSkillState : DogShadowState
 
     public override void Enter()
     {
-        shadow.Animator.SetTrigger(shadow.SkillAnimationData.SkillParameterHash);
         base.Enter();
+        shadow.Animator.SetTrigger(shadow.SkillAnimationData.SkillParameterHash);
     }
 }

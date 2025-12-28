@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class DogShadowStateMachine : ShadowStateMachine
@@ -13,9 +14,9 @@ public class DogShadowStateMachine : ShadowStateMachine
     {
         Shadow = shadow;
 
-        BiteState = new DogShadowBiteState(Shadow, this);
-        BackwardState = new DogShadowBackwardState(Shadow, this);
-        BarkState = new DogShadowBarkState(Shadow, this);
+        BiteState = new DogShadowSkillState(Shadow, this);
+        BackwardState = new ShadowState(Shadow, this);
+        BarkState = new DogShadowSkillState(Shadow, this);
     }
 
     public override void Init()
@@ -26,9 +27,18 @@ public class DogShadowStateMachine : ShadowStateMachine
         BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool, true);
     }
 
-    protected override void HandleUpdateChase()
+    public override void Register()
     {
-        base.HandleUpdateChase();
+        base.Register();
+
+        StateCoroutineActions[BiteState] = HandleBiteStateCoroutine;
+        StateCoroutineActions[BackwardState] = HandleBackwardStateCoroutine;
+        StateCoroutineActions[BarkState] = HandleBarkStateCoroutine;
+    }
+
+    protected override void HandleChaseStateUpdate()
+    {
+        base.HandleChaseStateUpdate();
 
         Transform shadowT = Shadow.transform;
         Transform targetT = Shadow.Target.transform;
@@ -42,4 +52,80 @@ public class DogShadowStateMachine : ShadowStateMachine
             ChangeState(BarkState);
         }
     }
+
+    #region 상태 Coroutine 내부 로직
+    private IEnumerator HandleBarkStateCoroutine()
+    {
+        WaitForSeconds spawnTimeSec = new WaitForSeconds(Shadow.BarkPrefabSpawnTime);
+        //shadow.HowlEffectPrefab.SetActive(true);
+
+        // 멈출 때까지 딜레이 주기
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < Shadow.BarkCount; ++i)
+        {
+            SoundManager.Instance.PlaySfxOnce(SfxName.Bark, idx: 2);
+            Shadow.SpawnHowlWind();
+            yield return spawnTimeSec;
+        }
+
+        //shadow.HowlEffectPrefab.SetActive(false);
+        Shadow.DonePattern = true;
+        ChangeState(IdleState);
+    }
+
+    private IEnumerator HandleBiteStateCoroutine()
+    {
+        Transform target = Shadow.Controller.transform;
+        Quaternion startRot = target.rotation;
+
+        Vector3 dir = Shadow.Target.position - target.position;
+        dir.y = 0f; // 수평 회전만 필요하다면
+
+        yield return null;
+        //Quaternion targetRot = Quaternion.LookRotation(dir);
+
+        //float elapsed = 0f;
+
+        //while (elapsed < shadow.BiteDuration)
+        //{
+        //    target.rotation = Quaternion.Slerp(
+        //        startRot,
+        //        targetRot,
+        //        elapsed / shadow.BiteDuration
+        //    );
+
+        //    elapsed += Time.deltaTime;
+        //    yield return null;
+        //}
+
+        //target.rotation = targetRot;
+
+        Shadow.Animator.SetBool(Shadow.SkillAnimationData.BiteParameterHash, true);
+        Shadow.Bite();
+    }
+
+    private IEnumerator HandleBackwardStateCoroutine()
+    {
+        Shadow.Controller.SetActiveAgentRotation(false);
+        Logger.Log("회전 false 상태");
+        yield return new WaitForSeconds(Shadow.BiteDuration);
+        Logger.Log("물기 대기 후 뒷걸음질");
+        Shadow.Backward();
+        yield return new WaitForSeconds(Shadow.BiteBackwardDuration);
+        Logger.Log("뒷걸음질 시간동안 대기 완료");
+        while (Shadow.Controller.Agent.pathPending
+            || Shadow.Controller.Agent.remainingDistance > Shadow.Controller.Agent.stoppingDistance)
+        {
+            Logger.Log("while문 내부");
+            yield return null;
+        }
+        Shadow.Controller.SetActiveAgentRotation(true);
+        Logger.Log("회전 true 상태");
+        Shadow.DonePattern = true;
+        Logger.Log("패턴 완료");
+
+        ChangeState(ChaseState);
+    }
+    #endregion
 }
