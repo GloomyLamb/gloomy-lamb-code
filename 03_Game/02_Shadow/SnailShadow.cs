@@ -40,7 +40,7 @@ public class SnailShadow : Shadow
             return;
         }
 
-        if (slimeRoutine != null) StopCoroutine(slimeRoutine);
+        if (slimeRoutine != null) StopCoroutine(slimeRoutine);   //slimeRoutine이 이미 돌고 있으면 멈추기 중복실행 방지 
         slimeRoutine = StartCoroutine(SlimeTrailCoroutine());
     }
 

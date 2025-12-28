@@ -47,7 +47,7 @@ public class BeamSkill : BaseSkill
         consumeTickSec = beamSkillData.ConsumeTickSec;
 
         // 테스트용: 시작 시 풀게이지
-        lightGauge = maxLightGauge;
+        lightGauge = 0f;
         hasUsedOnce = false;
         isBeaming = false;
         tickTimer = 0f;
@@ -106,10 +106,10 @@ public class BeamSkill : BaseSkill
         owner?.AddCondition(CharacterCondition.Beam, true);
 
 
-        if (owner is DuskyPlayer dusky)
-        {
-            dusky.SetBeamRotation();
-        }
+        // if (owner is DuskyPlayer dusky)
+        // {
+        //     dusky.SetBeamRotation();
+        // }
 
         if (beamController != null)
             beamController.PlayBeam();

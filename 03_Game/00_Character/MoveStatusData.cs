@@ -7,6 +7,8 @@ public class MoveStatusData : ScriptableObject
     public float DashMultiplier => dashMultiplier;
     public float JumpForce => jumpForce;
     public float JumpDelayTime => jumpDelayTime;
+
+    public float GravityMultiflier => _gravityMultiflier;
     
     
     [Header("이동 속도")]
@@ -16,6 +18,7 @@ public class MoveStatusData : ScriptableObject
     [Header("점프 설정")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float jumpDelayTime = 0.2f;
-    
-    
+    [SerializeField] private float _gravityMultiflier = 2.0f;
+
+
 }

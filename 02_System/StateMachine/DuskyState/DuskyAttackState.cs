@@ -47,7 +47,8 @@ public class DuskyAttackState : BaseDuskyState
 
     public override void Exit()
     {
-        CustomCoroutineRunner.Instance.StopCoroutine(_attackRotuine);
+        if(_attackRotuine != null)
+            CustomCoroutineRunner.Instance.StopCoroutine(_attackRotuine);
     }
 
 

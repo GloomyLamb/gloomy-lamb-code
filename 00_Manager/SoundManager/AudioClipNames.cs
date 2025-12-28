@@ -6,6 +6,7 @@ public enum SfxName
     FootStep,
     Jump,
     Landing,
+    FallDown,
     
     // Skill
     Bean,
@@ -22,6 +23,7 @@ public enum SfxName
     
     Test,
 }
+
 public enum BgmName
 {
     Title,
@@ -29,4 +31,6 @@ public enum BgmName
     ShadowForest,
     
     TestBgm,
+    
+    Ambient_GrassWind
 }
