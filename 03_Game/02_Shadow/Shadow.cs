@@ -101,7 +101,14 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     public virtual void Damage(float damage)
     {
-        Logger.Log($"데미지: {damage}");
+        if (stateMachine.CurState == stateMachine.BoundState)
+        {
+            damage *= controller.BoundDamageMultiplier;
+            Logger.Log("바인드 상태 -> 추가 대미지");
+        }
+
+        Logger.Log($"대미지: {damage}");
+
         if (stateMachine == null)
         {
             Logger.Log("state machine 없음");

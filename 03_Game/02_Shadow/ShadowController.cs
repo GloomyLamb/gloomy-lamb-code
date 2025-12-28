@@ -17,6 +17,7 @@ public abstract class ShadowController : MonoBehaviour
     [SerializeField] protected StatusData statusData;
     public Status Status => status;
     protected Status status;
+    [field: SerializeField] public float BoundDamageMultiplier = 1.2f;
 
     [field: Header("효과")]
     [field: SerializeField] public Transform ShadowFog { get; private set; }

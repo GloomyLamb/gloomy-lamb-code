@@ -65,7 +65,7 @@ public class SlimeShadow : Shadow
     public void CheckExpand()
     {
         DoneExpand = true;
-        damage = 20f;
+        SetCollisionDamage(20f);
     }
 
     #endregion

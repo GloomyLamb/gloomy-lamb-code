@@ -31,6 +31,7 @@ public class DogShadowStateMachine : ShadowStateMachine
     {
         base.Register();
 
+        StateCoroutineActions[IdleState] = HandleIdleStateCoroutine;
         StateCoroutineActions[BiteState] = HandleBiteStateCoroutine;
         StateCoroutineActions[BackwardState] = HandleBackwardStateCoroutine;
         StateCoroutineActions[BarkState] = HandleBarkStateCoroutine;
@@ -54,8 +55,15 @@ public class DogShadowStateMachine : ShadowStateMachine
     }
 
     #region 상태 Coroutine 내부 로직
+    private IEnumerator HandleIdleStateCoroutine()
+    {
+        Shadow.SetCollisionDamage(10f);
+        yield return null;
+    }
+
     private IEnumerator HandleBarkStateCoroutine()
     {
+        Shadow.SetCollisionDamage(30f);
         WaitForSeconds spawnTimeSec = new WaitForSeconds(Shadow.BarkPrefabSpawnTime);
         //shadow.HowlEffectPrefab.SetActive(true);
 
@@ -71,6 +79,7 @@ public class DogShadowStateMachine : ShadowStateMachine
 
         //shadow.HowlEffectPrefab.SetActive(false);
         Shadow.DonePattern = true;
+        Shadow.SetCollisionDamage(10f);
         ChangeState(IdleState);
     }
 
