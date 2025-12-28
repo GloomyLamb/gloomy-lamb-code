@@ -9,6 +9,7 @@ public class SlimeShadow : Shadow
     // 추격 조건
     [field: Header("추격 조건")]
     [field: SerializeField] public int ChaseCount { get; private set; } = 10;
+    [field: SerializeField] public float StopPatternTime { get; private set; } = 0.5f;
     [field: SerializeField] public float SlowChasePatternTime { get; private set; } = 1f;
     [field: SerializeField] public float FastChasePatternTime { get; private set; } = 1f;
     [field: SerializeField] public float MaxScale { get; private set; } = 3f;
@@ -20,7 +21,7 @@ public class SlimeShadow : Shadow
     [field: SerializeField] public float ScaleUpDuration { get; private set; } = 1f;
     [SerializeField] public float scaleDownDuration = 1f;
     // 변형 조건
-    private bool _checkExpand;
+    public bool DoneExpand { get; private set; }
     private bool CheckScale => transform.localScale.x == MinScale;
     public bool IsHitting { get; set; } // 일단 맞을 때 이거 변환
 
@@ -62,17 +63,17 @@ public class SlimeShadow : Shadow
 
     protected override bool CanTransform()
     {
-        return _checkExpand && CheckScale;
+        return DoneExpand && CheckScale;
     }
 
     protected override void ResetTransformFlag()
     {
-        _checkExpand = false;
+        DoneExpand = false;
     }
 
     public void CheckExpand()
     {
-        _checkExpand = true;
+        DoneExpand = true;
     }
 
     #endregion
