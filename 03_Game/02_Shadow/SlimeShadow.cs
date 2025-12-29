@@ -6,7 +6,11 @@ using UnityEngine;
 /// </summary>
 public class SlimeShadow : Shadow
 {
-    // 추격 조건
+    [field: Header("추격 충돌 대미지")]
+    [field: SerializeField] public float SlowCollisionDamage { get; private set; } = 30f;
+    [field: SerializeField] public float FastCollisionDamage { get; private set; } = 40f;
+    [field: SerializeField] public float ExpandCollisionDamage { get; private set; } = 50f;
+
     [field: Header("추격 조건")]
     [field: SerializeField] public int TotalChaseCount { get; private set; } = 20;
     [field: SerializeField] public int SlowChaseCount { get; private set; } = 10;

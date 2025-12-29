@@ -25,6 +25,7 @@ public class DogShadow : Shadow
     [field: SerializeField] public GameObject HowlEffectPrefab { get; private set; }
     [field: SerializeField] public int BarkCount { get; private set; } = 3;
     [field: SerializeField] public float BarkPrefabSpawnTime { get; private set; } = 2f;
+    [field: SerializeField] public float BarkCollisionDamage { get; private set; } = 100f;
 
     // 변형 조건
     public bool DonePattern { get; set; }
@@ -106,6 +107,7 @@ public class DogShadow : Shadow
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _biteDetectRange);
+        Gizmos.DrawLine(transform.position, transform.position + (-transform.forward * _biteBackwardLength));
     }
 #endif
     #endregion

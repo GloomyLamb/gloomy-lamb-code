@@ -58,14 +58,14 @@ public class DogShadowStateMachine : ShadowStateMachine
     #region 상태 Coroutine 내부 로직
     private IEnumerator HandleIdleStateCoroutine()
     {
-        Shadow.SetCollisionDamage(10f);
+        Shadow.ResetCollisionDamage();
         yield return null;
     }
 
     private IEnumerator HandleBarkStateCoroutine()
     {
         Shadow.DonePattern = true;
-        Shadow.SetCollisionDamage(30f);
+        Shadow.SetCollisionDamage(Shadow.BarkCollisionDamage);
         WaitForSeconds spawnTimeSec = new WaitForSeconds(Shadow.BarkPrefabSpawnTime);
         //shadow.HowlEffectPrefab.SetActive(true);
 
@@ -80,7 +80,7 @@ public class DogShadowStateMachine : ShadowStateMachine
         }
 
         //shadow.HowlEffectPrefab.SetActive(false);
-        Shadow.SetCollisionDamage(10f);
+        Shadow.ResetCollisionDamage();
         ChangeState(IdleState);
     }
 
