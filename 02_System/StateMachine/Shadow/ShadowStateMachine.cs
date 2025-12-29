@@ -66,6 +66,11 @@ public class ShadowStateMachine : StateMachine
         StateCoroutineActions[BoundState] = HandleBoundStateCoroutine;
     }
 
+    public override bool CanChange(IState nextState)
+    {
+        return curState != BoundState;
+    }
+
     #region 상태 Update 내부 로직
     /// <summary>
     /// 기본 상태 Update
