@@ -9,6 +9,7 @@ public class ShadowForestScene : BaseScene
     {
         PoolManager.Instance?.UsePool(PoolType.HowlWindPool);
         PoolManager.Instance?.UsePool(PoolType.ParticleCryPool);
+        PoolManager.Instance?.UsePool(PoolType.ParticleCryBindingPool);
         
         Player player = FindObjectOfType<Player>(); 
         GameManager.Instance?.SetPlayer(player);

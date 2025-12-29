@@ -14,5 +14,6 @@ public enum PoolType
     
     // 파티클
     ParticleCryPool,
+    ParticleCryBindingPool,
     
 }
