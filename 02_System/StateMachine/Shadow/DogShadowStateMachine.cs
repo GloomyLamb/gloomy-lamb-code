@@ -14,17 +14,17 @@ public class DogShadowStateMachine : ShadowStateMachine
     {
         Shadow = shadow;
 
-        BiteState = new ShadowState(Shadow, this);
+        BiteState = new ShadowSkillState(Shadow, this);
         BackwardState = new ShadowState(Shadow, this);
-        BarkState = new ShadowState(Shadow, this);
+        BarkState = new ShadowSkillState(Shadow, this);
     }
 
     public override void Init()
     {
         base.Init();
-        BiteState.Init(MovementType.Stop, Shadow.SkillAnimationData.BiteParameterHash, AnimType.Bool, true, true);
+        BiteState.Init(MovementType.Stop, Shadow.SkillAnimationData.BiteParameterHash, AnimType.Bool, true);
         BackwardState.Init(MovementType.Walk, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
-        BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool, true, true);
+        BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool, true);
     }
 
     public override void Register()
