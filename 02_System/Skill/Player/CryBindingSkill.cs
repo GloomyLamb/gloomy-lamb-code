@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class CryBindingSkill : BaseSkill
 {
@@ -20,7 +21,10 @@ public class CryBindingSkill : BaseSkill
         if (IsUsable)
         {  
             SoundManager.Instance?.PlaySfxOnce(SfxName.DuskyCry);
+            
             PoolManager.Instance?.Spawn(PoolType.ParticleCryPool,this.transform.position,this.transform.rotation);
+            GameObject bindingEffect = PoolManager.Instance?.Spawn(PoolType.ParticleCryBindingPool,this.transform.position + (Vector3.up * 0.05f),this.transform.rotation);
+            bindingEffect.transform.localScale = Vector3.one * cryBindingSkillData.AttackRange.Radius;
             
             
             Collider[] cols = Physics.OverlapSphere(this.transform.position, cryBindingSkillData.AttackRange.Radius);
@@ -42,5 +46,11 @@ public class CryBindingSkill : BaseSkill
     protected override bool HasEnoughResource()
     {
         return true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(this.transform.position,5);
     }
 }

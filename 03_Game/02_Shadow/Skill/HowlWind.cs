@@ -97,6 +97,14 @@ public class HowlWind : PoolObject
         DrawRing();
     }
 
+    protected override void OnDisableInternal()
+    {
+        base.OnDisableInternal();
+        
+        // 새로 꺼낼 때 깜빡이는거 보이지 않게 0인채로 한 번 그려
+        _radius = 0;
+        DrawRing();
+    }
 
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
