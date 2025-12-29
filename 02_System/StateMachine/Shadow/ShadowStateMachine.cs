@@ -10,6 +10,7 @@ using UnityEngine.Events;
 public class ShadowStateMachine : StateMachine
 {
     public Shadow Shadow { get; private set; }
+    protected bool hasBeenBound = false;
 
     public readonly Dictionary<IState, UnityAction> StateUpdateActions = new();
     public readonly Dictionary<IState, UnityAction> StateFixedUpdateActions = new();
@@ -119,6 +120,7 @@ public class ShadowStateMachine : StateMachine
 
     protected virtual IEnumerator HandleBoundStateCoroutine()
     {
+        hasBeenBound = true;
         yield return new WaitForSeconds(Shadow.BoundStopPoint);
         Shadow.Animator.speed = 0f;
         yield return new WaitForSeconds(Shadow.BoundDuration);

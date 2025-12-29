@@ -18,13 +18,17 @@ public class ForestShadowController : ShadowController
         _slimeShadow.Init(this);
         _dogShadow.Init(this);
         _snailShadow.Init(this);
-
-        TransformToSlime();
     }
 
     private void OnEnable()
     {
         Init();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        TransformToSlime();
     }
 
     private void Init()

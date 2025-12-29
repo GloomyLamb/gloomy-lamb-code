@@ -32,11 +32,11 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         StateFixedUpdateActions[ExpandState] = HandleChaseStateFixedUpdate;
 
         // Coroutine
-        StateCoroutineActions[ChaseState] = HandleChaseStateCoroutine;
         StateCoroutineActions[ExpandState] = HandleExpandStateCoroutine;
     }
 
-    private float _timer;
+    private float _idleTimer;
+    private float _chaseTimer;
 
     protected override void HandleIdleStateUpdate()
     {
@@ -47,34 +47,41 @@ public class SlimeShadowStateMachine : ShadowStateMachine
             ChangeState(ExpandState);
         }
 
-        _timer += Time.deltaTime;
-        if (_timer > Shadow.StopPatternTime)
+        _idleTimer += Time.deltaTime;
+        if (hasBeenBound || _idleTimer > Shadow.StopPatternTime)
         {
+            hasBeenBound = false;
             ChangeState(ChaseState);
-            _timer = 0f;
+            _idleTimer = 0f;
         }
     }
 
-    protected IEnumerator HandleChaseStateCoroutine()
+    protected override void HandleChaseStateUpdate()
     {
-        Shadow.PlusChaseCount();
-        SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
+        base.HandleChaseStateUpdate();
 
-        if (Shadow.CurChaseCount <= Shadow.SlowChaseCount)
+        _chaseTimer += Time.deltaTime;
+        if (hasBeenBound || _chaseTimer > Shadow.ChasePatternTime)
         {
-            //Logger.Log("저속 이동");
-            Shadow.SetCollisionDamage(Shadow.SlowCollisionDamage);
-            Shadow.SetMovementMultiplier(MovementType.Walk);
-            yield return new WaitForSeconds(Shadow.SlowChasePatternTime);
+            Shadow.PlusChaseCount();
+            SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
+            hasBeenBound = false;
+            if (Shadow.CurChaseCount > Shadow.SlowChaseCount)
+            {
+                //Logger.Log("고속 이동");
+                Shadow.SetCollisionDamage(Shadow.DoneExpand
+                    ? Shadow.ExpandCollisionDamage
+                    : Shadow.FastCollisionDamage);
+            }
+            else
+            {
+                //Logger.Log("저속 이동");
+                Shadow.SetMovementMultiplier(MovementType.Walk);
+                Shadow.SetCollisionDamage(Shadow.SlowCollisionDamage);
+            }
+            ChangeState(IdleState);
+            _chaseTimer = 0f;
         }
-        else
-        {
-            //Logger.Log("고속 이동");
-            Shadow.SetCollisionDamage(Shadow.DoneExpand ? Shadow.ExpandCollisionDamage : Shadow.FastCollisionDamage);
-            yield return new WaitForSeconds(Shadow.FastChasePatternTime);
-        }
-
-        ChangeState(IdleState);
     }
 
     protected IEnumerator HandleExpandStateCoroutine()
