@@ -11,8 +11,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     {
         Shadow = shadow;
 
-        ChaseState = null;
-        ChaseState = new ShadowState(shadow, this);
         ExpandState = new ShadowState(shadow, this);
     }
 

@@ -37,14 +37,6 @@ public class DogShadowStateMachine : ShadowStateMachine
         StateCoroutineActions[BarkState] = HandleBarkStateCoroutine;
     }
 
-    public override bool CanChange(IState nextState)
-    {
-        bool canChange = base.CanChange(nextState);
-        canChange = canChange && curState is not ShadowSkillState;
-
-        return canChange;
-    }
-
     protected override void HandleChaseStateUpdate()
     {
         base.HandleChaseStateUpdate();
