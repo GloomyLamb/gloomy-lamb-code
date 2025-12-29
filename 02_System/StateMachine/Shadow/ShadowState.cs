@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -42,21 +41,16 @@ public class ShadowState : IState
     }
 
     /// <summary>
-    /// State 내부에 초기화가 필요한 파라미터 값이 있을 경우 override 합니다.
-    /// </summary>
-    protected virtual void ResetParameter()
-    {
-    }
-
-    /// <summary>
     /// 코루틴을 사용하는 경우 Enter 시 코루틴을 시작합니다.
     /// </summary>
     protected virtual void StartCoroutine()
     {
         StopCoroutine();
-        coroutine = CustomCoroutineRunner
-            .Instance
-            .StartCoroutine(StateMachine.StateCoroutineActions[this]?.Invoke());
+
+        if (StateMachine.StateCoroutineActions.TryGetValue(this, out var action))
+        {
+            coroutine = CustomCoroutineRunner.Instance.StartCoroutine(action.Invoke());
+        }
     }
 
     private void StopCoroutine()
@@ -66,11 +60,6 @@ public class ShadowState : IState
             CustomCoroutineRunner.Instance.StopCoroutine(coroutine);
             coroutine = null;
         }
-    }
-
-    protected virtual IEnumerator StateCoroutine()
-    {
-        yield return null;
     }
 
     #region IState 구현
@@ -94,9 +83,6 @@ public class ShadowState : IState
             default:
                 break;
         }
-
-        // 초기화 필요한 필드 초기화
-        ResetParameter();
 
         // 코루틴 사용 시 시작
         if (useCoroutine)
@@ -131,7 +117,7 @@ public class ShadowState : IState
     {
         if (StateMachine.StateUpdateActions.TryGetValue(this, out var action))
         {
-            action?.Invoke();
+            action.Invoke();
         }
     }
 
@@ -139,7 +125,7 @@ public class ShadowState : IState
     {
         if (StateMachine.StateFixedUpdateActions.TryGetValue(this, out var action))
         {
-            action?.Invoke();
+            action.Invoke();
         }
     }
     #endregion
