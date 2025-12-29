@@ -23,7 +23,7 @@ public class DogShadowStateMachine : ShadowStateMachine
     {
         base.Init();
         BiteState.Init(MovementType.Stop, Shadow.SkillAnimationData.BiteParameterHash, AnimType.Bool, true);
-        BackwardState.Init(MovementType.Walk, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
+        BackwardState.Init(MovementType.Walk, Shadow.SkillAnimationData.BackwardParameterHash, AnimType.Bool, true);
         BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool, true);
     }
 
@@ -135,20 +135,19 @@ public class DogShadowStateMachine : ShadowStateMachine
         Logger.Log("회전 false 상태");
         Shadow.SetMovementMultiplier(MovementType.Walk);
         Shadow.Backward();
-        yield return new WaitForSeconds(Shadow.BiteBackwardDuration);
-        Logger.Log("뒷걸음질 시간동안 대기 완료");
         while (Shadow.Controller.Agent.pathPending
             || Shadow.Controller.Agent.remainingDistance > Shadow.Controller.Agent.stoppingDistance)
         {
             Logger.Log("while문 내부");
             yield return null;
         }
+        Logger.Log("뒷걸음질 시간동안 대기 완료");
         Shadow.Controller.SetActiveAgentRotation(true);
         Logger.Log("회전 true 상태");
         Shadow.DonePattern = true;
         Logger.Log("패턴 완료");
 
-        ChangeState(ChaseState);
+        ChangeState(IdleState);
     }
     #endregion
 }
