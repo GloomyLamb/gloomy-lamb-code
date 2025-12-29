@@ -172,5 +172,9 @@ public class BeamSkill : BaseSkill
         Logger.Log("스킬 사용 테스트");
     }
 
+    public void RecoverLightGauge(float amount)    // 수라님 이거 호출 ㄱㄱ
+    {
+        lightGauge = Mathf.Clamp(lightGauge + amount, 0f, maxLightGauge);
 
+    }
 }
