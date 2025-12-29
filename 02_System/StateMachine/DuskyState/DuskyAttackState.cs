@@ -31,7 +31,7 @@ public class DuskyAttackState : BaseDuskyState
             SoundManager.Instance?.PlaySfxOnce(SfxName.Attack, _soundVolume);
         }
         
-        _attackRotuine = CoroutineRunner.instance.StartCoroutine(AttackRoutine());
+        _attackRotuine = CustomCoroutineRunner.Instance.StartCoroutine(AttackRoutine());
         
     }
 
