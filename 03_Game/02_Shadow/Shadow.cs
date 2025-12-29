@@ -138,7 +138,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public void SetCollisionDamage(float damage)
     {
         if (CurCollisionDamage == damage) return;
-        Logger.Log($"대미지 변경: {CurCollisionDamage} -> {damage}");
+        //Logger.Log($"대미지 변경: {CurCollisionDamage} -> {damage}");
         CurCollisionDamage = damage;
     }
 
@@ -151,6 +151,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     {
         if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
+            Logger.Log($"대미지 (그림자 -> 플레이어): {CurCollisionDamage}");
             damageable.Damage(CurCollisionDamage);
         }
     }
