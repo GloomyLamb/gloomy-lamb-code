@@ -115,15 +115,12 @@ public class DuskyPlayer : Player
         if (_damageableDetector.CurrentTarget != null)
         {
             float damage = status.Atk;
-            bool isJumping = (stateMachine.CurState == stateMachine.JumpState);
+
             if (jumpingCheck)
             {
                 damage *= jumpAttackMultiplier;
             }
 
-            Debug.Log(
-                $"[Attack Debug] Jump:{jumpingCheck}  | Final:{damage}"
-            );
             _damageableDetector.CurrentTarget.Damage(damage);
             jumpingCheck = false;
         }
@@ -162,7 +159,6 @@ public class DuskyPlayer : Player
         }
 
         if (stateMachine.CurState != stateMachine.MoveState &&
-            NowCondition.HasFlag(CharacterCondition.Dash) == false &&
             nowCondition.HasFlag(CharacterCondition.Stun) == false)
         {
             if (stateMachine.CanChange(stateMachine.MoveState))
