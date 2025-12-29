@@ -48,6 +48,7 @@ public class CameraController : MonoBehaviour
 
     [Header("임시 VirtualCamera")]
     [SerializeField] CinemachineVirtualCamera virtualCamera;
+    [SerializeField] CinemachineCollisionImpulseSource impulseSource;
 
     public CinemachineVirtualCamera VirtaulCamera => virtualCamera;
 
@@ -207,5 +208,10 @@ public class CameraController : MonoBehaviour
         {
             tpsCinemachine.VerticalArmLength = Mathf.Lerp(calcMaxValue, minVerticalLength, curRotX / (limitMaxX - limitMinX));
         }
+    }
+
+    public void Impulse(float force = 0.5f)
+    {
+        impulseSource.GenerateImpulse(force);
     }
 }

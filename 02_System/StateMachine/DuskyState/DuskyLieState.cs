@@ -11,12 +11,15 @@
     {
         player.Animator.SetTrigger(AnimatorParameters.Die);
         player.Animator.SetBool(AnimatorParameters.IsDead, true);
+        
+        CameraController.Instance?.Impulse();
+        SoundManager.Instance?.PlaySfxOnce(SfxName.Hit, _soundVolume);
         PlayDelaySound(PlayFallDownSound, _soundDelay);
     }
 
     void PlayFallDownSound()
     {
-      //  SoundManager.Instance?.PlaySfxOnce(SfxName.FallDown, _soundVolume);
+        SoundManager.Instance?.PlaySfxOnce(SfxName.FallDown, _soundVolume);
     }
 
     public override void Update()
