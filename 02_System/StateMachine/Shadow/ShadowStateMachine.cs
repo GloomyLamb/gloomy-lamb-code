@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// 그림자 상태 머신 - 기본
+/// </summary>
 public class ShadowStateMachine : StateMachine
 {
     public Shadow Shadow { get; private set; }
@@ -62,6 +65,11 @@ public class ShadowStateMachine : StateMachine
     public override bool CanChange(IState nextState)
     {
         if (nextState == TransformState && CurState is ITransmutableState)
+        {
+            return true;
+        }
+
+        if (nextState == BoundState && CurState is IBindableState)
         {
             return true;
         }

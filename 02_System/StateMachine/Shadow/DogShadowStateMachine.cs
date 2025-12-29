@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 그림자 상태 머신 - 개
+/// </summary>
 public class DogShadowStateMachine : ShadowStateMachine
 {
     public new DogShadow Shadow { get; private set; }
@@ -22,6 +25,7 @@ public class DogShadowStateMachine : ShadowStateMachine
     public override void Init()
     {
         base.Init();
+
         BiteState.Init(MovementType.Stop, Shadow.SkillAnimationData.BiteParameterHash, AnimType.Bool, true);
         BackwardState.Init(MovementType.Walk, Shadow.SkillAnimationData.BackwardParameterHash, AnimType.Bool, true);
         BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool, true);

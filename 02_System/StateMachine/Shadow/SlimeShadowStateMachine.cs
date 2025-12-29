@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 그림자 상태 머신 - 슬라임
+/// </summary>
 public class SlimeShadowStateMachine : ShadowStateMachine
 {
     public new SlimeShadow Shadow { get; private set; }

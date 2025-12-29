@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 그림자 상태 - 스킬
 /// </summary>
-public class ShadowSkillState : ShadowState
+public class ShadowSkillState : ShadowState, IBindableState
 {
     protected int skillParameterHash = Animator.StringToHash("@Skill");
 
