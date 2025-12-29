@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 그림자 상태 - 기본
+/// </summary>
 public class ShadowState : IState
 {
     protected Shadow shadow;
@@ -12,9 +15,6 @@ public class ShadowState : IState
 
     protected bool useCoroutine;
     protected Coroutine coroutine;
-
-    protected bool isSkill;
-    protected int skillParameterHash = Animator.StringToHash("@Skill");
 
     public ShadowState(Shadow shadow, ShadowStateMachine stateMachine)
     {
@@ -33,14 +33,12 @@ public class ShadowState : IState
         MovementType movementType,
         int animParameterHash,
         AnimType animType = AnimType.Bool,
-        bool useCoroutine = false,
-        bool isSkill = false)
+        bool useCoroutine = false)
     {
         this.movementType = movementType;
         this.animParameterHash = animParameterHash;
         this.animType = animType;
         this.useCoroutine = useCoroutine;
-        this.isSkill = isSkill;
     }
 
     /// <summary>
@@ -95,11 +93,6 @@ public class ShadowState : IState
                 break;
             default:
                 break;
-        }
-
-        if (isSkill)
-        {
-            shadow.Animator.SetTrigger(skillParameterHash);
         }
 
         // 초기화 필요한 필드 초기화
