@@ -26,19 +26,19 @@ public class DogShadowStateMachine : ShadowStateMachine
     {
         base.Init();
 
-        BiteState.Init(MovementType.Stop, Shadow.SkillAnimationData.BiteParameterHash, AnimType.Bool, true);
-        BackwardState.Init(MovementType.Walk, Shadow.SkillAnimationData.BackwardParameterHash, AnimType.Bool, true);
-        BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool, true);
+        BiteState.Init(MovementType.Stop, Shadow.SkillAnimationData.BiteParameterHash, AnimType.Bool);
+        BackwardState.Init(MovementType.Walk, Shadow.SkillAnimationData.BackwardParameterHash, AnimType.Bool);
+        BarkState.Init(MovementType.Stop, Shadow.SkillAnimationData.BarkParameterHash, AnimType.Bool);
     }
 
     public override void Register()
     {
         base.Register();
 
-        StateCoroutineActions[IdleState] = HandleIdleStateCoroutine;
-        StateCoroutineActions[BiteState] = HandleBiteStateCoroutine;
-        StateCoroutineActions[BackwardState] = HandleBackwardStateCoroutine;
-        StateCoroutineActions[BarkState] = HandleBarkStateCoroutine;
+        stateCoroutineFuncs[IdleState] = HandleIdleStateCoroutine;
+        stateCoroutineFuncs[BiteState] = HandleBiteStateCoroutine;
+        stateCoroutineFuncs[BackwardState] = HandleBackwardStateCoroutine;
+        stateCoroutineFuncs[BarkState] = HandleBarkStateCoroutine;
     }
 
     protected override void HandleChaseStateUpdate()

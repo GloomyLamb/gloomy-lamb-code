@@ -12,9 +12,9 @@ public class ShadowStateMachine : StateMachine
     public Shadow Shadow { get; private set; }
     protected bool hasBeenBound = false;
 
-    public readonly Dictionary<IState, UnityAction> StateUpdateActions = new();
-    public readonly Dictionary<IState, UnityAction> StateFixedUpdateActions = new();
-    public readonly Dictionary<IState, Func<IEnumerator>> StateCoroutineActions = new();
+    protected readonly Dictionary<IState, UnityAction> stateUpdateActions = new();
+    protected readonly Dictionary<IState, UnityAction> stateFixedUpdateActions = new();
+    protected readonly Dictionary<IState, Func<IEnumerator>> stateCoroutineFuncs = new();
 
     public ShadowState IdleState { get; protected set; }
     public ShadowState ChaseState { get; protected set; }
@@ -42,8 +42,8 @@ public class ShadowStateMachine : StateMachine
     {
         IdleState.Init(MovementType.Stop, Shadow.AnimationData.IdleParameterHash, AnimType.Bool);
         ChaseState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
-        TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Trigger, true);
-        BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Trigger, true);
+        TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Trigger);
+        BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Trigger);
     }
 
     /// <summary>
@@ -52,15 +52,15 @@ public class ShadowStateMachine : StateMachine
     public virtual void Register()
     {
         // Update
-        StateUpdateActions[IdleState] = HandleIdleStateUpdate;
-        StateUpdateActions[ChaseState] = HandleChaseStateUpdate;
+        stateUpdateActions[IdleState] = HandleIdleStateUpdate;
+        stateUpdateActions[ChaseState] = HandleChaseStateUpdate;
 
         // FixedUpdate
-        StateFixedUpdateActions[ChaseState] = HandleChaseStateFixedUpdate;
+        stateFixedUpdateActions[ChaseState] = HandleChaseStateFixedUpdate;
 
         // Coroutine
-        StateCoroutineActions[TransformState] = HandleTransformStateCoroutine;
-        StateCoroutineActions[BoundState] = HandleBoundStateCoroutine;
+        stateCoroutineFuncs[TransformState] = HandleTransformStateCoroutine;
+        stateCoroutineFuncs[BoundState] = HandleBoundStateCoroutine;
     }
 
     public override bool CanChange(IState nextState)
@@ -77,6 +77,23 @@ public class ShadowStateMachine : StateMachine
 
         return false;
     }
+
+    #region 딕셔너리 관리
+    public bool TryGetUpdateAction(IState state, out UnityAction action)
+    {
+        return stateUpdateActions.TryGetValue(state, out action);
+    }
+
+    public bool TryGetFixedUpdateAction(IState state, out UnityAction action)
+    {
+        return stateFixedUpdateActions.TryGetValue(state, out action);
+    }
+
+    public bool TryGetCoroutineFunc(IState state, out Func<IEnumerator> func)
+    {
+        return stateCoroutineFuncs.TryGetValue(state, out func);
+    }
+    #endregion
 
     #region 상태 Update 내부 로직
     /// <summary>

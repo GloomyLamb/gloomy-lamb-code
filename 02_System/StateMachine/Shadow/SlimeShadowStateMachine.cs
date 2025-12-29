@@ -21,18 +21,18 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     {
         base.Init();
 
-        ChaseState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
-        ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool, true);
+        ChaseState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
     }
 
     public override void Register()
     {
         base.Register();
 
-        StateFixedUpdateActions[ExpandState] = HandleChaseStateFixedUpdate;
+        stateFixedUpdateActions[ExpandState] = HandleChaseStateFixedUpdate;
 
         // Coroutine
-        StateCoroutineActions[ExpandState] = HandleExpandStateCoroutine;
+        stateCoroutineFuncs[ExpandState] = HandleExpandStateCoroutine;
     }
 
     private float _idleTimer;
