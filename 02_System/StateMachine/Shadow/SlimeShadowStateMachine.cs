@@ -78,6 +78,8 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         Vector3 endScale = startScale * Shadow.MaxScale;
         float elapsed = 0f;
 
+        SoundManager.Instance.PlaySfxOnce(SfxName.ShadowExpand);
+
         while (elapsed < Shadow.ScaleUpDuration)
         {
             target.localScale = Vector3.Lerp(startScale, endScale, elapsed / Shadow.ScaleUpDuration);

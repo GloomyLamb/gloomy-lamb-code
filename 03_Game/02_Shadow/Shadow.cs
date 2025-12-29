@@ -117,6 +117,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         }
         //stateMachine.ChangeState(stateMachine.HitState);
         Animator.SetTrigger(AnimationData.HitParameterHash);
+        SoundManager.Instance.PlaySfxOnce(SfxName.Hit, idx: 1);
         controller.Damage(damage);
     }
 

@@ -112,6 +112,7 @@ public class ShadowStateMachine : StateMachine
     protected virtual IEnumerator HandleTransformStateCoroutine()
     {
         yield return new WaitForSeconds(Shadow.TransformDuration);
+        SoundManager.Instance.PlaySfxOnce(SfxName.Transform);
         Shadow.Transform();
     }
 

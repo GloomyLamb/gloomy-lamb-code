@@ -116,6 +116,7 @@ public class DogShadowStateMachine : ShadowStateMachine
         if (Shadow.TryBite())
         {
             Shadow.DonePattern = true;
+            SoundManager.Instance.PlaySfxOnce(SfxName.Bite);
             yield return new WaitForSeconds(Shadow.BiteDuration);
             ChangeState(BackwardState);
         }
