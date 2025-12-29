@@ -39,7 +39,10 @@ public class DogShadowStateMachine : ShadowStateMachine
 
     public override bool CanChange(IState nextState)
     {
-        return curState != BoundState;
+        bool canChange = base.CanChange(nextState);
+        canChange = canChange && curState is not ShadowSkillState;
+
+        return canChange;
     }
 
     protected override void HandleChaseStateUpdate()
@@ -69,6 +72,7 @@ public class DogShadowStateMachine : ShadowStateMachine
 
     private IEnumerator HandleBarkStateCoroutine()
     {
+        Shadow.DonePattern = true;
         Shadow.SetCollisionDamage(30f);
         WaitForSeconds spawnTimeSec = new WaitForSeconds(Shadow.BarkPrefabSpawnTime);
         //shadow.HowlEffectPrefab.SetActive(true);
@@ -84,7 +88,6 @@ public class DogShadowStateMachine : ShadowStateMachine
         }
 
         //shadow.HowlEffectPrefab.SetActive(false);
-        Shadow.DonePattern = true;
         Shadow.SetCollisionDamage(10f);
         ChangeState(IdleState);
     }
@@ -120,6 +123,7 @@ public class DogShadowStateMachine : ShadowStateMachine
 
         if (Shadow.TryBite())
         {
+            Shadow.DonePattern = true;
             yield return new WaitForSeconds(Shadow.BiteDuration);
             ChangeState(BackwardState);
         }
@@ -145,7 +149,6 @@ public class DogShadowStateMachine : ShadowStateMachine
         Logger.Log("뒷걸음질 시간동안 대기 완료");
         Shadow.Controller.SetActiveAgentRotation(true);
         Logger.Log("회전 true 상태");
-        Shadow.DonePattern = true;
         Logger.Log("패턴 완료");
 
         ChangeState(IdleState);

@@ -1,4 +1,4 @@
-public enum SfxName
+﻿public enum SfxName
 {
     // Common
     Attack,
@@ -9,7 +9,7 @@ public enum SfxName
     FallDown,
     
     // Skill
-    Bean,
+    Beam,
     DuskyCry,
 
     // Shadow
