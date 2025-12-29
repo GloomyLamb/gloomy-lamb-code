@@ -19,7 +19,8 @@ public class SlimeShadow : Shadow
 
     [field: Header("추가 설정")]
     [field: SerializeField] public float ScaleUpDuration { get; private set; } = 1f;
-    [SerializeField] public float scaleDownDuration = 1f;
+    [field: SerializeField] public float ScaleDownDuration { get; private set; } = 1f;
+
     // 변형 조건
     public bool DoneExpand { get; private set; }
     private bool CheckScale => transform.localScale.x == MinScale;
@@ -76,7 +77,7 @@ public class SlimeShadow : Shadow
     {
         if (scaleDownRoutine != null)
             StopCoroutine(scaleDownRoutine);
-        scaleDownRoutine = StartCoroutine(ScaleDownRoutine(MinScale, scaleDownDuration));
+        scaleDownRoutine = StartCoroutine(ScaleDownRoutine(MinScale, ScaleDownDuration));
     }
 
     protected IEnumerator ScaleDownRoutine(float size, float duration)

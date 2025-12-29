@@ -12,18 +12,19 @@ public class ShadowForestScene : BaseScene
         Player player = FindObjectOfType<Player>(); 
         GameManager.Instance?.SetPlayer(player);
         
+        
         if (player != null)
         {
-            BeamSkill beamSkill = player.gameObject.AddComponent<BeamSkill>();
             PlayerSkillController skillController = player.GetComponent<PlayerSkillController>();
             if (skillController != null)
             {
+                BeamSkill beamSkill = player.gameObject.AddComponent<BeamSkill>();
                 if (skillController.TryAcquireSkill(SkillType.Beam, beamSkill))
                 {
                     skillController.BindInput(SkillType.Beam,InputType.Skill,InputMapName.Default,InputActionName.Skill_Beam);
                 }
-        
-                CryBindingSkill cryBindingSkill = this.gameObject.AddComponent<CryBindingSkill>();
+                
+                CryBindingSkill cryBindingSkill = player.gameObject.AddComponent<CryBindingSkill>();
                 if (skillController.TryAcquireSkill(SkillType.CryBinding, cryBindingSkill))
                 {
                     skillController.BindInput(SkillType.CryBinding,InputType.Skill,InputMapName.Default,InputActionName.Skill_CryBinding);

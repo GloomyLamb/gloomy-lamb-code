@@ -42,6 +42,25 @@ public class InputHandler
         }
     }
 
+    public void SetEnableInput(InputMapName mapName, InputActionName actionName, bool enable)
+    {
+        string mapNameString = mapName.ToString();
+        string actionNameString = actionName.ToString();
+
+        if (actionMaps.TryGetValue(mapNameString, out InputActionMap map))
+        {
+            InputAction inputAction = map.actions.FirstOrDefault(a => a.name == actionNameString);
+            
+            if (inputAction == null) return;
+            
+            if(enable)
+                inputAction.Enable();
+            else
+                inputAction.Disable();
+        }
+
+    }
+
     public bool IsPressed(InputActionName actionName, InputMapName mapName = InputMapName.Default)
     {
         string mapNameString = mapName.ToString();
@@ -92,8 +111,7 @@ public class InputHandler
         return 0f;
     }
 
-    public void BindInputEvent(InputMapName mapName, InputActionName actionName,
-        Action<InputAction.CallbackContext> action)
+    public void BindInputEvent(InputMapName mapName, InputActionName actionName, Action<InputAction.CallbackContext> action)
     {
         string mapNameString = mapName.ToString();
         string actionNameString = actionName.ToString();
