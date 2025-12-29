@@ -49,7 +49,8 @@ public class DogShadowStateMachine : ShadowStateMachine
         Transform shadowT = Shadow.transform;
         Transform targetT = Shadow.Target.transform;
 
-        if ((targetT.position - shadowT.position).sqrMagnitude < Shadow.SqrBiteRange)
+        if ((targetT.position - shadowT.position).sqrMagnitude < Shadow.SqrBiteRange &&
+            Shadow.BiteCount < Shadow.BiteSuccessThreshold)
         {
             ChangeState(BiteState);
         }
