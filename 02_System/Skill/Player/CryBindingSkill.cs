@@ -19,6 +19,10 @@ public class CryBindingSkill : BaseSkill
         // 일단 찾아
         if (IsUsable)
         {  
+            SoundManager.Instance?.PlaySfxOnce(SfxName.DuskyCry);
+            PoolManager.Instance?.Spawn(PoolType.ParticleCryPool,this.transform.position,this.transform.rotation);
+            
+            
             Collider[] cols = Physics.OverlapSphere(this.transform.position, cryBindingSkillData.AttackRange.Radius);
 
             foreach (Collider col in cols)
