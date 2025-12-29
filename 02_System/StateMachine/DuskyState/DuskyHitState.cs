@@ -15,7 +15,9 @@ public class DuskyHitState : BaseDuskyState, IMovableState
     public override void Enter()
     {
         player.Animator.SetTrigger(AnimatorParameters.Hit);
+     
         SoundManager.Instance?.PlaySfxOnce(SfxName.Hit, _soundVolume);
+        CameraController.Instance?.Impulse();
         
         if(_hitStateRoutine != null)
             CustomCoroutineRunner.Instance.StopCoroutine(_hitStateRoutine);
