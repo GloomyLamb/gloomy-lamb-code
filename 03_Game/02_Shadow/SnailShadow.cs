@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using UnityEngine;
+
 /// <summary>
 /// 그림자 - 달팽이
 /// </summary>
-using UnityEngine;
 public class SnailShadow : Shadow
 {
     [Header("Snail Slime")]
@@ -29,8 +30,6 @@ public class SnailShadow : Shadow
     protected override void Update()
     {
         base.Update();
-
-
     }
 
     public void StartSlime()

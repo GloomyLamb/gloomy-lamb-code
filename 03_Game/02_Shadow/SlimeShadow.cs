@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public class SlimeShadow : Shadow
 {
+    #region 필드
     [field: Header("추격 충돌 대미지")]
     [field: SerializeField] public float SlowCollisionDamage { get; private set; } = 30f;
     [field: SerializeField] public float FastCollisionDamage { get; private set; } = 40f;
@@ -28,6 +29,7 @@ public class SlimeShadow : Shadow
     public bool DoneExpand { get; private set; }
     private bool CheckScale => transform.localScale.x == MinScale;
     public bool IsHitting { get; set; } // 일단 맞을 때 이거 변환
+    #endregion  
 
     protected override void Awake()
     {

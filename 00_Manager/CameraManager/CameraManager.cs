@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-#if UNITY_EDITOR
-#endif
-
 // todo: enum은 따로 관리
 public enum VCType
 {

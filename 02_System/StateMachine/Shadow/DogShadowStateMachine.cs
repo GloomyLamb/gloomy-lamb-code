@@ -41,6 +41,9 @@ public class DogShadowStateMachine : ShadowStateMachine
         stateCoroutineFuncs[BarkState] = HandleBarkStateCoroutine;
     }
 
+    /// <summary>
+    /// 추적 상태 Update
+    /// </summary>
     protected override void HandleChaseStateUpdate()
     {
         base.HandleChaseStateUpdate();
@@ -60,18 +63,30 @@ public class DogShadowStateMachine : ShadowStateMachine
     }
 
     #region 상태 Coroutine 내부 로직
+    /// <summary>
+    /// 기본 상태 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator HandleIdleStateCoroutine()
     {
         Shadow.ResetCollisionDamage();
         yield return null;
     }
 
+    /// <summary>
+    /// 스턴 상태 코루틴
+    /// </summary>
+    /// <returns></returns>
     protected override IEnumerator HandleBoundStateCoroutine()
     {
         Shadow.HowlEffectPrefab.SetActive(false);
         return base.HandleBoundStateCoroutine();
     }
 
+    /// <summary>
+    /// 짖기 상태 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator HandleBarkStateCoroutine()
     {
         Shadow.DonePattern = true;
@@ -94,6 +109,10 @@ public class DogShadowStateMachine : ShadowStateMachine
         ChangeState(IdleState);
     }
 
+    /// <summary>
+    /// 물기 상태 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator HandleBiteStateCoroutine()
     {
         Transform target = Shadow.Controller.transform;
@@ -137,6 +156,11 @@ public class DogShadowStateMachine : ShadowStateMachine
         }
     }
 
+    /// <summary>
+    /// 뒷걸음질 상태 코루틴
+    /// 물기 다음에 수행됩니다.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator HandleBackwardStateCoroutine()
     {
         Shadow.Controller.SetActiveAgentRotation(false);

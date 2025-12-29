@@ -9,6 +9,7 @@ using UnityEngine.Events;
 /// </summary>
 public class ShadowStateMachine : StateMachine
 {
+    #region 필드
     public Shadow Shadow { get; private set; }
     protected bool hasBeenBound = false;
 
@@ -20,7 +21,9 @@ public class ShadowStateMachine : StateMachine
     public ShadowState ChaseState { get; protected set; }
     public ShadowState TransformState { get; private set; }
     public ShadowState BoundState { get; private set; }
+    #endregion
 
+    #region 초기화
     /// <summary>
     /// 생성자 : 각종 State를 생성
     /// </summary>
@@ -62,7 +65,13 @@ public class ShadowStateMachine : StateMachine
         stateCoroutineFuncs[TransformState] = HandleTransformStateCoroutine;
         stateCoroutineFuncs[BoundState] = HandleBoundStateCoroutine;
     }
+    #endregion
 
+    /// <summary>
+    /// 다음 상태로 넘어갈 수 있는지 확인합니다.
+    /// </summary>
+    /// <param name="nextState"></param>
+    /// <returns></returns>
     public override bool CanChange(IState nextState)
     {
         if (nextState == TransformState && CurState is ITransmutableState)

@@ -38,7 +38,7 @@ public class ShadowState : IState
     }
 
     /// <summary>
-    /// 코루틴을 사용하는 경우 Enter 시 코루틴을 시작합니다.
+    /// 코루틴을 존재하는 경우 시작합니다.
     /// </summary>
     protected virtual void StartCoroutine()
     {
@@ -50,6 +50,9 @@ public class ShadowState : IState
         }
     }
 
+    /// <summary>
+    /// 현재 수행 중인 코루틴을 정지합니다.
+    /// </summary>
     private void StopCoroutine()
     {
         if (coroutine != null)

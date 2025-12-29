@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
-using System.IO;
 using UnityEngine.SceneManagement;
+
 public class DataManager
 {
     SaveData saveData;
@@ -12,6 +11,7 @@ public class DataManager
     private string SavePath =>
         Path.Combine(Application.persistentDataPath, FileName);    //저장경로
     public SaveData Current { get; private set; }
+
     public DataManager()
     {
         Current = new SaveData
@@ -20,6 +20,7 @@ public class DataManager
             ClearChapterNumber = 0
         };
     }
+
     public void Load()
     {
         if (!File.Exists(SavePath))
@@ -29,7 +30,7 @@ public class DataManager
         string json = File.ReadAllText(SavePath);
         Current = JsonUtility.FromJson<SaveData>(json);
 
-        if(Current == null)
+        if (Current == null)
         {
             Current = new SaveData();
         }
@@ -47,7 +48,6 @@ public class DataManager
             File.Delete(SavePath);
         Current = new SaveData(); // 메모리도 초기화
     }
-    
 
     public void SavePlayingChapter(int currentChapterNumber)
     {
