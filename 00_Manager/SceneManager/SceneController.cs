@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -62,10 +61,10 @@ public class SceneController
 
         if (_coroutine != null)
         {
-            CoroutineRunner.instance.StopCoroutine(_coroutine);
+            CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
             _coroutine = null;
         }
-        _coroutine = CoroutineRunner.instance.StartCoroutine(LoadSceneAsync());
+        _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(LoadSceneAsync());
     }
 
     /// <summary>
@@ -84,18 +83,28 @@ public class SceneController
 
         if (_coroutine != null)
         {
-            CoroutineRunner.instance.StopCoroutine(_coroutine);
+            CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
             _coroutine = null;
         }
-        _coroutine = CoroutineRunner.instance.StartCoroutine(LoadSceneAsync());
+        _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(LoadSceneAsync());
     }
 
     /// <summary>
-    /// 현재 씬을 리로드 합니다.
+    /// 현재 씬을 비동기 리로드 합니다.
     /// </summary>
-    public void ReLoadScene()
+    public void ReLoadSceneAsync()
     {
-        SceneManager.LoadScene(_curSceneType.ToString());
+        if (_externalSceneName == null)
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        if (_coroutine != null)
+        {
+            CustomCoroutineRunner.Instance.StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+        _coroutine = CustomCoroutineRunner.Instance.StartCoroutine(LoadSceneAsync());
     }
 
     /// <summary>
