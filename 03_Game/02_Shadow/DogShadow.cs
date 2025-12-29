@@ -101,6 +101,12 @@ public class DogShadow : Shadow
         _biteDetector = transform.FindChild<DamageableDetector>("Pivot_AttackRange_Bite");
         HowlEffectPrefab = transform.FindChild<ParticleSystem>("Particle_BarkEffect").gameObject;
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _biteDetectRange);
+    }
 #endif
     #endregion
 }
