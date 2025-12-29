@@ -50,7 +50,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     public event Action OnTransform;    // 변형
     #endregion
 
-    #region 초기화
+    #region Unity API
     protected virtual void Awake()
     {
         AnimationData.Initialize();
@@ -62,16 +62,10 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
         stateMachine.Register();
     }
 
-    public virtual void Init(ShadowController controller)
-    {
-        this.controller = controller;
-    }
-
     protected virtual void OnEnable()
     {
         stateMachine.ChangeState(stateMachine.IdleState);
     }
-    #endregion
 
     protected virtual void Update()
     {
@@ -92,6 +86,12 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void OnDisable()
     {
+    }
+    #endregion
+
+    public virtual void Init(ShadowController controller)
+    {
+        this.controller = controller;
     }
 
     // IDamageable
@@ -119,7 +119,7 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
             Logger.Log("state machine 없음");
             return;
         }
-        //stateMachine.ChangeState(stateMachine.HitState);
+
         Animator.SetTrigger(AnimationData.HitParameterHash);
         SoundManager.Instance.PlaySfxOnce(SfxName.Hit, idx: 1);
         controller.Damage(damage);

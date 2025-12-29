@@ -15,8 +15,6 @@ public class ShadowStateMachine : StateMachine
     public ShadowState IdleState { get; protected set; }
     public ShadowState ChaseState { get; protected set; }
     public ShadowState TransformState { get; private set; }
-
-    public ShadowState HitState { get; private set; }
     public ShadowState BoundState { get; private set; }
 
     /// <summary>
@@ -30,8 +28,6 @@ public class ShadowStateMachine : StateMachine
         IdleState = new ShadowIdleState(shadow, this);
         ChaseState = new ShadowChaseState(shadow, this);
         TransformState = new ShadowState(shadow, this);
-
-        //HitState = new ShadowState(shadow, this);
         BoundState = new ShadowState(shadow, this);
     }
 
@@ -43,8 +39,6 @@ public class ShadowStateMachine : StateMachine
         IdleState.Init(MovementType.Stop, Shadow.AnimationData.IdleParameterHash, AnimType.Bool);
         ChaseState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
         TransformState.Init(MovementType.Stop, Shadow.AnimationData.TransformParameterHash, AnimType.Trigger, true);
-
-        //HitState.Init(MovementType.Stop, Shadow.AnimationData.HitParameterHash, AnimType.Trigger, true);
         BoundState.Init(MovementType.Stop, Shadow.AnimationData.BoundParameterHash, AnimType.Trigger, true);
     }
 
@@ -62,7 +56,6 @@ public class ShadowStateMachine : StateMachine
 
         // Coroutine
         StateCoroutineActions[TransformState] = HandleTransformStateCoroutine;
-        //StateCoroutineActions[HitState] = HandleHitStateCoroutine;
         StateCoroutineActions[BoundState] = HandleBoundStateCoroutine;
     }
 
@@ -114,12 +107,6 @@ public class ShadowStateMachine : StateMachine
         yield return new WaitForSeconds(Shadow.TransformDuration);
         SoundManager.Instance.PlaySfxOnce(SfxName.Transform);
         Shadow.Transform();
-    }
-
-    protected virtual IEnumerator HandleHitStateCoroutine()
-    {
-        yield return new WaitForSeconds(Shadow.HitDuration);
-        ChangeState(IdleState);
     }
 
     protected virtual IEnumerator HandleBoundStateCoroutine()
