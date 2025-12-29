@@ -144,6 +144,8 @@ public class DuskyPlayer : Player
 
     public override void OnMoveEnd(Vector2 inputValue)
     {
+        if (NowCondition.HasFlag(CharacterCondition.Stun)) return;
+        
         if (stateMachine.CanChange(stateMachine.IdleState))
         {
             stateMachine.ChangeState(stateMachine.IdleState);
@@ -158,8 +160,12 @@ public class DuskyPlayer : Player
             return;
         }
 
-        if (stateMachine.CurState != stateMachine.MoveState &&
-            nowCondition.HasFlag(CharacterCondition.Stun) == false)
+        if (nowCondition.HasFlag(CharacterCondition.Stun))
+            return;
+        
+
+        if (NowCondition.HasFlag(CharacterCondition.Dash) == false &&
+            stateMachine.CurState != stateMachine.MoveState)
         {
             if (stateMachine.CanChange(stateMachine.MoveState))
             {
