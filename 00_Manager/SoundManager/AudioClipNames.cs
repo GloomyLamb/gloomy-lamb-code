@@ -17,7 +17,8 @@
     Bark,
     Bite,
     ShadowExpand,
-    
+    Transform,
+
     // UI
     Click,
     

@@ -27,8 +27,8 @@ public class ShadowStateMachine : StateMachine
     {
         Shadow = shadow;
 
-        IdleState = new ShadowState(shadow, this);
-        ChaseState = new ShadowState(shadow, this);
+        IdleState = new ShadowIdleState(shadow, this);
+        ChaseState = new ShadowChaseState(shadow, this);
         TransformState = new ShadowState(shadow, this);
 
         //HitState = new ShadowState(shadow, this);
@@ -68,7 +68,12 @@ public class ShadowStateMachine : StateMachine
 
     public override bool CanChange(IState nextState)
     {
-        return curState != BoundState;
+        if (nextState == TransformState && CurState is ITransmutableState)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     #region 상태 Update 내부 로직
@@ -107,6 +112,7 @@ public class ShadowStateMachine : StateMachine
     protected virtual IEnumerator HandleTransformStateCoroutine()
     {
         yield return new WaitForSeconds(Shadow.TransformDuration);
+        SoundManager.Instance.PlaySfxOnce(SfxName.Transform);
         Shadow.Transform();
     }
 

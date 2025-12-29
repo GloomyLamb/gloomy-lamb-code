@@ -11,8 +11,6 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     {
         Shadow = shadow;
 
-        ChaseState = null;
-        ChaseState = new ShadowState(shadow, this);
         ExpandState = new ShadowState(shadow, this);
     }
 
@@ -39,6 +37,7 @@ public class SlimeShadowStateMachine : ShadowStateMachine
 
     protected override void HandleIdleStateUpdate()
     {
+        Shadow.SetCollisionDamage(Shadow.SlowCollisionDamage);
         if (Shadow.CurChaseCount == Shadow.TotalChaseCount)
         {
             Logger.Log($"추적 횟수: {Shadow.CurChaseCount} => 확대 패턴 진입");
@@ -61,12 +60,14 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         if (Shadow.CurChaseCount <= Shadow.SlowChaseCount)
         {
             //Logger.Log("저속 이동");
+            Shadow.SetCollisionDamage(Shadow.SlowCollisionDamage);
             Shadow.SetMovementMultiplier(MovementType.Walk);
             yield return new WaitForSeconds(Shadow.SlowChasePatternTime);
         }
         else
         {
             //Logger.Log("고속 이동");
+            Shadow.SetCollisionDamage(Shadow.DoneExpand ? Shadow.ExpandCollisionDamage : Shadow.FastCollisionDamage);
             yield return new WaitForSeconds(Shadow.FastChasePatternTime);
         }
 
@@ -79,6 +80,8 @@ public class SlimeShadowStateMachine : ShadowStateMachine
         Vector3 startScale = target.localScale;
         Vector3 endScale = startScale * Shadow.MaxScale;
         float elapsed = 0f;
+
+        SoundManager.Instance.PlaySfxOnce(SfxName.ShadowExpand);
 
         while (elapsed < Shadow.ScaleUpDuration)
         {

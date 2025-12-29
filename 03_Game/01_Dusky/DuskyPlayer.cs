@@ -115,15 +115,12 @@ public class DuskyPlayer : Player
         if (_damageableDetector.CurrentTarget != null)
         {
             float damage = status.Atk;
-            bool isJumping = (stateMachine.CurState == stateMachine.JumpState);
+
             if (jumpingCheck)
             {
                 damage *= jumpAttackMultiplier;
             }
 
-            Debug.Log(
-                $"[Attack Debug] Jump:{jumpingCheck}  | Final:{damage}"
-            );
             _damageableDetector.CurrentTarget.Damage(damage);
             jumpingCheck = false;
         }
@@ -147,6 +144,8 @@ public class DuskyPlayer : Player
 
     public override void OnMoveEnd(Vector2 inputValue)
     {
+        if (NowCondition.HasFlag(CharacterCondition.Stun)) return;
+        
         if (stateMachine.CanChange(stateMachine.IdleState))
         {
             stateMachine.ChangeState(stateMachine.IdleState);
@@ -161,9 +160,12 @@ public class DuskyPlayer : Player
             return;
         }
 
-        if (stateMachine.CurState != stateMachine.MoveState &&
-            NowCondition.HasFlag(CharacterCondition.Dash) == false &&
-            nowCondition.HasFlag(CharacterCondition.Stun) == false)
+        if (nowCondition.HasFlag(CharacterCondition.Stun))
+            return;
+        
+
+        if (NowCondition.HasFlag(CharacterCondition.Dash) == false &&
+            stateMachine.CurState != stateMachine.MoveState)
         {
             if (stateMachine.CanChange(stateMachine.MoveState))
             {
