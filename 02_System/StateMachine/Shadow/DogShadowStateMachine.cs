@@ -62,12 +62,18 @@ public class DogShadowStateMachine : ShadowStateMachine
         yield return null;
     }
 
+    protected override IEnumerator HandleBoundStateCoroutine()
+    {
+        Shadow.HowlEffectPrefab.SetActive(false);
+        return base.HandleBoundStateCoroutine();
+    }
+
     private IEnumerator HandleBarkStateCoroutine()
     {
         Shadow.DonePattern = true;
         Shadow.SetCollisionDamage(Shadow.BarkCollisionDamage);
         WaitForSeconds spawnTimeSec = new WaitForSeconds(Shadow.BarkPrefabSpawnTime);
-        //shadow.HowlEffectPrefab.SetActive(true);
+        Shadow.HowlEffectPrefab.SetActive(true);
 
         // 멈출 때까지 딜레이 주기
         yield return new WaitForSeconds(0.5f);
@@ -79,7 +85,7 @@ public class DogShadowStateMachine : ShadowStateMachine
             yield return spawnTimeSec;
         }
 
-        //shadow.HowlEffectPrefab.SetActive(false);
+        Shadow.HowlEffectPrefab.SetActive(false);
         Shadow.ResetCollisionDamage();
         ChangeState(IdleState);
     }
