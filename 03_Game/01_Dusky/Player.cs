@@ -81,13 +81,13 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 
     Coroutine slowDownRoutine;
     Coroutine stunRoutine;
-
+ 
     // todo : 버프 디버프 받는걸로 변경해야함. 구조는 나중에! 중간발표대비 임시구현
-    public virtual void TakeSlowDown()
+    public virtual void TakeSlowDown(float duration)
     {
         if (slowDownRoutine != null)
             StopCoroutine(slowDownRoutine);
-        slowDownRoutine = StartCoroutine(AddConditionRoutine(CharacterCondition.Slow, 15f));
+        slowDownRoutine = StartCoroutine(AddConditionRoutine(CharacterCondition.Slow, duration));
     }
 
     public virtual void TakeStun()
@@ -106,7 +106,7 @@ public abstract class Player : MonoBehaviour, IAttackable, IDamageable
 
     public void AddCondition(CharacterCondition condition, bool value)
     {
-        if (value)
+        if (value) 
         {
             nowCondition |= condition;
         }
