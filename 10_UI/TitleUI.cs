@@ -26,7 +26,12 @@ public class TitleUI : BaseUI
 
     private void OnStartGame()
     {
-        GameManager.Instance.ShowVideo(VideoID.Test, SceneType.LibraryScene);
+        if (GameManager.Instance.Data.Current.HasWatchedIntroVideo)
+        {
+            GameManager.Instance.Scene.LoadSceneWithCoroutine(SceneType.LibraryScene);
+            return;
+        }
+        GameManager.Instance.ShowVideo(VideoID.Intro, SceneType.LibraryScene);
     }
 
     private void OnPopUpSettingWindow()

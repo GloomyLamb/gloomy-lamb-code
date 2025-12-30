@@ -45,6 +45,11 @@ public class VideoController : MonoBehaviour
     /// <param name="id"></param>
     public void PlayVideo(VideoID id)
     {
+        if (id == VideoID.Intro)
+        {
+            GameManager.Instance.Data.WatchIntroVideo();
+        }
+
         if (!_videoDatabase.TryGetClip(id, out VideoClip clip))
         {
             Debug.LogWarning($"{id} 비디오 데이터베이스에 없음");

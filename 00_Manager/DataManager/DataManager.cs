@@ -38,6 +38,7 @@ public class DataManager
 
     public void Save()
     {
+        Logger.Log("데이터 저장");
         string json = JsonUtility.ToJson(Current, prettyPrint: true);
         File.WriteAllText(SavePath, json);
     }
@@ -84,5 +85,14 @@ public class DataManager
     public void SaveSceneName()
     {
         Current.SceneName = SceneManager.GetActiveScene().name;
+    }
+
+    /// <summary>
+    /// [public] 인트로 비디오를 볼 경우 호출
+    /// </summary>
+    public void WatchIntroVideo()
+    {
+        Current.HasWatchedIntroVideo = true;
+        Logger.Log("인트로 영상 보기 완료");
     }
 }

@@ -10,4 +10,6 @@ public class SaveData
     public string PlayerPositionX;
     public string PlayerPositionY;
     public string PlayerPositionZ;
+
+    public bool HasWatchedIntroVideo { get; set; }
 }
