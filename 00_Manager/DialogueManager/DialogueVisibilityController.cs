@@ -50,7 +50,10 @@ public class DialogueVisibilityController : MonoBehaviour
 
     private void OnDestroy()
     {
-        DialogueManager.Instance.OnDialogueStartAction -= Show;
-        DialogueManager.Instance.OnDialogueEndAction -= Hide;
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.OnDialogueStartAction -= Show;
+            DialogueManager.Instance.OnDialogueEndAction -= Hide;
+        }
     }
 }
