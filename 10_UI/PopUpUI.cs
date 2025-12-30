@@ -6,7 +6,7 @@ public class PopUpUI : MonoBehaviour
     [SerializeField] private GameObject _popUpPrefab;
     private GameObject _popUpGo;
     private TextMeshProUGUI _popUpText;
-    private static string _defaultText = "현재 지원하지 않는 기능입니다.";
+    private const string _defaultText = "현재 지원하지 않는 기능입니다.";
 
     private void Init()
     {
