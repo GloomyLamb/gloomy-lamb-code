@@ -20,6 +20,14 @@ public class VideoController : MonoBehaviour
     // 캐싱
     private VideoID _currentVideoID;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            StopVideo();
+        }
+    }
+
     public void Init(VideoID videoId)
     {
         Logger.Log("비디오 정보 초기화");
