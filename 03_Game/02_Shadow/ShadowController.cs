@@ -27,7 +27,6 @@ public abstract class ShadowController : MonoBehaviour
 
     [field: Header("추격")]
     [field: SerializeField] public Transform Target { get; private set; }
-    [field: SerializeField] public bool CanChaseTarget { get; private set; }
     [SerializeField] private float _updateInterval = 0.1f;
     [SerializeField] private float _rotDamping = 6f;
     private float _agentTimer;
@@ -60,7 +59,7 @@ public abstract class ShadowController : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (_useManualRotation)
+        if (_useManualRotation && curShadow.CanRotateWhileStopped())
         {
             RotateToTarget();
         }

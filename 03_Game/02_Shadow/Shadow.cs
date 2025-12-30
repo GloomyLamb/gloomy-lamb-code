@@ -230,6 +230,20 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     protected abstract void ResetTransformFlag();
     #endregion
 
+    /// <summary>
+    /// 정지 상태에서 코드로 회전할 수 있는지 확인하기 위한 메서드
+    /// </summary>
+    /// <returns></returns>
+    public bool CanRotateWhileStopped()
+    {
+        IState curState = stateMachine.CurState;
+        // 조건
+        // 1. 바인딩 중이 아닐 때
+        // 2. 스킬 상태가 아닐 때
+        return curState != stateMachine.BoundState
+            && curState is not ShadowSkillState;
+    }
+
     #region 에디터 전용
 #if UNITY_EDITOR
     protected virtual void Reset()
