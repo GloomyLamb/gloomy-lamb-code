@@ -19,8 +19,11 @@ public class DialogueVisibilityController : MonoBehaviour
 
     private void Start()
     {
-        DialogueManager.Instance.OnDialogueStartAction += Hide;
-        DialogueManager.Instance.OnDialogueEndAction += Show;
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.OnDialogueStartAction += Hide;
+            DialogueManager.Instance.OnDialogueEndAction += Show;
+        }
     }
 
     public void Show()
