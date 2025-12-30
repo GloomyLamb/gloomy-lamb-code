@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,7 +9,8 @@ public abstract class ShadowController : MonoBehaviour
     // 컴포넌트
     private NavMeshAgent _agent;
     public NavMeshAgent Agent => _agent;
-
+    private bool isDead = false;   
+    private UIResult _uiResult;
     // 현재 그림자
     protected Shadow curShadow;
 
@@ -41,10 +42,11 @@ public abstract class ShadowController : MonoBehaviour
     protected virtual void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-
+        _uiResult = FindObjectOfType<UIResult>();
         status = statusData.GetNewStatus();
-
+      
         _defaultFogScale = ShadowFog.localScale;
+       
     }
 
     protected virtual void Start()
@@ -54,12 +56,30 @@ public abstract class ShadowController : MonoBehaviour
             Target = GameManager.Instance.Player.transform;
         }
     }
-
+ 
     public void Damage(float damage)
     {
+        
         Status.AddHp(-damage);
-    }
 
+        if (Status.Hp <= 0f)
+        {
+            Die();
+        }
+    }
+    protected virtual void Die()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        _agent.isStopped = true;
+        _agent.ResetPath();
+
+        Logger.Log("그림자 사망");
+
+        if (_uiResult != null) _uiResult.ShowClear();
+        else Logger.Log("UIResult 없음!");
+    }
     protected void TransformFogScaleTo()
     {
         if (_scaleCoroutine != null)
@@ -101,6 +121,8 @@ public abstract class ShadowController : MonoBehaviour
         }
 
         target.localScale = endScale;
+
+
     }
 
     #region Nev Mesh Agent 관리

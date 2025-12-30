@@ -6,7 +6,8 @@ using UnityEngine;
 public class DuskyPlayer : Player
 {
     [SerializeField] DamageableDetector _damageableDetector;
-
+    private bool isDead = false;
+    private UIResult uiResult;
     public DuskyStateMachine StateMachine => stateMachine;
     protected DuskyStateMachine stateMachine;
     private float jumpAttackMultiplier = 2f;
@@ -41,7 +42,7 @@ public class DuskyPlayer : Player
 
         rb = GetComponent<Rigidbody>();
     }
-
+   
     private void Start()
     {
         InputManager.Instance.UseInput(InputType.Player);
@@ -235,6 +236,7 @@ public class DuskyPlayer : Player
 
         stateMachine.ChangeState(stateMachine.HitState);
         base.Damage(damage);
+       
     }
 
     IEnumerator JumpDelaRotuine()
