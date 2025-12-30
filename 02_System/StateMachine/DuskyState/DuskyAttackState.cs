@@ -12,6 +12,10 @@ public class DuskyAttackState : BaseDuskyState
     private Coroutine _attackRotuine;
     
     private readonly float _soundVolume = 0.3f;
+    readonly float _animationDuration = 0.2f;
+    
+    private Coroutine _hitStateRoutine;
+    private Coroutine _animRoutine;
 
     public DuskyAttackState(StateMachine stateMachine, DuskyPlayer player,
     float attackAnimDelay) : base(stateMachine, player)
@@ -32,20 +36,18 @@ public class DuskyAttackState : BaseDuskyState
         }
         
         _attackRotuine = CustomCoroutineRunner.Instance.StartCoroutine(AttackRoutine());
-        
     }
 
     public override void Update()
     {
-        AnimatorStateInfo animInfo = player.Animator.GetCurrentAnimatorStateInfo(0);
-        
-        if (animInfo.IsName(AnimatorParameters.AttackName) && animInfo.normalizedTime >= 1f)
-        {
-            if (stateMachine != null)
-            {
-                stateMachine.ChangeState(stateMachine.IdleState);
-            }
-        }
+        //AnimatorStateInfo animInfo = player.Animator.GetCurrentAnimatorStateInfo(0);
+        // if (animInfo.IsName(AnimatorParameters.AttackName) && animInfo.normalizedTime >= 1f)
+        // {
+        //     if (stateMachine != null)
+        //     {
+        //         stateMachine.ChangeState(stateMachine.IdleState);
+        //     }
+        // }
     }
 
     public override void Exit()
@@ -59,5 +61,8 @@ public class DuskyAttackState : BaseDuskyState
     {
         yield return new WaitForSeconds(_attackAnimTiming);
         player.Attack();
+        yield return new WaitForSeconds(0.1f);
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
+
 }
