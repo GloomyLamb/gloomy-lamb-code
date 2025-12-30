@@ -13,12 +13,26 @@ public class VideoController : MonoBehaviour
 
     [Header("비디오 재생 관리")]
     [SerializeField] private VideoPlayer _videoPlayer;
+    [SerializeField] private GameObject _videoCover;
 
     // 이벤트
     public event Action OnVideoFinished;
 
     // 캐싱
     private VideoID _currentVideoID;
+
+    private void OnEnable()
+    {
+        _videoCover.SetActive(true);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            StopVideo();
+        }
+    }
 
     public void Init(VideoID videoId)
     {
@@ -37,6 +51,11 @@ public class VideoController : MonoBehaviour
     /// <param name="id"></param>
     public void PlayVideo(VideoID id)
     {
+        if (id == VideoID.Intro)
+        {
+            GameManager.Instance.Data.WatchIntroVideo();
+        }
+
         if (!_videoDatabase.TryGetClip(id, out VideoClip clip))
         {
             Debug.LogWarning($"{id} 비디오 데이터베이스에 없음");
@@ -45,6 +64,7 @@ public class VideoController : MonoBehaviour
 
         _videoPlayer.clip = clip;
         _videoPlayer.Play();
+        _videoCover.SetActive(false);
     }
 
     /// <summary>

@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ShadowForestScene : BaseScene
 {
     private void Start()
@@ -10,11 +5,10 @@ public class ShadowForestScene : BaseScene
         PoolManager.Instance?.UsePool(PoolType.HowlWindPool);
         PoolManager.Instance?.UsePool(PoolType.ParticleCryPool);
         PoolManager.Instance?.UsePool(PoolType.ParticleCryBindingPool);
-        
-        Player player = FindObjectOfType<Player>(); 
+
+        Player player = FindObjectOfType<Player>();
         GameManager.Instance?.SetPlayer(player);
-        
-        
+
         if (player != null)
         {
             PlayerSkillController skillController = player.GetComponent<PlayerSkillController>();
@@ -23,16 +17,17 @@ public class ShadowForestScene : BaseScene
                 BeamSkill beamSkill = player.gameObject.AddComponent<BeamSkill>();
                 if (skillController.TryAcquireSkill(SkillType.Beam, beamSkill))
                 {
-                    skillController.BindInput(SkillType.Beam,InputType.Skill,InputMapName.Default,InputActionName.Skill_Beam);
+                    skillController.BindInput(SkillType.Beam, InputType.Skill, InputMapName.Default, InputActionName.Skill_Beam);
                 }
-                
+
                 CryBindingSkill cryBindingSkill = player.gameObject.AddComponent<CryBindingSkill>();
                 if (skillController.TryAcquireSkill(SkillType.CryBinding, cryBindingSkill))
                 {
-                    skillController.BindInput(SkillType.CryBinding,InputType.Skill,InputMapName.Default,InputActionName.Skill_CryBinding);
+                    skillController.BindInput(SkillType.CryBinding, InputType.Skill, InputMapName.Default, InputActionName.Skill_CryBinding);
                 }
             }
         }
-        
+
+        SoundManager.Instance.PlayBgm(BgmName.ShadowForest, volume: 0.6f);
     }
 }

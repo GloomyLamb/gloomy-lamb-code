@@ -20,10 +20,9 @@ public class DuskyPlayer : Player
     private bool _jumpDelay = false;
     WaitForSeconds _jumpDelayWait = new WaitForSeconds(0.2f);
 
-    
-    
+
     [SerializeField] private LayerMask wallLayerMask;
-    
+
     protected override void Init()
     {
         stateMachine = new DuskyStateMachine(this);
@@ -100,14 +99,14 @@ public class DuskyPlayer : Player
 
                 if (nowCondition.HasFlag(CharacterCondition.Slow))
                     moveSpeed = moveSpeed * 0.3f; // todo : 수치 빼는건 나중에
-                if (nowCondition.HasFlag(CharacterCondition.Dash))
+                if (nowCondition.HasFlag(CharacterCondition.Dash) && IsGrounded())
                     moveSpeed = moveSpeed * moveStatusData.DashMultiplier;
 
                 Vector3 newPosition = rb.position + _lastMoveInputValue * (moveSpeed * Time.fixedDeltaTime);
 
                 if (AreaLimit.Instance != null)
                 {
-                    if (AreaLimit.Instance.CanMove(newPosition) == false) return;
+                    newPosition = AreaLimit.Instance.GetNextPosition(this.transform.position, newPosition);
                 }
                 
                 rb.MovePosition(newPosition);
@@ -156,7 +155,7 @@ public class DuskyPlayer : Player
     public override void OnMoveEnd(Vector2 inputValue)
     {
         if (NowCondition.HasFlag(CharacterCondition.Stun)) return;
-        
+
         if (stateMachine.CanChange(stateMachine.IdleState))
         {
             stateMachine.ChangeState(stateMachine.IdleState);
@@ -173,7 +172,7 @@ public class DuskyPlayer : Player
 
         if (nowCondition.HasFlag(CharacterCondition.Stun))
             return;
-        
+
 
         if (NowCondition.HasFlag(CharacterCondition.Dash) == false &&
             stateMachine.CurState != stateMachine.MoveState)
@@ -251,5 +250,4 @@ public class DuskyPlayer : Player
         base.TakeStun();
         stateMachine.ChangeState(stateMachine.LieState);
     }
-
 }

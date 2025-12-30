@@ -42,11 +42,13 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     }
 
     [Header("대미지")]
+    [SerializeField] protected float collisionInterval = 0.5f;
     [SerializeField] protected float defaultCollisionDamage = 10f;
     [field: SerializeField] public float CurCollisionDamage { get; private set; } = 10f;
 
     [field: Header("효과")]
     [field: SerializeField] public float FogScaleModifier { get; private set; } = 2f;
+    private float _collisionTimer = 0f;
 
     // 이벤트
     public Action OnMove;               // 이동
@@ -154,9 +156,35 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     {
         if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
-            Logger.Log($"대미지 (그림자 -> 플레이어): {CurCollisionDamage}");
-            damageable.Damage(CurCollisionDamage);
+            DamageTo(damageable);
         }
+    }
+
+    protected virtual void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            _collisionTimer += Time.deltaTime;
+            if (_collisionTimer > collisionInterval)
+            {
+                DamageTo(damageable);
+            }
+        }
+    }
+
+    protected virtual void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            _collisionTimer = 0f;
+        }
+    }
+
+    private void DamageTo(IDamageable damageable)
+    {
+        _collisionTimer = 0f;
+        Logger.Log($"대미지 (그림자 -> 플레이어): {CurCollisionDamage}");
+        damageable.Damage(CurCollisionDamage);
     }
     #endregion
 
@@ -201,6 +229,20 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     /// </summary>
     protected abstract void ResetTransformFlag();
     #endregion
+
+    /// <summary>
+    /// 정지 상태에서 코드로 회전할 수 있는지 확인하기 위한 메서드
+    /// </summary>
+    /// <returns></returns>
+    public bool CanRotateWhileStopped()
+    {
+        IState curState = stateMachine.CurState;
+        // 조건
+        // 1. 바인딩 중이 아닐 때
+        // 2. 스킬 상태가 아닐 때
+        return curState != stateMachine.BoundState
+            && curState is not ShadowSkillState;
+    }
 
     #region 에디터 전용
 #if UNITY_EDITOR

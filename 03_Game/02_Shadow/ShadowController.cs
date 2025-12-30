@@ -29,7 +29,9 @@ public abstract class ShadowController : MonoBehaviour
     [field: Header("추격")]
     [field: SerializeField] public Transform Target { get; private set; }
     [SerializeField] private float _updateInterval = 0.1f;
+    [SerializeField] private float _rotDamping = 6f;
     private float _agentTimer;
+    private bool _useManualRotation;
 
     [field: Header("시간 설정")]
     [field: SerializeField] public float TransformDuration { get; protected set; } = 2f;
@@ -56,7 +58,29 @@ public abstract class ShadowController : MonoBehaviour
             Target = GameManager.Instance.Player.transform;
         }
     }
- 
+
+    protected virtual void Update()
+    {
+        if (_useManualRotation && curShadow.CanRotateWhileStopped())
+        {
+            RotateToTarget();
+        }
+    }
+
+    protected virtual void RotateToTarget()
+    {
+        Vector3 dir = Target.position - transform.position;
+        dir.y = 0f;
+
+        if (dir.sqrMagnitude > 0.0001f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            float t = 1f - Mathf.Exp(-_rotDamping * Time.deltaTime);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, t);
+        }
+    }
+
     public void Damage(float damage)
     {
         
@@ -135,6 +159,7 @@ public abstract class ShadowController : MonoBehaviour
 
     public void SetActiveAgentRotation(bool active)
     {
+        _useManualRotation = !active;
         _agent.updateRotation = active;
     }
 
@@ -149,10 +174,18 @@ public abstract class ShadowController : MonoBehaviour
         _agentTimer += Time.deltaTime;
         if (_agentTimer > _updateInterval)
         {
+            SetActiveAgentRotation(true);
             // 플레이어와 겹치지 않게 주변 랜덤값 적용
             Vector3 targetPosition = Target.position + (new Vector3(1f, 0, 1f) * Random.Range(0.5f, 0.75f));
             _agent.SetDestination(targetPosition);
             _agentTimer = 0f;
+        }
+
+        // path에 도착, 커스텀 회전이 아닐 때
+        if (!_useManualRotation && !_agent.pathPending &&
+            _agent.remainingDistance <= _agent.stoppingDistance)
+        {
+            SetActiveAgentRotation(false);
         }
     }
 

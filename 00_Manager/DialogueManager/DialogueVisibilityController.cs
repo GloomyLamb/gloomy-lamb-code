@@ -10,7 +10,7 @@ using UnityEngine;
 public class DialogueVisibilityController : MonoBehaviour
 {
     Renderer[] renderers;
-    
+
     private void Awake()
     {
         renderers = GetComponentsInChildren<Renderer>();
@@ -19,8 +19,11 @@ public class DialogueVisibilityController : MonoBehaviour
 
     private void Start()
     {
-        DialogueManager.Instance.OnDialogueStartAction += Show;
-        DialogueManager.Instance.OnDialogueEndAction += Hide;
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.OnDialogueStartAction += Hide;
+            DialogueManager.Instance.OnDialogueEndAction += Show;
+        }
     }
 
     public void Show()
@@ -44,10 +47,13 @@ public class DialogueVisibilityController : MonoBehaviour
             }
         }
     }
-    
+
     private void OnDestroy()
     {
-        DialogueManager.Instance.OnDialogueStartAction -= Show;
-        DialogueManager.Instance.OnDialogueEndAction -= Hide;
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.OnDialogueStartAction -= Show;
+            DialogueManager.Instance.OnDialogueEndAction -= Hide;
+        }
     }
 }
