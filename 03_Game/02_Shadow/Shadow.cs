@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// 그림자 기본 클래스
+/// </summary>
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
     #region 필드

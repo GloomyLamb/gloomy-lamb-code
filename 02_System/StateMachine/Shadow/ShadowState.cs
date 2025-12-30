@@ -12,7 +12,6 @@ public class ShadowState : IState
     protected AnimType animType;
     protected int animParameterHash;
 
-    protected bool useCoroutine;
     protected Coroutine coroutine;
 
     public ShadowState(Shadow shadow, ShadowStateMachine stateMachine)
@@ -31,28 +30,29 @@ public class ShadowState : IState
     public void Init(
         MovementType movementType,
         int animParameterHash,
-        AnimType animType = AnimType.Bool,
-        bool useCoroutine = false)
+        AnimType animType = AnimType.Bool)
     {
         this.movementType = movementType;
         this.animParameterHash = animParameterHash;
         this.animType = animType;
-        this.useCoroutine = useCoroutine;
     }
 
     /// <summary>
-    /// 코루틴을 사용하는 경우 Enter 시 코루틴을 시작합니다.
+    /// 코루틴을 존재하는 경우 시작합니다.
     /// </summary>
     protected virtual void StartCoroutine()
     {
         StopCoroutine();
 
-        if (StateMachine.StateCoroutineActions.TryGetValue(this, out var action))
+        if (StateMachine.TryGetCoroutineFunc(this, out var func))
         {
-            coroutine = CustomCoroutineRunner.Instance.StartCoroutine(action.Invoke());
+            coroutine = CustomCoroutineRunner.Instance.StartCoroutine(func.Invoke());
         }
     }
 
+    /// <summary>
+    /// 현재 수행 중인 코루틴을 정지합니다.
+    /// </summary>
     private void StopCoroutine()
     {
         if (coroutine != null)
@@ -85,10 +85,7 @@ public class ShadowState : IState
         }
 
         // 코루틴 사용 시 시작
-        if (useCoroutine)
-        {
-            StartCoroutine();
-        }
+        StartCoroutine();
     }
 
     /// <summary>
@@ -115,7 +112,7 @@ public class ShadowState : IState
 
     public virtual void Update()
     {
-        if (StateMachine.StateUpdateActions.TryGetValue(this, out var action))
+        if (StateMachine.TryGetUpdateAction(this, out var action))
         {
             action.Invoke();
         }
@@ -123,7 +120,7 @@ public class ShadowState : IState
 
     public virtual void PhysicsUpdate()
     {
-        if (StateMachine.StateFixedUpdateActions.TryGetValue(this, out var action))
+        if (StateMachine.TryGetFixedUpdateAction(this, out var action))
         {
             action.Invoke();
         }

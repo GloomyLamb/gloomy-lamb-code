@@ -31,7 +31,7 @@ public abstract class ShadowController : MonoBehaviour
     private float _agentTimer;
 
     [field: Header("시간 설정")]
-    [field: SerializeField] public float TransformDuration = 2f;
+    [field: SerializeField] public float TransformDuration { get; protected set; } = 2f;
     [field: SerializeField] public float HitDuration { get; protected set; } = 1f;
     [field: SerializeField] public float BoundDuration { get; protected set; } = 2f;
     [field: SerializeField] public float BoundStopPoint { get; protected set; } = 0.1f;
@@ -42,7 +42,7 @@ public abstract class ShadowController : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
 
-        status = statusData?.GetNewStatus();
+        status = statusData.GetNewStatus();
 
         _defaultFogScale = ShadowFog.localScale;
     }
@@ -127,25 +127,21 @@ public abstract class ShadowController : MonoBehaviour
         _agentTimer += Time.deltaTime;
         if (_agentTimer > _updateInterval)
         {
+            // 플레이어와 겹치지 않게 주변 랜덤값 적용
             Vector3 targetPosition = Target.position + (new Vector3(1f, 0, 1f) * Random.Range(0.5f, 0.75f));
             _agent.SetDestination(targetPosition);
             _agentTimer = 0f;
         }
     }
 
+    /// <summary>
+    /// Nev Agent Speed 변경
+    /// </summary>
+    /// <param name="modifier"></param>
     public void SetAgentMovementModifier(float modifier)
     {
         //Logger.Log("nev agent 속도 변경");
         _agent.speed = curShadow.MovementSpeed * modifier;
-    }
-
-    private NavMeshAgent GetAgentSafely()
-    {
-        var shadowObj = Object.FindObjectOfType<Shadow>();
-        if (shadowObj != null)
-            return shadowObj.GetComponent<NavMeshAgent>();
-
-        return null;
     }
     #endregion
 
@@ -153,7 +149,14 @@ public abstract class ShadowController : MonoBehaviour
 #if UNITY_EDITOR
     protected virtual void Reset()
     {
-        ShadowFog = transform.FindChild<Transform>("Particle_Fog");
+        if (ShadowFog == null)
+        {
+            ShadowFog = transform.FindChild<Transform>("Particle_Fog");
+        }
+        if (statusData == null)
+        {
+            statusData = AssetLoader.FindAndLoadByName<StatusData>("status_shadow_chapter1");
+        }
     }
 #endif
     #endregion
