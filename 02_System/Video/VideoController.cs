@@ -13,12 +13,18 @@ public class VideoController : MonoBehaviour
 
     [Header("비디오 재생 관리")]
     [SerializeField] private VideoPlayer _videoPlayer;
+    [SerializeField] private GameObject _videoCover;
 
     // 이벤트
     public event Action OnVideoFinished;
 
     // 캐싱
     private VideoID _currentVideoID;
+
+    private void OnEnable()
+    {
+        _videoCover.SetActive(true);
+    }
 
     private void Update()
     {
@@ -58,6 +64,7 @@ public class VideoController : MonoBehaviour
 
         _videoPlayer.clip = clip;
         _videoPlayer.Play();
+        _videoCover.SetActive(false);
     }
 
     /// <summary>
