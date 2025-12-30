@@ -92,7 +92,7 @@ public class DataManager
     /// </summary>
     public void WatchIntroVideo()
     {
-        Current.HasWatchedIntroVideo = true;
+        Current.hasWatchedIntroVideo = true;
         Logger.Log("인트로 영상 보기 완료");
     }
 }

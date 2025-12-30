@@ -11,5 +11,5 @@ public class SaveData
     public string PlayerPositionY;
     public string PlayerPositionZ;
 
-    public bool HasWatchedIntroVideo { get; set; }
+    public bool hasWatchedIntroVideo;
 }

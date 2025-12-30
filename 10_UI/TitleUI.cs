@@ -26,7 +26,7 @@ public class TitleUI : BaseUI
 
     private void OnStartGame()
     {
-        if (GameManager.Instance.Data.Current.HasWatchedIntroVideo)
+        if (GameManager.Instance.Data.Current.hasWatchedIntroVideo)
         {
             GameManager.Instance.Scene.LoadSceneWithCoroutine(SceneType.LibraryScene);
             return;
