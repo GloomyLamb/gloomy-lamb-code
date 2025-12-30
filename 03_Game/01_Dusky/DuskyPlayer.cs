@@ -19,6 +19,10 @@ public class DuskyPlayer : Player
     private bool _jumpDelay = false;
     WaitForSeconds _jumpDelayWait = new WaitForSeconds(0.2f);
 
+    
+    
+    [SerializeField] private LayerMask wallLayerMask;
+    
     protected override void Init()
     {
         stateMachine = new DuskyStateMachine(this);
@@ -99,6 +103,12 @@ public class DuskyPlayer : Player
                     moveSpeed = moveSpeed * moveStatusData.DashMultiplier;
 
                 Vector3 newPosition = rb.position + _lastMoveInputValue * (moveSpeed * Time.fixedDeltaTime);
+
+                if (AreaLimit.Instance != null)
+                {
+                    if (AreaLimit.Instance.CanMove(newPosition) == false) return;
+                }
+                
                 rb.MovePosition(newPosition);
             }
         }
