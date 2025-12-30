@@ -30,6 +30,22 @@ public class AreaLimit : SceneSingletonManager<AreaLimit>
         }
         return true;
     }
+    
+    public Vector3 GetNextPosition(Vector3 currentPosition, Vector3 nextPosition)
+    {
+        Vector3 curXZ = new Vector3(currentPosition.x, 0f, currentPosition.z);
+        Vector3 nextXZ = new Vector3(nextPosition.x, 0f, nextPosition.z);
+
+        Vector3 dir = nextXZ - thisPosXZ;
+
+        if ( dir.magnitude <= _limitDistance)
+            return nextPosition;
+        
+        Vector3 canMove = Vector3.ProjectOnPlane( nextXZ - curXZ, dir.normalized);  // 벽방향 없애기
+        Vector3 calcedNextDir = curXZ + canMove;
+        Vector3 calcedNextPos = thisPosXZ + (calcedNextDir - thisPosXZ).normalized * _limitDistance;
+        return new Vector3(calcedNextPos.x, nextPosition.y, calcedNextPos.z);
+    }
 
     private void OnDrawGizmos()
     {
