@@ -31,12 +31,14 @@ public class MapUI : MonoBehaviour
     {
         InputManager.Instance?.ShowCursor();
         InputManager.Instance?.LockInput(InputType.Camera);
+        InputManager.Instance?.LockInput(InputType.Player);
     }
 
     void OnDisable()
     {
-        InputManager.Instance.HideCursor();
-        InputManager.Instance.UseInput(InputType.Camera);
+        InputManager.Instance?.HideCursor();
+        InputManager.Instance?.UseInput(InputType.Camera);
+        InputManager.Instance?.UseInput(InputType.Player);
     }
 
     private void Check(int chapter)
