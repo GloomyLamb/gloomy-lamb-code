@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MapUI : MonoBehaviour
 {
     private DataManager dm;
+    [SerializeField] private Button _closeButton; 
 
     private void Awake()
     {
@@ -18,9 +21,11 @@ public class MapUI : MonoBehaviour
         }
         
         dm?.Load();
-
         //Debug.Log($"[로드 완료] ClearChapterNumber = {dm.Current.ClearChapterNumber}");
+        
+        _closeButton.onClick.AddListener(CloseUI);
     }
+    
 
     // 버튼 OnClick에 연결할 함수들
     public void OnClickChapter1() => Check(1);
@@ -31,12 +36,14 @@ public class MapUI : MonoBehaviour
     {
         InputManager.Instance?.ShowCursor();
         InputManager.Instance?.LockInput(InputType.Camera);
+        InputManager.Instance?.LockInput(InputType.Player);
     }
 
     void OnDisable()
     {
-        InputManager.Instance.HideCursor();
-        InputManager.Instance.UseInput(InputType.Camera);
+        InputManager.Instance?.HideCursor();
+        InputManager.Instance?.UseInput(InputType.Camera);
+        InputManager.Instance?.UseInput(InputType.Player);
     }
 
     private void Check(int chapter)
@@ -76,6 +83,12 @@ public class MapUI : MonoBehaviour
                 // SceneManager.LoadScene("Chapter3Scene");
                 // break;
         }
+    }
+
+
+    void CloseUI()
+    {
+        this.gameObject.SetActive(false);
     }
 
 }

@@ -1,8 +1,12 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// 그림자 기본 클래스
+/// </summary>
 public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 {
+    #region 필드
     // controller
     protected ShadowController controller;
     public Transform Target => controller.Target;
@@ -11,67 +15,69 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     // state machine
     protected ShadowStateMachine stateMachine;
 
-    [Header("애니메이션")]
-    [field: SerializeField] public Animator Animator;
+    [field: Header("애니메이션")]
+    [field: SerializeField] public Animator Animator { get; private set; }
     [field: SerializeField] public ShadowAnimationData AnimationData { get; protected set; }
+
     public float TransformDuration => controller.TransformDuration;
     public float HitDuration => controller.HitDuration;
     public float BoundStopPoint => controller.BoundStopPoint;
     public float BoundDuration => controller.BoundDuration;
 
-    // todo: 추후 SO로 분리
     [field: Header("움직임")]
-    [field: SerializeField] public float MovementSpeed { get; set; } = 10f;
-    [SerializeField] private float _defaultSpeedModifier = 1f;
-    [SerializeField] private float _runSpeedModifier = 2f;
-    private float _movementSpeedModifier = 1f;
-
-    protected float MovementSpeedModitier
+    [field: SerializeField] public MoveStatusData MoveStatusData { get; protected set; }
+    public float MovementSpeed => MoveStatusData.MoveSpeed;
+    private float _movementSpeedMultiplier = 1f;
+    protected float MovementSpeedMultiplier
     {
-        get { return _movementSpeedModifier; }
+        get { return _movementSpeedMultiplier; }
         private set
         {
-            _movementSpeedModifier = value;
+            _movementSpeedMultiplier = value;
             if (controller != null)
             {
-                controller.SetAgentMovementModifier(_movementSpeedModifier);
+                controller.SetAgentMovementModifier(_movementSpeedMultiplier);
             }
         }
     }
-    [SerializeField] protected float damage = 10f;
+
+    [Header("대미지")]
+    [SerializeField] protected float collisionInterval = 0.5f;
+    [SerializeField] protected float defaultCollisionDamage = 10f;
+    [field: SerializeField] public float CurCollisionDamage { get; private set; } = 10f;
+
+    [field: Header("효과")]
+    [field: SerializeField] public float FogScaleModifier { get; private set; } = 2f;
+    private float _collisionTimer = 0f;
 
     // 이벤트
     public Action OnMove;               // 이동
     public event Action OnTransform;    // 변형
+    #endregion
 
-    #region 초기화
+    #region Unity API
     protected virtual void Awake()
     {
         AnimationData.Initialize();
+        CurCollisionDamage = defaultCollisionDamage;
     }
 
     protected virtual void Start()
     {
-    }
-
-    public virtual void Init(ShadowController controller)
-    {
-        this.controller = controller;
+        stateMachine.Register();
     }
 
     protected virtual void OnEnable()
     {
-        stateMachine.Register();
         stateMachine.ChangeState(stateMachine.IdleState);
     }
-    #endregion
 
     protected virtual void Update()
     {
-        if (CanTransform())
+        if (CanTransform() && stateMachine.CanChange(stateMachine.TransformState))
         {
-            ResetTransformFlag();
             stateMachine.ChangeState(stateMachine.TransformState);
+            ResetTransformFlag();
             return;
         }
 
@@ -85,7 +91,12 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     protected virtual void OnDisable()
     {
-        stateMachine.UnRegister();
+    }
+    #endregion
+
+    public virtual void Init(ShadowController controller)
+    {
+        this.controller = controller;
     }
 
     // IDamageable
@@ -100,16 +111,26 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
 
     public virtual void Damage(float damage)
     {
-        Logger.Log($"데미지: {damage}");
+        if (stateMachine.CurState == stateMachine.BoundState)
+        {
+            damage *= controller.BoundDamageMultiplier;
+            Logger.Log("바인드 상태 -> 추가 대미지");
+        }
+
+        Logger.Log($"대미지: {damage}");
+
         if (stateMachine == null)
         {
             Logger.Log("state machine 없음");
             return;
         }
-        stateMachine.ChangeState(stateMachine.HitState);
+
+        Animator.SetTrigger(AnimationData.HitParameterHash);
+        SoundManager.Instance.PlaySfxOnce(SfxName.Hit, idx: 1);
         controller.Damage(damage);
     }
 
+    #region 공격
     // IAttackable
     public virtual void Attack()
     {
@@ -119,15 +140,63 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     {
     }
 
-    #region 움직임
-    public virtual void SetMovementModifier(MovementType type)
+    public void SetCollisionDamage(float damage)
     {
-        MovementSpeedModitier = (type) switch
+        if (CurCollisionDamage == damage) return;
+        //Logger.Log($"대미지 변경: {CurCollisionDamage} -> {damage}");
+        CurCollisionDamage = damage;
+    }
+
+    public void ResetCollisionDamage()
+    {
+        SetCollisionDamage(defaultCollisionDamage);
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            DamageTo(damageable);
+        }
+    }
+
+    protected virtual void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            _collisionTimer += Time.deltaTime;
+            if (_collisionTimer > collisionInterval)
+            {
+                DamageTo(damageable);
+            }
+        }
+    }
+
+    protected virtual void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            _collisionTimer = 0f;
+        }
+    }
+
+    private void DamageTo(IDamageable damageable)
+    {
+        _collisionTimer = 0f;
+        Logger.Log($"대미지 (그림자 -> 플레이어): {CurCollisionDamage}");
+        damageable.Damage(CurCollisionDamage);
+    }
+    #endregion
+
+    #region 움직임
+    public virtual void SetMovementMultiplier(MovementType type)
+    {
+        MovementSpeedMultiplier = (type) switch
         {
             MovementType.Stop => 0f,
-            MovementType.Default => _defaultSpeedModifier,
-            MovementType.Run => _runSpeedModifier,
-            _ => _defaultSpeedModifier,
+            MovementType.Walk => 1f,
+            MovementType.Run => MoveStatusData.DashMultiplier,
+            _ => 1f,
         };
     }
     #endregion
@@ -135,8 +204,11 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     #region 바인딩
     public virtual void Bound()
     {
-        Logger.Log("바인딩");
-        stateMachine?.ChangeState(stateMachine.BoundState);
+        if (stateMachine.CanChange(stateMachine.BoundState))
+        {
+            Logger.Log("바인딩");
+            stateMachine.ChangeState(stateMachine.BoundState);
+        }
     }
     #endregion
 
@@ -158,11 +230,25 @@ public abstract class Shadow : MonoBehaviour, IAttackable, IDamageable
     protected abstract void ResetTransformFlag();
     #endregion
 
+    /// <summary>
+    /// 정지 상태에서 코드로 회전할 수 있는지 확인하기 위한 메서드
+    /// </summary>
+    /// <returns></returns>
+    public bool CanRotateWhileStopped()
+    {
+        IState curState = stateMachine.CurState;
+        // 조건
+        // 1. 바인딩 중이 아닐 때
+        // 2. 스킬 상태가 아닐 때
+        return curState != stateMachine.BoundState
+            && curState is not ShadowSkillState;
+    }
+
     #region 에디터 전용
 #if UNITY_EDITOR
-    private void Reset()
+    protected virtual void Reset()
     {
-        Animator = transform.FindChild<Animator>("Model");
+        Animator = GetComponentInChildren<Animator>();
     }
 #endif
     #endregion

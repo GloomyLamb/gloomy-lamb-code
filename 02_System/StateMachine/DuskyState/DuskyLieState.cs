@@ -1,5 +1,8 @@
 ﻿public class DuskyLieState : BaseDuskyState
 {
+    private readonly float _soundVolume = 0.3f;
+    private readonly float _soundDelay = 0.3f;
+
     public DuskyLieState(StateMachine stateMachine, DuskyPlayer player) : base(stateMachine, player)
     {
     }
@@ -8,13 +11,22 @@
     {
         player.Animator.SetTrigger(AnimatorParameters.Die);
         player.Animator.SetBool(AnimatorParameters.IsDead, true);
+        
+        CameraController.Instance?.Impulse();
+        SoundManager.Instance?.PlaySfxOnce(SfxName.Hit, _soundVolume);
+        PlayDelaySound(PlayFallDownSound, _soundDelay);
+    }
+
+    void PlayFallDownSound()
+    {
+        SoundManager.Instance?.PlaySfxOnce(SfxName.FallDown, _soundVolume);
     }
 
     public override void Update()
     {
         if (player.NowCondition.HasFlag(CharacterCondition.Stun) == false)
         {
-            stateMachine.ChangeState(stateMachine.IdleState);           
+            stateMachine.ChangeState(stateMachine.IdleState);
         }
     }
 

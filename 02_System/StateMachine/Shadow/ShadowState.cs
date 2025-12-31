@@ -1,7 +1,8 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 그림자 상태 - 기본
+/// </summary>
 public class ShadowState : IState
 {
     protected Shadow shadow;
@@ -11,11 +12,7 @@ public class ShadowState : IState
     protected AnimType animType;
     protected int animParameterHash;
 
-    protected bool useCoroutine;
     protected Coroutine coroutine;
-
-    public event Action OnUpdate;
-    public event Action OnFixedUpdate;
 
     public ShadowState(Shadow shadow, ShadowStateMachine stateMachine)
     {
@@ -33,42 +30,36 @@ public class ShadowState : IState
     public void Init(
         MovementType movementType,
         int animParameterHash,
-        AnimType animType = AnimType.Bool,
-        bool useCoroutine = false)
+        AnimType animType = AnimType.Bool)
     {
         this.movementType = movementType;
         this.animParameterHash = animParameterHash;
         this.animType = animType;
-        this.useCoroutine = useCoroutine;
     }
 
     /// <summary>
-    /// State 내부에 초기화가 필요한 파라미터 값이 있을 경우 override 합니다.
-    /// </summary>
-    protected virtual void ResetParameter()
-    {
-    }
-
-    /// <summary>
-    /// 코루틴을 사용하는 경우 Enter 시 코루틴을 시작합니다.
+    /// 코루틴을 존재하는 경우 시작합니다.
     /// </summary>
     protected virtual void StartCoroutine()
     {
-        if (coroutine != null)
+        StopCoroutine();
+
+        if (StateMachine.TryGetCoroutineFunc(this, out var func))
         {
-            CustomCoroutineRunner.Instance.StopCoroutine(StateCoroutine());
-            coroutine = null;
+            coroutine = CustomCoroutineRunner.Instance.StartCoroutine(func.Invoke());
         }
-        coroutine = CustomCoroutineRunner.Instance.StartCoroutine(StateCoroutine());
     }
 
     /// <summary>
-    /// 코루틴 내부 로직으로, 필요할 경우 override 합니다.
+    /// 현재 수행 중인 코루틴을 정지합니다.
     /// </summary>
-    /// <returns></returns>
-    protected virtual IEnumerator StateCoroutine()
+    private void StopCoroutine()
     {
-        yield return null;
+        if (coroutine != null)
+        {
+            CustomCoroutineRunner.Instance.StopCoroutine(coroutine);
+            coroutine = null;
+        }
     }
 
     #region IState 구현
@@ -78,7 +69,7 @@ public class ShadowState : IState
     public virtual void Enter()
     {
         // 그림자 움직임 보정값 설정
-        shadow.SetMovementModifier(movementType);
+        shadow.SetMovementMultiplier(movementType);
 
         // 애니메이션 처리
         switch (animType)
@@ -93,14 +84,8 @@ public class ShadowState : IState
                 break;
         }
 
-        // 초기화 필요한 필드 초기화
-        ResetParameter();
-
         // 코루틴 사용 시 시작
-        if (useCoroutine)
-        {
-            StartCoroutine();
-        }
+        StartCoroutine();
     }
 
     /// <summary>
@@ -117,20 +102,28 @@ public class ShadowState : IState
             default:
                 break;
         }
+
+        StopCoroutine();
     }
 
     public virtual void HandleInput()
     {
     }
 
-    public virtual void PhysicsUpdate()
-    {
-        OnFixedUpdate?.Invoke();
-    }
-
     public virtual void Update()
     {
-        OnUpdate?.Invoke();
+        if (StateMachine.TryGetUpdateAction(this, out var action))
+        {
+            action.Invoke();
+        }
+    }
+
+    public virtual void PhysicsUpdate()
+    {
+        if (StateMachine.TryGetFixedUpdateAction(this, out var action))
+        {
+            action.Invoke();
+        }
     }
     #endregion
 }

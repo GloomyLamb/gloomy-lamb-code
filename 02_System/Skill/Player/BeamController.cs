@@ -79,7 +79,9 @@ public class BeamController : MonoBehaviour
 
         if (on)
         {
-            if(_damageRoutine != null)
+            SoundManager.Instance.PlaySfxOnce(SfxName.Beam);
+
+            if (_damageRoutine != null)
                 StopCoroutine(_damageRoutine);
             _damageRoutine = StartCoroutine(LightDamageRoutine());
             _damageables.Clear();
@@ -94,6 +96,7 @@ public class BeamController : MonoBehaviour
         
             if(_damageRoutine != null)
                 StopCoroutine(_damageRoutine);
+           
         }
     }
 
@@ -126,7 +129,8 @@ public class BeamController : MonoBehaviour
         currentLength = 0f;
         isExpanding = true;
         ApplyBeam(0f);
-        
+       
+      
     }
 
     public void OnTriggerEnter(Collider other)

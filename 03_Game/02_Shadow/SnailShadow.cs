@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using UnityEngine;
+
 /// <summary>
 /// 그림자 - 달팽이
 /// </summary>
-using UnityEngine;
 public class SnailShadow : Shadow
 {
     [Header("Snail Slime")]
@@ -29,8 +30,6 @@ public class SnailShadow : Shadow
     protected override void Update()
     {
         base.Update();
-
-
     }
 
     public void StartSlime()
@@ -40,7 +39,7 @@ public class SnailShadow : Shadow
             return;
         }
 
-        if (slimeRoutine != null) StopCoroutine(slimeRoutine);
+        if (slimeRoutine != null) StopCoroutine(slimeRoutine);   //slimeRoutine이 이미 돌고 있으면 멈추기 중복실행 방지 
         slimeRoutine = StartCoroutine(SlimeTrailCoroutine());
     }
 
@@ -86,4 +85,14 @@ public class SnailShadow : Shadow
     protected override void ResetTransformFlag()
     {
     }
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+        MoveStatusData = AssetLoader.FindAndLoadByName<MoveStatusData>("SnailMoveStatusData");
+    }
+#endif
+    #endregion
 }

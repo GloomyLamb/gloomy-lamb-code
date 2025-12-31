@@ -49,7 +49,7 @@ public class DuskyStateMachine : StateMachine
             },
             {
                 _jumpState,
-                new HashSet<IState> { _idleState, _attackState, _hitState, _dieState, _dashState }
+                new HashSet<IState> { _idleState, _attackState, _hitState, _dieState }
             },
             {
                 _attackState,
@@ -69,7 +69,7 @@ public class DuskyStateMachine : StateMachine
             },
             {
                 _dashState,
-                new HashSet<IState> { _idleState, _moveState, _attackState, _hitState, _dieState }
+                new HashSet<IState> { _idleState, _moveState, _attackState, _jumpState, _hitState, _dieState }
             }
         };
     }

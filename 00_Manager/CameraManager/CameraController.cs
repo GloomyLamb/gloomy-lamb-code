@@ -3,16 +3,6 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// public enum CameraViewType
-// {
-//     TpsFixed,
-//     TpsFixedRotatable,
-//     TpsFollow,
-//     TpsFollowRotatable,
-//     TpsAutoRotateFollow,
-//     TpsRotatableFollow,
-//     FirstPerson,
-// }
 
 [Flags]
 public enum CameraControlOption
@@ -32,9 +22,6 @@ public class CameraController : MonoBehaviour
     public static CameraController Instance => instance;
     private static CameraController instance;
 
-    // [Header("조작 설정")]
-    // [SerializeField] private CameraViewType cameraViewType = CameraViewType.TpsAutoRotateFollow;
-
     [SerializeField] private CameraControlOption camControlOption = CameraControlOption.None;
 
     [Header("카메라 조작을 위한 pivot")]
@@ -51,7 +38,6 @@ public class CameraController : MonoBehaviour
 
     [Header("각도에 따른 카메라 높이 조절")]
     [SerializeField] private float minVerticalLength = 0;
-
     [SerializeField] private float maxVerticalLength = 3;
 
     [Header("줌 설정")]
@@ -62,6 +48,7 @@ public class CameraController : MonoBehaviour
 
     [Header("임시 VirtualCamera")]
     [SerializeField] CinemachineVirtualCamera virtualCamera;
+    [SerializeField] CinemachineCollisionImpulseSource impulseSource;
 
     public CinemachineVirtualCamera VirtaulCamera => virtualCamera;
 
@@ -118,29 +105,6 @@ public class CameraController : MonoBehaviour
         virtualCamera.Priority = 1;
         tpsCinemachine = virtualCamera?.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
     }
-
-
-    // public void SwitchCameraControl(CameraViewType cameraView)
-    // {
-    //     cameraViewType = cameraView;
-    //     switch (cameraViewType)
-    //     {
-    //         case CameraViewType.TpsFollow:
-    //         case CameraViewType.TpsFixed:
-    //         case CameraViewType.TpsAutoRotateFollow:
-    //             InputManager.Instance.LockInput(InputType.Camera);
-    //             break;
-    //
-    //         case CameraViewType.TpsRotableFixed:
-    //         case CameraViewType.TpsRotatableFollow:
-    //         case CameraViewType.FirstPerson:
-    //             InputManager.Instance.UseInput(InputType.Camera);
-    //             curRotX = rotPivot.transform.eulerAngles.x;
-    //             curRotY = rotPivot.transform.eulerAngles.y;
-    //             curZoomValue = (maxZoom + minZoom) / 2;
-    //             break;
-    //     }
-    // }
 
     public void SetTarget(Transform _target)
     {
@@ -230,20 +194,9 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        //lookPivot.position = target != null ? target.position : Vector3.zero;
         lookPivot.rotation = Quaternion.Euler(curRotX, curRotY, 0);
 
         float calcMaxValue = Mathf.Lerp(minVerticalLength, maxVerticalLength, curZoomValue / (maxZoom - minZoom));
-        // switch (cameraViewType)
-        // {
-        //     // case CameraViewType.TpsRotableFixed:
-        //     // case CameraViewType.TpsRotatableFollow:
-        //     // case CameraViewType.FirstPerson:
-        //         float calcMaxValue = Mathf.Lerp(minVerticalLength, maxVerticalLength, curZoomValue / (maxZoom - minZoom));
-        //         tpsCinemachine.VerticalArmLength = Mathf.Lerp(calcMaxValue, minVerticalLength, curRotX / (limitMaxX - limitMinX));
-        //         break;
-        // }
-
 
         if (tpsCinemachine == null) return;
         if (camControlOption.HasFlag(CameraControlOption.Zoom))
@@ -255,5 +208,10 @@ public class CameraController : MonoBehaviour
         {
             tpsCinemachine.VerticalArmLength = Mathf.Lerp(calcMaxValue, minVerticalLength, curRotX / (limitMaxX - limitMinX));
         }
+    }
+
+    public void Impulse(float force = 0.5f)
+    {
+        impulseSource.GenerateImpulse(force);
     }
 }

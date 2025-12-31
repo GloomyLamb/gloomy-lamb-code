@@ -6,23 +6,30 @@ using UnityEngine;
 /// </summary>
 public class SlimeShadow : Shadow
 {
-    // 추격 조건
+    #region 필드
+    [field: Header("추격 충돌 대미지")]
+    [field: SerializeField] public float SlowCollisionDamage { get; private set; } = 30f;
+    [field: SerializeField] public float FastCollisionDamage { get; private set; } = 40f;
+    [field: SerializeField] public float ExpandCollisionDamage { get; private set; } = 50f;
+
     [field: Header("추격 조건")]
-    [field: SerializeField] public int ChaseCount { get; private set; } = 10;
-    [field: SerializeField] public float SlowChasePatternTime { get; private set; } = 1f;
-    [field: SerializeField] public float FastChasePatternTime { get; private set; } = 1f;
+    [field: SerializeField] public int TotalChaseCount { get; private set; } = 20;
+    [field: SerializeField] public int SlowChaseCount { get; private set; } = 10;
+    [field: SerializeField] public float StopPatternTime { get; private set; } = 0.5f;
+    [field: SerializeField] public float ChasePatternTime { get; private set; } = 1f;
     [field: SerializeField] public float MaxScale { get; private set; } = 3f;
     [field: SerializeField] public float MinScale { get; private set; } = 1f;
-    public bool IsFastMode { get; set; }
     public int CurChaseCount { get; private set; } = 0;
 
     [field: Header("추가 설정")]
     [field: SerializeField] public float ScaleUpDuration { get; private set; } = 1f;
-    [SerializeField] public float scaleDownDuration = 1f;
+    [field: SerializeField] public float ScaleDownDuration { get; private set; } = 1f;
+
     // 변형 조건
-    private bool _checkExpand;
+    public bool DoneExpand { get; private set; }
     private bool CheckScale => transform.localScale.x == MinScale;
     public bool IsHitting { get; set; } // 일단 맞을 때 이거 변환
+    #endregion  
 
     protected override void Awake()
     {
@@ -30,15 +37,6 @@ public class SlimeShadow : Shadow
 
         stateMachine = new SlimeShadowStateMachine(this);
         stateMachine.Init();
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
-        {
-            //todo : 
-            damageable.Damage(damage);
-        }
     }
 
     public override void ApplyEffect()
@@ -62,17 +60,18 @@ public class SlimeShadow : Shadow
 
     protected override bool CanTransform()
     {
-        return _checkExpand && CheckScale;
+        return DoneExpand && CheckScale;
     }
 
     protected override void ResetTransformFlag()
     {
-        _checkExpand = false;
+        DoneExpand = false;
     }
 
     public void CheckExpand()
     {
-        _checkExpand = true;
+        DoneExpand = true;
+        SetCollisionDamage(20f);
     }
 
     #endregion
@@ -83,7 +82,7 @@ public class SlimeShadow : Shadow
     {
         if (scaleDownRoutine != null)
             StopCoroutine(scaleDownRoutine);
-        scaleDownRoutine = StartCoroutine(ScaleDownRoutine(MinScale, scaleDownDuration));
+        scaleDownRoutine = StartCoroutine(ScaleDownRoutine(MinScale, ScaleDownDuration));
     }
 
     protected IEnumerator ScaleDownRoutine(float size, float duration)
@@ -101,4 +100,14 @@ public class SlimeShadow : Shadow
 
         transform.localScale = endScale;
     }
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+        MoveStatusData = AssetLoader.FindAndLoadByName<MoveStatusData>("SlimeMoveStatusData");
+    }
+#endif
+    #endregion
 }

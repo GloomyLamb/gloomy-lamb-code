@@ -7,8 +7,13 @@ public enum PoolType
 {
     // 예시
     TestObjectPool,
-    MonsterPool,
-    BulletPool,
+    
+    // 오브젝트
     HowlWindPool,
+    
+    
+    // 파티클
+    ParticleCryPool,
+    ParticleCryBindingPool,
     
 }

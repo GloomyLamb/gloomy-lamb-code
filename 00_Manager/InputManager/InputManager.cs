@@ -86,6 +86,12 @@ public class InputManager : GlobalSingletonManager<InputManager>
         if (inputHandlers.ContainsKey(inputType) == false) return;
         inputHandlers[inputType]?.SetEnableInput(true);
     }
+    
+    public void UseInput(InputType inputType, InputMapName inputMapName, InputActionName inputActionName)
+    {
+        if (inputHandlers.ContainsKey(inputType) == false) return;
+        inputHandlers[inputType]?.SetEnableInput(inputMapName, inputActionName, true);
+    }
 
     /// <summary>
     /// Input 막기
@@ -95,6 +101,13 @@ public class InputManager : GlobalSingletonManager<InputManager>
         if (inputHandlers.ContainsKey(inputType) == false) return;
         inputHandlers[inputType]?.SetEnableInput(false);
     }
+
+    public void LockInput(InputType inputType, InputMapName inputMapName, InputActionName inputActionName)
+    {
+        if (inputHandlers.ContainsKey(inputType) == false) return;
+        inputHandlers[inputType]?.SetEnableInput(inputMapName, inputActionName, false);
+    }
+    
 
     /// <summary>
     /// 해당 Input 빼고 모두 꺼줌.
@@ -160,3 +173,4 @@ public class InputManager : GlobalSingletonManager<InputManager>
         }
     }
 }
+

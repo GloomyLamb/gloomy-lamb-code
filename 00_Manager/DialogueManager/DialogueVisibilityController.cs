@@ -13,14 +13,17 @@ public class DialogueVisibilityController : MonoBehaviour
     
     private void Awake()
     {
-        renderers = GetComponentsInChildren<Renderer>();
+        renderers = GetComponentsInChildren<Renderer>(true);
     }
 
 
     private void Start()
     {
-        DialogueManager.Instance.OnDialogueStartAction += Show;
-        DialogueManager.Instance.OnDialogueEndAction += Hide;
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.OnDialogueStartAction += Hide;
+            DialogueManager.Instance.OnDialogueEndAction += Show;
+        }
     }
 
     public void Show()
@@ -44,10 +47,13 @@ public class DialogueVisibilityController : MonoBehaviour
             }
         }
     }
-    
+
     private void OnDestroy()
     {
-        DialogueManager.Instance.OnDialogueStartAction -= Show;
-        DialogueManager.Instance.OnDialogueEndAction -= Hide;
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.OnDialogueStartAction -= Show;
+            DialogueManager.Instance.OnDialogueEndAction -= Hide;
+        }
     }
 }

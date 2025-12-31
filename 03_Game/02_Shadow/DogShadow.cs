@@ -21,8 +21,11 @@ public class DogShadow : Shadow
     public float SqrBiteRange => _biteDetectRange * _biteDetectRange;
     public int BiteCount { get; private set; } = 0;
 
-    [Header("짖기")]
-    [SerializeField] private HowlWind _howlWindPrefab;
+    [field: Header("짖기")]
+    [field: SerializeField] public GameObject HowlEffectPrefab { get; private set; }
+    [field: SerializeField] public int BarkCount { get; private set; } = 3;
+    [field: SerializeField] public float BarkPrefabSpawnTime { get; private set; } = 2f;
+    [field: SerializeField] public float BarkCollisionDamage { get; private set; } = 100f;
 
     // 변형 조건
     public bool DonePattern { get; set; }
@@ -36,17 +39,11 @@ public class DogShadow : Shadow
         SkillAnimationData.Initialize();
         stateMachine = new DogShadowStateMachine(this);
         stateMachine.Init();
+
+        HowlEffectPrefab.SetActive(false);
     }
 
     #endregion
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
-        {
-            damageable.Damage(damage);
-        }
-    }
 
     #region 변형
 
@@ -65,10 +62,10 @@ public class DogShadow : Shadow
     #region 스킬
     public void SpawnHowlWind()
     {
-        PoolManager.Instance?.Spawn(PoolType.HowlWindPool,transform.position,Quaternion.identity);
+        PoolManager.Instance?.Spawn(PoolType.HowlWindPool, transform.position, Quaternion.identity);
     }
 
-    public void Bite()
+    public bool TryBite()
     {
         Player target = _biteDetector.CurrentTarget as Player;
 
@@ -83,14 +80,9 @@ public class DogShadow : Shadow
 
             // ai 끄기
             //controller.SetActiveAgentRotation(false);
-            stateMachine.ChangeState(((DogShadowStateMachine)stateMachine).BackwardState);
+            return true;
         }
-        else
-        {
-            Logger.Log("물기 공격 실패 -> 추적 모드");
-            stateMachine.ChangeState(stateMachine.BoundState);
-            return;
-        }
+        return false;
     }
 
     public void Backward()
@@ -99,5 +91,24 @@ public class DogShadow : Shadow
         Vector3 targetPos = controller.transform.position + dir * _biteBackwardLength;
         controller.Agent.SetDestination(targetPos);
     }
+    #endregion
+
+    #region 에디터 전용
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+        MoveStatusData = AssetLoader.FindAndLoadByName<MoveStatusData>("DogMoveStatusData");
+        _biteDetector = transform.FindChild<DamageableDetector>("Pivot_AttackRange_Bite");
+        HowlEffectPrefab = transform.FindChild<ParticleSystem>("Particle_BarkEffect").gameObject;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _biteDetectRange);
+        Gizmos.DrawLine(transform.position, transform.position + (-transform.forward * _biteBackwardLength));
+    }
+#endif
     #endregion
 }

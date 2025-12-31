@@ -10,6 +10,12 @@ public class DuskyAttackState : BaseDuskyState
     private float _attackAnimTiming;
     private Action _attackAction;
     private Coroutine _attackRotuine;
+    
+    private readonly float _soundVolume = 0.3f;
+    readonly float _animationDuration = 0.1f;
+    
+    private Coroutine _hitStateRoutine;
+    private Coroutine _animRoutine;
 
     public DuskyAttackState(StateMachine stateMachine, DuskyPlayer player,
     float attackAnimDelay) : base(stateMachine, player)
@@ -22,28 +28,32 @@ public class DuskyAttackState : BaseDuskyState
     {
         // todo : 후에 동작 플래그를 따로 만들어서 Enter 가 두 번 들어오는거 자체를 막기
         AnimatorStateInfo animInfo = player.Animator.GetCurrentAnimatorStateInfo(0);
-        if(animInfo.IsName(AnimatorParameters.AttackName) == false)
+        
+        if (animInfo.IsName(AnimatorParameters.AttackName) == false)
+        {
             player.Animator.SetTrigger(AnimatorParameters.Attack);
-        _attackRotuine = CoroutineRunner.instance.StartCoroutine(AttackRoutine());
+            SoundManager.Instance?.PlaySfxOnce(SfxName.Attack, _soundVolume);
+        }
+        
+        _attackRotuine = CustomCoroutineRunner.Instance.StartCoroutine(AttackRoutine());
     }
 
     public override void Update()
     {
-        AnimatorStateInfo animInfo = player.Animator.GetCurrentAnimatorStateInfo(0);
-
-        //Debug.Log(animInfo.normalizedTime);
-        if (animInfo.IsName(AnimatorParameters.AttackName) && animInfo.normalizedTime >= 1f)
-        {
-            if (stateMachine != null)
-            {
-                stateMachine.ChangeState(stateMachine.IdleState);
-            }
-        }
+        //AnimatorStateInfo animInfo = player.Animator.GetCurrentAnimatorStateInfo(0);
+        // if (animInfo.IsName(AnimatorParameters.AttackName) && animInfo.normalizedTime >= 1f)
+        // {
+        //     if (stateMachine != null)
+        //     {
+        //         stateMachine.ChangeState(stateMachine.IdleState);
+        //     }
+        // }
     }
 
     public override void Exit()
     {
-        CustomCoroutineRunner.Instance.StopCoroutine(_attackRotuine);
+        if(_attackRotuine != null)
+            CustomCoroutineRunner.Instance.StopCoroutine(_attackRotuine);
     }
 
 
@@ -51,5 +61,8 @@ public class DuskyAttackState : BaseDuskyState
     {
         yield return new WaitForSeconds(_attackAnimTiming);
         player.Attack();
+        yield return new WaitForSeconds(_animationDuration);
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
+
 }

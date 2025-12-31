@@ -1,33 +1,27 @@
+using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 그림자 상태 머신 - 슬라임
+/// </summary>
 public class SlimeShadowStateMachine : ShadowStateMachine
 {
     public new SlimeShadow Shadow { get; private set; }
 
-    #region States
-    // Ground
-    public ShadowState WalkState { get; private set; }
-    public ShadowState RunState { get; private set; }
     public ShadowState ExpandState { get; private set; }
-    #endregion
-
-    // 추적
 
     public SlimeShadowStateMachine(SlimeShadow shadow) : base(shadow)
     {
         Shadow = shadow;
 
-        WalkState = new SlimeShadowWalkState(shadow, this);
-        RunState = new SlimeShadowChaseState(shadow, this);
-        ExpandState = new SlimeShadowExpandState(shadow, this);
+        ExpandState = new ShadowState(shadow, this);
     }
 
     public override void Init()
     {
         base.Init();
 
-        WalkState.Init(MovementType.Default, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
-        RunState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
+        ChaseState.Init(MovementType.Run, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
         ExpandState.Init(MovementType.Stop, Shadow.AnimationData.ChaseParameterHash, AnimType.Bool);
     }
 
@@ -35,45 +29,79 @@ public class SlimeShadowStateMachine : ShadowStateMachine
     {
         base.Register();
 
-        WalkState.OnFixedUpdate += HandleFixedUpdateChase;
-        RunState.OnFixedUpdate += HandleFixedUpdateChase;
-        ExpandState.OnFixedUpdate += HandleFixedUpdateChase;
+        stateFixedUpdateActions[ExpandState] = HandleChaseStateFixedUpdate;
+
+        // Coroutine
+        stateCoroutineFuncs[ExpandState] = HandleExpandStateCoroutine;
     }
 
-    public override void UnRegister()
+    private float _idleTimer;
+    private float _chaseTimer;
+
+    protected override void HandleIdleStateUpdate()
     {
-        base.UnRegister();
-
-        WalkState.OnFixedUpdate -= HandleFixedUpdateChase;
-        RunState.OnFixedUpdate -= HandleFixedUpdateChase;
-        ExpandState.OnFixedUpdate -= HandleFixedUpdateChase;
-    }
-
-    private float _timer;
-    private float _patternTime = 0.5f;
-
-    protected override void HandleUpdateIdle()
-    {
-        if (Shadow.CurChaseCount == Shadow.ChaseCount + 1)
+        Shadow.SetCollisionDamage(Shadow.SlowCollisionDamage);
+        if (Shadow.CurChaseCount == Shadow.TotalChaseCount)
         {
-            Logger.Log("확대 패턴 진입");
+            Logger.Log($"추적 횟수: {Shadow.CurChaseCount} => 확대 패턴 진입");
             ChangeState(ExpandState);
         }
 
-        _timer += Time.deltaTime;
-        if (Shadow.Target != null)
+        _idleTimer += Time.deltaTime;
+        if (hasBeenBound || _idleTimer > Shadow.StopPatternTime)
         {
-            if (_timer > _patternTime && !Shadow.IsFastMode)
-            {
-                Shadow.IsFastMode = true;
-                ChangeState(WalkState);
-                _timer = 0f;
-            }
-            else if (_timer > _patternTime && Shadow.IsFastMode)
-            {
-                ChangeState(RunState);
-                _timer = 0f;
-            }
+            hasBeenBound = false;
+            ChangeState(ChaseState);
+            _idleTimer = 0f;
         }
+    }
+
+    protected override void HandleChaseStateUpdate()
+    {
+        base.HandleChaseStateUpdate();
+
+        _chaseTimer += Time.deltaTime;
+        if (hasBeenBound || _chaseTimer > Shadow.ChasePatternTime)
+        {
+            Shadow.PlusChaseCount();
+            SoundManager.Instance.PlaySfxOnce(SfxName.Slime, idx: 2);
+            hasBeenBound = false;
+            if (Shadow.CurChaseCount > Shadow.SlowChaseCount)
+            {
+                //Logger.Log("고속 이동");
+                Shadow.SetCollisionDamage(Shadow.DoneExpand
+                    ? Shadow.ExpandCollisionDamage
+                    : Shadow.FastCollisionDamage);
+            }
+            else
+            {
+                //Logger.Log("저속 이동");
+                Shadow.SetMovementMultiplier(MovementType.Walk);
+                Shadow.SetCollisionDamage(Shadow.SlowCollisionDamage);
+            }
+            ChangeState(IdleState);
+            _chaseTimer = 0f;
+        }
+    }
+
+    protected IEnumerator HandleExpandStateCoroutine()
+    {
+        Transform target = Shadow.transform;
+        Vector3 startScale = target.localScale;
+        Vector3 endScale = startScale * Shadow.MaxScale;
+        float elapsed = 0f;
+
+        SoundManager.Instance.PlaySfxOnce(SfxName.ShadowExpand);
+
+        while (elapsed < Shadow.ScaleUpDuration)
+        {
+            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / Shadow.ScaleUpDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.localScale = endScale;
+        Shadow.CheckExpand();
+        ChangeState(ChaseState);
     }
 }

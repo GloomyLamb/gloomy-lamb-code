@@ -1,3 +1,4 @@
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,22 +9,32 @@ public abstract class ShadowController : MonoBehaviour
     // 컴포넌트
     private NavMeshAgent _agent;
     public NavMeshAgent Agent => _agent;
+    private bool isDead = false;   
+    private UIResult _uiResult;
+    // 현재 그림자
+    protected Shadow curShadow;
 
-    // todo: 각종 스텟
     [Header("스탯 SO")]
     [SerializeField] protected StatusData statusData;
     public Status Status => status;
     protected Status status;
+    [field: SerializeField] public float BoundDamageMultiplier = 1.2f;
 
-    protected Shadow curShadow;
+    [field: Header("효과")]
+    [field: SerializeField] public Transform ShadowFog { get; private set; }
+    protected float scaleDuration = 0.5f;
+    private Vector3 _defaultFogScale;
+    private Coroutine _scaleCoroutine;
 
     [field: Header("추격")]
     [field: SerializeField] public Transform Target { get; private set; }
     [SerializeField] private float _updateInterval = 0.1f;
+    [SerializeField] private float _rotDamping = 6f;
     private float _agentTimer;
+    private bool _useManualRotation;
 
     [field: Header("시간 설정")]
-    [field: SerializeField] public float TransformDuration = 2f;
+    [field: SerializeField] public float TransformDuration { get; protected set; } = 2f;
     [field: SerializeField] public float HitDuration { get; protected set; } = 1f;
     [field: SerializeField] public float BoundDuration { get; protected set; } = 2f;
     [field: SerializeField] public float BoundStopPoint { get; protected set; } = 0.1f;
@@ -33,8 +44,11 @@ public abstract class ShadowController : MonoBehaviour
     protected virtual void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-
-        status = statusData?.GetNewStatus();
+        _uiResult = FindObjectOfType<UIResult>();
+        status = statusData.GetNewStatus();
+      
+        _defaultFogScale = ShadowFog.localScale;
+       
     }
 
     protected virtual void Start()
@@ -45,9 +59,94 @@ public abstract class ShadowController : MonoBehaviour
         }
     }
 
+    protected virtual void Update()
+    {
+        if (_useManualRotation && curShadow.CanRotateWhileStopped())
+        {
+            RotateToTarget();
+        }
+    }
+
+    protected virtual void RotateToTarget()
+    {
+        Vector3 dir = Target.position - transform.position;
+        dir.y = 0f;
+
+        if (dir.sqrMagnitude > 0.0001f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            float t = 1f - Mathf.Exp(-_rotDamping * Time.deltaTime);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, t);
+        }
+    }
+
     public void Damage(float damage)
     {
+        
         Status.AddHp(-damage);
+
+        if (Status.Hp <= 0f)
+        {
+            Die();
+        }
+    }
+    protected virtual void Die()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        _agent.isStopped = true;
+        _agent.ResetPath();
+
+        Logger.Log("그림자 사망");
+
+        if (_uiResult != null) _uiResult.ShowClear();
+        else Logger.Log("UIResult 없음!");
+    }
+    protected void TransformFogScaleTo()
+    {
+        if (_scaleCoroutine != null)
+        {
+            StopCoroutine(_scaleCoroutine);
+            _scaleCoroutine = null;
+        }
+        _scaleCoroutine = StartCoroutine(ScaleToCoroutine(
+            ShadowFog,
+            _defaultFogScale,
+            curShadow.FogScaleModifier,
+            scaleDuration));
+    }
+
+    public void TransformFogScaleTo(float modifier)
+    {
+        if (_scaleCoroutine != null)
+        {
+            StopCoroutine(_scaleCoroutine);
+            _scaleCoroutine = null;
+        }
+        _scaleCoroutine = StartCoroutine(ScaleToCoroutine(
+            ShadowFog,
+            _defaultFogScale,
+            modifier,
+            scaleDuration));
+    }
+
+    protected IEnumerator ScaleToCoroutine(Transform target, Vector3 startScale, float scaleModifier, float duration)
+    {
+        Vector3 endScale = startScale * scaleModifier;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            target.localScale = Vector3.Lerp(startScale, endScale, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.localScale = endScale;
+
+
     }
 
     #region Nev Mesh Agent 관리
@@ -60,6 +159,7 @@ public abstract class ShadowController : MonoBehaviour
 
     public void SetActiveAgentRotation(bool active)
     {
+        _useManualRotation = !active;
         _agent.updateRotation = active;
     }
 
@@ -74,25 +174,29 @@ public abstract class ShadowController : MonoBehaviour
         _agentTimer += Time.deltaTime;
         if (_agentTimer > _updateInterval)
         {
-            Vector3 targetPosition = Target.position + (new Vector3(1f,0,1f) * Random.Range(0.5f,0.75f));
+            SetActiveAgentRotation(true);
+            // 플레이어와 겹치지 않게 주변 랜덤값 적용
+            Vector3 targetPosition = Target.position + (new Vector3(1f, 0, 1f) * Random.Range(0.5f, 0.75f));
             _agent.SetDestination(targetPosition);
             _agentTimer = 0f;
         }
+
+        // path에 도착, 커스텀 회전이 아닐 때
+        if (!_useManualRotation && !_agent.pathPending &&
+            _agent.remainingDistance <= _agent.stoppingDistance)
+        {
+            SetActiveAgentRotation(false);
+        }
     }
 
+    /// <summary>
+    /// Nev Agent Speed 변경
+    /// </summary>
+    /// <param name="modifier"></param>
     public void SetAgentMovementModifier(float modifier)
     {
         //Logger.Log("nev agent 속도 변경");
         _agent.speed = curShadow.MovementSpeed * modifier;
-    }
-
-    private NavMeshAgent GetAgentSafely()
-    {
-        var shadowObj = Object.FindObjectOfType<Shadow>();
-        if (shadowObj != null)
-            return shadowObj.GetComponent<NavMeshAgent>();
-
-        return null;
     }
     #endregion
 
@@ -100,6 +204,14 @@ public abstract class ShadowController : MonoBehaviour
 #if UNITY_EDITOR
     protected virtual void Reset()
     {
+        if (ShadowFog == null)
+        {
+            ShadowFog = transform.FindChild<Transform>("Particle_Fog");
+        }
+        if (statusData == null)
+        {
+            statusData = AssetLoader.FindAndLoadByName<StatusData>("status_shadow_chapter1");
+        }
     }
 #endif
     #endregion

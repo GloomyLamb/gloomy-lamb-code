@@ -10,21 +10,21 @@ public class GameManager : GlobalSingletonManager<GameManager>
     {
         get
         {
-            DuskyPlayer dusky = player as DuskyPlayer;
+            DuskyPlayer dusky = _player as DuskyPlayer;
             return dusky;
         }
     }
-    private Player player;
+    private Player _player;
 
     // 비디오
     public VideoFlowContext VideoFlow { get; private set; } = new();
 
     protected override void Init()
     {
+        Data.Load();
     }
 
     #region 비디오
-
     /// <summary>
     /// video id의 비디오를 보여주고 returnScene 씬으로 돌아간다.
     /// </summary>
@@ -35,15 +35,26 @@ public class GameManager : GlobalSingletonManager<GameManager>
         VideoFlow.SetUp(videoId, returnScene);
         Scene.LoadSceneWithCoroutine(SceneType.VideoScene);
     }
-
     #endregion
 
+    #region 씬 관리
     protected override void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        player = FindObjectOfType<Player>();
+        _player = FindObjectOfType<Player>();
     }
 
     protected override void OnSceneUnloaded(Scene scene)
     {
+    }
+    #endregion
+
+    public void SetPlayer(Player player)
+    {
+        _player = player;
+    }
+
+    private void OnApplicationQuit()
+    {
+        Data.Save();
     }
 }

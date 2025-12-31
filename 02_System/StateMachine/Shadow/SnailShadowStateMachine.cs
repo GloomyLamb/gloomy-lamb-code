@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SnailShadowStateMachine : ShadowStateMachine      // StateMachine이 상태를 바꾸기위한 클래스를 만드려고하는데
 {                                                               // IState 타입으로 cur 로 저장하여 ChangeState로 상태를 갈아끼우는 역할이라고 이해.
@@ -11,17 +12,35 @@ public class SnailShadowStateMachine : ShadowStateMachine      // StateMachine�
         ChaseState = new SnailShadowChaseState(shadow, this);
     }
 
+    public override void Register()
+    {
+        base.Register();
+
+        stateCoroutineFuncs[ChaseState] = HandleChaseStateCoroutine;
+    }
+
     private float _timer;
 
-    protected override void HandleUpdateChase()
+    protected override void HandleChaseStateUpdate()
     {
-        base.HandleUpdateChase();
+        base.HandleChaseStateUpdate();
 
         _timer += Time.deltaTime;
         if (_timer > Shadow.CycleTime)
         {
             _timer = 0f;
             ChangeState(TransformState);
+        }
+    }
+
+    private IEnumerator HandleChaseStateCoroutine()
+    {
+        WaitForSeconds timer = new(2f);
+
+        while (true)
+        {
+            SoundManager.Instance.PlaySfxOnce(SfxName.Slime, volume: 0.7f, idx: 3);
+            yield return timer;
         }
     }
 }

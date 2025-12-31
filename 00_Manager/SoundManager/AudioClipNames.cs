@@ -1,4 +1,4 @@
-public enum SfxName
+﻿public enum SfxName
 {
     // Common
     Attack,
@@ -6,21 +6,25 @@ public enum SfxName
     FootStep,
     Jump,
     Landing,
+    FallDown,
     
     // Skill
-    Bean,
+    Beam,
     DuskyCry,
 
     // Shadow
+    Slime,
     Bark,
     Bite,
     ShadowExpand,
-    
+    Transform,
+
     // UI
     Click,
     
     Test,
 }
+
 public enum BgmName
 {
     Title,
@@ -28,4 +32,6 @@ public enum BgmName
     ShadowForest,
     
     TestBgm,
+    
+    Ambient_GrassWind
 }

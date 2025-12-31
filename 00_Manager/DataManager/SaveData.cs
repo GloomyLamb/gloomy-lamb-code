@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
+
 [Serializable]
 public class SaveData
 {
@@ -12,5 +11,5 @@ public class SaveData
     public string PlayerPositionY;
     public string PlayerPositionZ;
 
-
+    public bool hasWatchedIntroVideo;
 }
