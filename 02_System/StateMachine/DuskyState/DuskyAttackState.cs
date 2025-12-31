@@ -12,7 +12,7 @@ public class DuskyAttackState : BaseDuskyState
     private Coroutine _attackRotuine;
     
     private readonly float _soundVolume = 0.3f;
-    readonly float _animationDuration = 0.2f;
+    readonly float _animationDuration = 0.1f;
     
     private Coroutine _hitStateRoutine;
     private Coroutine _animRoutine;
@@ -61,7 +61,7 @@ public class DuskyAttackState : BaseDuskyState
     {
         yield return new WaitForSeconds(_attackAnimTiming);
         player.Attack();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(_animationDuration);
         stateMachine.ChangeState(stateMachine.IdleState);
     }
 
