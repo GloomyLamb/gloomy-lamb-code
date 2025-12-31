@@ -10,10 +10,10 @@ using UnityEngine;
 public class DialogueVisibilityController : MonoBehaviour
 {
     Renderer[] renderers;
-
+    
     private void Awake()
     {
-        renderers = GetComponentsInChildren<Renderer>();
+        renderers = GetComponentsInChildren<Renderer>(true);
     }
 
 
